@@ -58,13 +58,15 @@ body {
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.09);
 }
 
-:where(a) {
-  color: inherit;
-}
+@layer base {
+  a {
+    color: inherit;
+  }
 
-:where(a:hover) {
-  text-decoration: underline;
-  text-decoration-style: dotted;
+  a:hover {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+  }
 }
 
 @media (max-width: 640px) {
