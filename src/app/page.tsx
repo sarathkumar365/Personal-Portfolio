@@ -1,103 +1,166 @@
-import Image from "next/image";
+const experiences = [
+  {
+    period: "2021 — Present",
+    role: "Senior Full-Stack Developer",
+    company: "Independent",
+    summary:
+      "Leading end-to-end delivery of web applications with a focus on resilient infrastructure, polished UX, and measurable outcomes.",
+  },
+  {
+    period: "2018 — 2021",
+    role: "Product Engineer",
+    company: "Studio & SaaS teams",
+    summary:
+      "Shipped performant React frontends, designed scalable Node backends, and mentored teams on modern tooling and accessibility.",
+  },
+  {
+    period: "2014 — 2018",
+    role: "Software Engineer",
+    company: "Various startups",
+    summary:
+      "Built and maintained feature-rich products across fintech and education, working closely with designers and stakeholders.",
+  },
+];
+
+const skills = [
+  "TypeScript",
+  "React / Next.js",
+  "Node.js",
+  "PostgreSQL",
+  "Tailwind CSS",
+  "Framer Motion",
+  "tRPC",
+  "AWS",
+  "Playwright",
+];
+
+const highlights = [
+  "Crafting narrative-driven portfolios and dashboards with motion-rich details.",
+  "Obsessed with clean typography, inclusive experiences, and performance budgets.",
+  "Collaborating with founders to translate ideas into reliable, scalable software.",
+];
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="space-y-20">
+      <section className="space-y-6">
+        <p className="text-xs uppercase tracking-[0.5em] text-black/60">Typed on a calm morning</p>
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+          Sarath Kumar · Full-Stack Developer
+        </h1>
+        <p className="max-w-2xl text-base sm:text-lg text-black/80">
+          I help teams craft thoughtful digital experiences—from strategy and architecture to
+          {" "}
+          authentic interfaces that feel as personal as a letter from a well-loved typewriter.
+        </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="rounded-sm border border-black/30 bg-white/50 p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
+            <p className="text-[0.55rem] uppercase tracking-[0.45em] text-black/60">Experience</p>
+            <p className="mt-2 text-xl font-semibold">10+ years</p>
+          </div>
+          <div className="rounded-sm border border-black/30 bg-white/50 p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
+            <p className="text-[0.55rem] uppercase tracking-[0.45em] text-black/60">Primary Stack</p>
+            <p className="mt-2 text-xl font-semibold">Next.js · Node.js</p>
+          </div>
+          <div className="rounded-sm border border-black/30 bg-white/50 p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
+            <p className="text-[0.55rem] uppercase tracking-[0.45em] text-black/60">Location</p>
+            <p className="mt-2 text-xl font-semibold">Remote · GMT+5:30</p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-4 pt-2 text-sm">
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/projects"
+            className="inline-flex items-center justify-center border border-black bg-black px-6 py-2 text-white transition-transform duration-200 hover:-translate-y-0.5"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+            View Projects
           </a>
           <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/blogs"
+            className="inline-flex items-center justify-center border border-black/60 px-6 py-2 text-black transition-colors duration-200 hover:bg-black hover:text-white"
           >
-            Read our docs
+            Read Blogs
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      <div className="h-px w-full border-t border-black/20 border-dashed" aria-hidden="true" />
+
+      <section className="space-y-6">
+        <header className="space-y-1">
+          <p className="text-xs uppercase tracking-[0.45em] text-black/55">Experience log</p>
+          <h2 className="text-2xl font-semibold tracking-tight">Selected chapters</h2>
+        </header>
+        <div className="space-y-6">
+          {experiences.map((experience) => (
+            <article
+              key={experience.period}
+              className="border border-black/25 bg-white/40 p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)] transition duration-200 hover:-translate-y-1 hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.8),0_16px_32px_rgba(0,0,0,0.08)]"
+            >
+              <p className="text-[0.6rem] uppercase tracking-[0.42em] text-black/60">
+                {experience.period}
+              </p>
+              <h3 className="mt-2 text-xl font-semibold">
+                {experience.role} · {experience.company}
+              </h3>
+              <p className="mt-3 text-sm text-black/75">
+                {experience.summary}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <div className="h-px w-full border-t border-black/20 border-dashed" aria-hidden="true" />
+
+      <section className="grid gap-10 lg:grid-cols-[2fr_1fr]">
+        <div className="space-y-5">
+          <header className="space-y-1">
+            <p className="text-xs uppercase tracking-[0.45em] text-black/55">Toolkit</p>
+            <h2 className="text-2xl font-semibold tracking-tight">Skills & Technologies</h2>
+          </header>
+          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {skills.map((skill) => (
+              <li
+                key={skill}
+                className="border border-black/30 bg-white/50 px-4 py-3 text-sm font-medium uppercase tracking-[0.3em] text-black/80 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.55)]"
+              >
+                {skill}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <aside className="space-y-4 border border-black/25 bg-white/40 p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.7)]">
+          <p className="text-xs uppercase tracking-[0.45em] text-black/55">Highlights</p>
+          <ul className="space-y-3 text-sm text-black/75">
+            {highlights.map((highlight) => (
+              <li key={highlight} className="relative pl-5">
+                <span className="absolute left-0 top-1.5 h-1 w-1 bg-black" aria-hidden="true" />
+                {highlight}
+              </li>
+            ))}
+          </ul>
+        </aside>
+      </section>
+
+      <div className="h-px w-full border-t border-black/20 border-dashed" aria-hidden="true" />
+
+      <section className="space-y-4">
+        <header>
+          <p className="text-xs uppercase tracking-[0.45em] text-black/55">Next on the ribbon</p>
+          <h2 className="text-2xl font-semibold tracking-tight">Let&rsquo;s build something enduring</h2>
+        </header>
+        <p className="max-w-2xl text-sm text-black/75">
+          Whether it&rsquo;s a portfolio rich with story, a high-performing SaaS dashboard, or a
+          bespoke content platform, I bring a balanced stack and an eye for detail to every
+          engagement.
+        </p>
+        <p className="text-sm text-black/75">
+          Ready when you are: drop a line to discuss your next chapter, or explore the
+          projects and essays linked above.
+        </p>
+      </section>
     </div>
   );
 }
