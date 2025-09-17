@@ -30,7 +30,7 @@ export default function NavigationBar() {
                   href={item.href}
                   className={`${baseLinkClasses} ${
                     isActive
-                      ? "bg-black text-white shadow-[inset_0_-2px_0_rgba(255,255,255,0.35)]"
+                      ? "bg-black text-[var(--paper-base)] shadow-[inset_0_-2px_0_rgba(255,255,255,0.35)] hover:bg-black"
                       : "bg-transparent text-black hover:bg-black hover:text-white"
                   }`}
                 >
