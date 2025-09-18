@@ -1,3 +1,8 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+
+import HeroName from "@/components/hero-name";
 import { getHomeData } from "@/data/portfolio";
 
 const {
@@ -10,19 +15,47 @@ const {
 } = getHomeData();
 
 export default function Home() {
+  const [heroComplete, setHeroComplete] = useState(false);
+
+  const handleHeroComplete = useCallback(() => {
+    setHeroComplete(true);
+  }, []);
+
+  useEffect(() => {
+    if (heroComplete) {
+      return undefined;
+    }
+
+    const fallback = window.setTimeout(() => {
+      setHeroComplete(true);
+    }, 3600);
+
+    return () => window.clearTimeout(fallback);
+  }, [heroComplete]);
+
   return (
     <div className="space-y-20">
       <section className="space-y-6">
         <p className="text-xs uppercase tracking-[0.5em] text-black/60">
           {hero.locationLabel}
         </p>
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
-          {hero.name} · {hero.title}
-        </h1>
-        <p className="max-w-2xl text-base sm:text-lg text-black/80">
+        <HeroName
+          name={hero.name}
+          title={hero.title}
+          onComplete={handleHeroComplete}
+        />
+        <div
+          className={`max-w-2xl text-base text-black/80 transition-opacity duration-700 sm:text-lg ${
+            heroComplete ? "opacity-100" : "opacity-0"
+          }`}
+        >
           {hero.summary}
-        </p>
-        <div className="space-y-1 text-sm uppercase tracking-[0.3em] text-black/70">
+        </div>
+        <div
+          className={`space-y-1 text-sm uppercase tracking-[0.3em] text-black/70 transition-opacity duration-700 delay-100 ${
+            heroComplete ? "opacity-100" : "opacity-0"
+          }`}
+        >
           <p>
             {hero.contact.phone} · {hero.contact.location}
           </p>
@@ -50,7 +83,11 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div
+          className={`grid gap-4 transition-opacity duration-700 delay-200 sm:grid-cols-3 ${
+            heroComplete ? "opacity-100" : "opacity-0"
+          }`}
+        >
           {stats.map((stat) => (
             <div
               key={stat.label}
@@ -70,7 +107,11 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      <section className="space-y-6">
+      <section
+        className={`space-y-6 transition-opacity duration-700 delay-[350ms] ${
+          heroComplete ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <header className="space-y-1">
           <p className="text-xs uppercase tracking-[0.45em] text-black/55">
             Experience log
@@ -102,7 +143,11 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      <section className="grid gap-10 lg:grid-cols-[2fr_1fr]">
+      <section
+        className={`grid gap-10 transition-opacity duration-700 delay-[450ms] lg:grid-cols-[2fr_1fr] ${
+          heroComplete ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <div className="space-y-5">
           <header className="space-y-1">
             <p className="text-xs uppercase tracking-[0.45em] text-black/55">
@@ -146,7 +191,11 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      <section className="space-y-4">
+      <section
+        className={`space-y-4 transition-opacity duration-700 delay-[550ms] ${
+          heroComplete ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <header>
           <p className="text-xs uppercase tracking-[0.45em] text-black/55">
             Next on the ribbon

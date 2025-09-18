@@ -48,9 +48,10 @@ src/data/
 - Inactive links invert to black-on-white while hovering, which now respect Tailwind text utilities after the `@layer base` update.
 
 ## Home Route (`src/app/page.tsx`)
+- Marked as a client component so it can orchestrate staged reveal timings alongside GSAP.
 - Pulls structured content from `getHomeData()` which hydrates JSON into typed objects.
-- Sections are separated by dashed rules to mimic typewritten page breaks while mapping directly over JSON arrays (`stats`, `experiences`, `skills.items`, `credentials.items`).
-- Hero block renders location label, name/title, summary, and contact strip sourced from `home.json` to avoid hardcoding.
+- `HeroName` client component (`src/components/hero-name.tsx`) scrambles the hero name via GSAP’s ScrambleTextPlugin; once the title fade completes it triggers `onComplete` and internally guards so the sequence only runs once per session.
+- Remaining hero copy, contact strip, stats, and each subsequent section fade in sequentially using Tailwind opacity transitions keyed on the `heroComplete` flag.
 - Final CTA section copies the `cta` object, keeping messaging editable without touching component code.
 
 ## Projects Route (`src/app/projects/page.tsx`)

@@ -13,17 +13,55 @@
 body {
   min-height: 100vh;
   margin: 0;
+  position: relative;
+  overflow-x: hidden;
   background:
     radial-gradient(1px 1px at 25% 25%, rgba(0, 0, 0, 0.07), transparent) repeat,
     linear-gradient(180deg, rgba(0, 0, 0, 0.06) 0%, transparent 32%),
     linear-gradient(90deg, rgba(0, 0, 0, 0.04) 0%, transparent 30%);
   background-color: var(--paper-base);
   background-size: 80px 80px, 100% 240px, 220px 220px;
+  background-position: -28px -32px, 0 -24px, -20px -10px;
   color: var(--ink);
   font-family: var(--font-typewriter), "Courier New", "Roboto Mono", monospace;
   letter-spacing: 0.015em;
   line-height: 1.8;
   text-rendering: optimizeLegibility;
+  animation: paperRipple 26s linear infinite;
+  will-change: background-position;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -30%;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 38%, rgba(255, 255, 255, 0) 72%);
+  opacity: 0.28;
+  transform: translate3d(-40%, -35%, 0) scale(0.85);
+  animation: rippleHighlight 30s linear infinite;
+  mix-blend-mode: soft-light;
+  will-change: transform, opacity;
+}
+
+@keyframes paperRipple {
+  0% {
+    background-position: -28px -32px, 0 -24px, -20px -10px;
+  }
+  100% {
+    background-position: 220px 180px, 0 96px, 160px 84px;
+  }
+}
+
+@keyframes rippleHighlight {
+  0% {
+    transform: translate3d(-40%, -35%, 0) scale(0.82);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate3d(60%, 45%, 0) scale(1.08);
+    opacity: 0.32;
+  }
 }
 
 .site-canvas {
@@ -74,6 +112,18 @@ body {
 
   button:disabled {
     cursor: not-allowed;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+    background-position: -28px -32px, 0 -24px, -20px -10px;
+  }
+
+  body::before {
+    animation: none;
+    opacity: 0.18;
   }
 }
 
