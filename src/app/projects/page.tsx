@@ -1,26 +1,6 @@
-const projects = [
-  {
-    title: "Studio Atlas",
-    year: "2024",
-    stack: "Next.js · tRPC · Postgres",
-    description:
-      "Design-led platform for creative studios to manage proposals, production schedules, and stakeholder feedback with real-time updates.",
-  },
-  {
-    title: "Ledgerline",
-    year: "2023",
-    stack: "Remix · GraphQL · Tailwind",
-    description:
-      "Financial analytics dashboard distilling complex reporting into digestible narratives with exportable insights and alerts.",
-  },
-  {
-    title: "CartaPress",
-    year: "2022",
-    stack: "Astro · Sanity · Cloudflare",
-    description:
-      "High-performing content site with editorial workflows, custom MDX components, and edge-rendered localization.",
-  },
-];
+import { getProjects } from "@/data/portfolio";
+
+const projects = getProjects();
 
 export default function ProjectsPage() {
   return (
@@ -51,6 +31,19 @@ export default function ProjectsPage() {
               {project.stack}
             </p>
             <p className="mt-4 text-sm text-black/75">{project.description}</p>
+            {project.links.length > 0 ? (
+              <div className="mt-4 flex flex-wrap gap-3 text-[0.6rem] uppercase tracking-[0.35em]">
+                {project.links.map((link) => (
+                  <a
+                    key={`${project.title}-${link.label}`}
+                    href={link.url}
+                    className="border border-black px-3 py-2 text-black transition-colors duration-200 hover:bg-black hover:text-white"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            ) : null}
           </article>
         ))}
       </div>

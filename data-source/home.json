@@ -1,0 +1,79 @@
+{
+  "hero": {
+    "locationLabel": "Typed in Toronto · Ontario",
+    "name": "Sarath Kumar",
+    "title": "Full-Stack Developer",
+    "summary": "Passionate about turning complex datasets into intuitive products—from high-performance dashboards and streaming AI copilots to cross-platform Salesforce experiences backed by React and Java.",
+    "contact": {
+      "phone": "905.922.5917",
+      "location": "Toronto, ON",
+      "email": "Sarathkumarks.dev@gmail.com",
+      "linkedin": "https://linkedin.com/in/sarathkumarks",
+      "github": "https://github.com/sarathkumar365"
+    }
+  },
+  "stats": [
+    {
+      "label": "Experience",
+      "value": "2+ years"
+    },
+    {
+      "label": "Primary Stack",
+      "value": "React · Java · Salesforce"
+    },
+    {
+      "label": "Location",
+      "value": "Toronto · ON"
+    }
+  ],
+  "experiences": [
+    {
+      "period": "2025 — Present",
+      "role": "Full Stack Developer",
+      "company": "2Creative",
+      "summary": "Rebuilding analytics dashboards with React, D3.js, and Java services, resolving pagination bottlenecks, and enabling saved chart views that lifted retention by 22%."
+    },
+    {
+      "period": "2024",
+      "role": "AI Chat Features",
+      "company": "2Creative",
+      "summary": "Delivered a streaming OpenAI-powered chatbot UI using fetchEventSource over Java APIs, grounding conversations in live dashboard data and boosting interaction 35%."
+    },
+    {
+      "period": "2023 — 2025",
+      "role": "Full Stack Software Development",
+      "company": "Lambton College",
+      "summary": "Completed the post-graduate program (GPA 3.4/4.0) while shipping MERN, cloud, and AI-driven capstones for real clients and academic showcases."
+    }
+  ],
+  "skills": {
+    "heading": "Skills & Technologies",
+    "items": [
+      "React · Next.js",
+      "JavaScript / TypeScript",
+      "Java & Spring",
+      "Node.js · Express",
+      "Salesforce Platform",
+      "D3.js Data Viz",
+      "OpenAI API & SSE",
+      "Postgres · Prisma",
+      "MongoDB",
+      "Docker · Jenkins",
+      "Azure · AWS · GCP",
+      "Git & GitHub"
+    ]
+  },
+  "credentials": {
+    "heading": "Education & Credentials",
+    "items": [
+      "Post-Grad Certificate in Full Stack Software Development, Lambton College (GPA 3.4/4.0).",
+      "Salesforce Certified Administrator & Omnistudio Developer.",
+      "Architecting with Google Compute Engine specialization; led campus debugging challenge."
+    ]
+  },
+  "cta": {
+    "heading": "Let’s ship data-rich experiences",
+    "body": "From high-impact dashboards to AI copilots grounded in real data, I love partnering with teams who value measurable outcomes and thoughtfully crafted interfaces.",
+    "closing": "Drop a line at Sarathkumarks.dev@gmail.com or connect on LinkedIn to start a conversation."
+  }
+}

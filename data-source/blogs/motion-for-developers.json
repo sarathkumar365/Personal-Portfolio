@@ -1,0 +1,12 @@
+{
+  "slug": "motion-for-developers",
+  "title": "Motion for Developers Who Love Constraints",
+  "author": "Sarath Kumar",
+  "date": "2024-09-05",
+  "summary": "A primer on introducing motion systems that stay accessible and performant.",
+  "content": [
+    "Every animation should have intent: clarify interaction, reward curiosity, or reduce cognitive load.",
+    "Lean on tools like Framer Motion for orchestration and match easing curves to the tone of your brand.",
+    "Ship with performance budgets—motion should complement the experience, not compete with it."
+  ]
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "title": "FormSpec",
+    "year": "2024",
+    "stack": "Next.js · TypeScript · Prisma/Postgres",
+    "description": "Schema-driven form builder that compiles custom specs into JSON Schema/UI Schema with live preview, publication share links, and immutable submission workflows.",
+    "links": [
+      {
+        "label": "Live",
+        "url": "#"
+      },
+      {
+        "label": "GitHub",
+        "url": "#"
+      }
+    ]
+  },
+  {
+    "title": "Analytics & NL-to-Query Chat",
+    "year": "2024",
+    "stack": "Next.js · Postgres JSONB · LLM",
+    "description": "Designed a JSON DSL for KPIs, charts, and filters, built SQL compilation over JSONB storage, and added a grounded chat interface that emits executable analytics queries.",
+    "links": []
+  },
+  {
+    "title": "Pokémon Match Game",
+    "year": "2023",
+    "stack": "React · CSS Animations · Netlify",
+    "description": "Responsive memory game with flip interactions, score tracking, and Netlify deployment for quick play-and-share sessions across devices.",
+    "links": [
+      {
+        "label": "Play",
+        "url": "#"
+      }
+    ]
+  }
+]

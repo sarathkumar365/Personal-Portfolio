@@ -1,0 +1,12 @@
+{
+  "slug": "durable-portfolio-interfaces",
+  "title": "Designing Durable Portfolio Interfaces",
+  "author": "Sarath Kumar",
+  "date": "2024-11-01",
+  "summary": "How to combine storytelling, motion, and developer empathy when building personal sites.",
+  "content": [
+    "A memorable portfolio is less about shiny features and more about the narrative arc you create. Lead with context, offer proof, and invite conversation.",
+    "I start with foundational copy and sketch sections in low fidelity. Only after the structure feels inevitable do I reach for animation libraries to elevate the experience.",
+    "Small flourishes—subtle hover motion, tactile buttons, intentional typographic rhythm—carry more weight than large interactions that distract from the message."
+  ]
+}
