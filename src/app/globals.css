@@ -67,6 +67,14 @@ body {
     text-decoration: underline;
     text-decoration-style: dotted;
   }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
 }
 
 @media (max-width: 640px) {
