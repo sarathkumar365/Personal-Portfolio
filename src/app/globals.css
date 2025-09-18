@@ -36,12 +36,13 @@ body::before {
   position: fixed;
   inset: -30%;
   pointer-events: none;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 38%, rgba(255, 255, 255, 0) 72%);
-  opacity: 0.28;
-  transform: translate3d(-40%, -35%, 0) scale(0.85);
-  animation: rippleHighlight 30s linear infinite;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0) 72%);
+  background-repeat: repeat;
+  background-size: 180% 180%;
+  opacity: 0.25;
+  animation: rippleHighlight 32s linear infinite;
   mix-blend-mode: soft-light;
-  will-change: transform, opacity;
+  will-change: background-position, opacity;
 }
 
 @keyframes paperRipple {
@@ -49,18 +50,18 @@ body::before {
     background-position: -28px -32px, 0 -24px, -20px -10px;
   }
   100% {
-    background-position: 220px 180px, 0 96px, 160px 84px;
+    background-position: 52px 48px, 0 216px, 200px 210px;
   }
 }
 
 @keyframes rippleHighlight {
   0% {
-    transform: translate3d(-40%, -35%, 0) scale(0.82);
-    opacity: 0.2;
+    background-position: 0% 0%;
+    opacity: 0.24;
   }
   100% {
-    transform: translate3d(60%, 45%, 0) scale(1.08);
-    opacity: 0.32;
+    background-position: 100% 100%;
+    opacity: 0.3;
   }
 }
 
@@ -90,6 +91,13 @@ body::before {
   display: flex;
   flex-direction: column;
   gap: clamp(3rem, 8vw, 5rem);
+  perspective: 1600px;
+  transform-style: preserve-3d;
+}
+
+.page-turn-section {
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
 }
 
 .shadow-soft {

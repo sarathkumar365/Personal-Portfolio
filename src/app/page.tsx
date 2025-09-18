@@ -1,21 +1,18 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import type { GSAPContext, GSAPTween } from "gsap";
+import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 
 import HeroName from "@/components/hero-name";
 import { getHomeData } from "@/data/portfolio";
 
-const {
-  hero,
-  stats,
-  experiences,
-  skills,
-  credentials,
-  cta,
-} = getHomeData();
+const { hero, stats, experiences, skills, credentials, cta } = getHomeData();
 
 export default function Home() {
   const [heroComplete, setHeroComplete] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const handleHeroComplete = useCallback(() => {
     setHeroComplete(true);
@@ -33,9 +30,112 @@ export default function Home() {
     return () => window.clearTimeout(fallback);
   }, [heroComplete]);
 
+  useEffect(() => {
+    let ctx: GSAPContext | undefined;
+    const tweens: GSAPTween[] = [];
+    const triggers: ScrollTriggerType[] = [];
+    let isMounted = true;
+
+    void (async () => {
+      const [gsapModule, scrollTriggerModule] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+
+      const gsap = gsapModule.gsap;
+      const ScrollTrigger =
+        scrollTriggerModule.ScrollTrigger ?? scrollTriggerModule.default;
+
+      if (!isMounted || !containerRef.current) {
+        return;
+      }
+
+      if (!ScrollTrigger) {
+        return;
+      }
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      ctx = gsap.context(() => {
+        const sections = gsap.utils.toArray<HTMLElement>("[data-page-section]");
+
+        if (!sections.length) {
+          return;
+        }
+
+        const snapFn =
+          sections.length > 1 && ScrollTrigger?.utils
+            ? ScrollTrigger.utils.snap(1 / (sections.length - 1))
+            : undefined;
+
+        sections.forEach((section, index) => {
+          const direction = index % 2 === 0 ? 1 : -1;
+
+          gsap.set(section, {
+            transformOrigin: direction > 0 ? "left center" : "right center",
+            transformPerspective: 1400,
+          });
+
+          const tween = gsap.fromTo(
+            section,
+            {
+              rotateY: direction * -12,
+              rotateX: 4,
+              xPercent: direction * -7.5,
+              yPercent: 9,
+              opacity: 0.6,
+            },
+            {
+              rotateY: 0,
+              rotateX: 0,
+              xPercent: 0,
+              yPercent: 0,
+              opacity: 1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: section,
+                start: "top 80%",
+                end: "top 25%",
+                scrub: 0.35,
+                fastScrollEnd: true,
+                anticipatePin: 1,
+              },
+            }
+          );
+
+          tweens.push(tween);
+          if (tween.scrollTrigger) {
+            triggers.push(tween.scrollTrigger);
+          }
+        });
+
+        if (snapFn && ScrollTrigger) {
+          const snapTrigger = ScrollTrigger.create({
+            start: 0,
+            end: () => ScrollTrigger.maxScroll(window),
+            snap: {
+              snapTo: (value) => snapFn(value),
+              duration: { min: 0.18, max: 0.35 },
+              ease: "power2.inOut",
+            },
+          });
+
+          triggers.push(snapTrigger);
+        }
+      }, containerRef);
+    })();
+
+    return () => {
+      isMounted = false;
+      ctx?.revert();
+      tweens.forEach((tween) => tween.kill());
+      triggers.forEach((trigger) => trigger.kill());
+    };
+  }, []);
+
   return (
-    <div className="space-y-20">
-      <section className="space-y-6">
+    <div ref={containerRef} className="space-y-20">
+      <section data-page-section className="page-turn-section space-y-6">
         <p className="text-xs uppercase tracking-[0.5em] text-black/60">
           {hero.locationLabel}
         </p>
@@ -67,17 +167,11 @@ export default function Home() {
               {hero.contact.email}
             </a>{" "}
             ·{" "}
-            <a
-              href={hero.contact.linkedin}
-              className="hover:text-black"
-            >
+            <a href={hero.contact.linkedin} className="hover:text-black">
               LinkedIn
             </a>{" "}
             ·{" "}
-            <a
-              href={hero.contact.github}
-              className="hover:text-black"
-            >
+            <a href={hero.contact.github} className="hover:text-black">
               GitHub
             </a>
           </p>
@@ -108,7 +202,8 @@ export default function Home() {
       />
 
       <section
-        className={`space-y-6 transition-opacity duration-700 delay-[350ms] ${
+        data-page-section
+        className={`page-turn-section space-y-6 transition-opacity duration-700 delay-[350ms] ${
           heroComplete ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -144,7 +239,8 @@ export default function Home() {
       />
 
       <section
-        className={`grid gap-10 transition-opacity duration-700 delay-[450ms] lg:grid-cols-[2fr_1fr] ${
+        data-page-section
+        className={`page-turn-section grid gap-10 transition-opacity duration-700 delay-[450ms] lg:grid-cols-[2fr_1fr] ${
           heroComplete ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -192,7 +288,8 @@ export default function Home() {
       />
 
       <section
-        className={`space-y-4 transition-opacity duration-700 delay-[550ms] ${
+        data-page-section
+        className={`page-turn-section space-y-4 transition-opacity duration-700 delay-[550ms] ${
           heroComplete ? "opacity-100" : "opacity-0"
         }`}
       >

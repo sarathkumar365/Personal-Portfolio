@@ -54,6 +54,10 @@ src/data/
 - Remaining hero copy, contact strip, stats, and each subsequent section fade in sequentially using Tailwind opacity transitions keyed on the `heroComplete` flag.
 - Final CTA section copies the `cta` object, keeping messaging editable without touching component code.
 
+### Scroll Experience
+- `page-turn-scroll` branch introduces GSAP ScrollTrigger to animate each `[data-page-section]` block with a page-turn rotation/translation as the user scrolls.
+- A global snap configuration nudges the viewport toward the nearest section, producing crisp, notebook-style “page turns” without sacrificing smoothness.
+
 ## Projects Route (`src/app/projects/page.tsx`)
 - Calls `getProjects()` to retrieve the typed array from `projects.json`.
 - Each project renders inside a bordered card with subtle hover translation.
