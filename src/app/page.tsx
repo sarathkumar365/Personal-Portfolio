@@ -181,11 +181,21 @@ export default function Home() {
               {hero.contact.email}
             </a>{" "}
             ·{" "}
-            <a href={hero.contact.linkedin} className="hover:text-black">
+            <a
+              href={hero.contact.linkedin}
+              className="hover:text-black"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               LinkedIn
             </a>{" "}
             ·{" "}
-            <a href={hero.contact.github} className="hover:text-black">
+            <a
+              href={hero.contact.github}
+              className="hover:text-black"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               GitHub
             </a>
           </p>
