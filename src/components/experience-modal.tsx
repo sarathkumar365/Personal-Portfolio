@@ -66,7 +66,7 @@ export default function ExperienceModal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/15 backdrop-blur-md px-4 py-10"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-md px-4 py-10"
       onClick={onClose}
     >
       <div
@@ -74,51 +74,67 @@ export default function ExperienceModal({
         aria-modal="true"
         aria-labelledby={headingId}
         aria-describedby={descriptionId}
-        className="relative w-full max-w-3xl overflow-hidden rounded-md border border-black/25 bg-white/90 shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+        className="relative w-full max-w-2xl overflow-hidden rounded-md bg-[#fefbf6] shadow-[0_24px_60px_rgba(0,0,0,0.35)]"
         onClick={(event) => event.stopPropagation()}
       >
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 border border-black/25"
+        />
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 text-xs uppercase tracking-[0.32em] text-black/60 transition hover:text-black"
+          className="absolute right-6 top-6 cursor-pointer text-[0.6rem] uppercase tracking-[0.35em] text-black/60 transition hover:text-black"
         >
           Close ✕
         </button>
         <div
-          className="max-h-[95vh] overflow-y-auto px-8 pb-12 pt-16 text-black/80 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="max-h-[95vh] overflow-y-auto p-8 text-black/80 sm:p-10 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           id={descriptionId}
         >
-          <header className="space-y-2 border-b border-black/10 pb-6">
-            <p className="text-[0.6rem] uppercase tracking-[0.5em] text-black/50">
-              {experience.period} · {experience.location}
-            </p>
-            <h2
-              id={headingId}
-              className="text-2xl font-semibold tracking-tight text-black"
-            >
-              {experience.role} · {experience.company}
-            </h2>
-            <p className="text-sm text-black/70">{experience.details.overview}</p>
-          </header>
-          <div className="space-y-6 py-6 text-sm leading-relaxed">
-            {experience.details.sections.map((section) => (
-              <section key={section.title} className="space-y-2">
+          <div className="rounded-sm bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.02),transparent_55%)]">
+            <div className="space-y-3 border-b border-black/15 pb-6">
+              <p className="text-[0.58rem] uppercase tracking-[0.45em] text-black/55">
+                {experience.period} · {experience.location}
+              </p>
+              <h2
+                id={headingId}
+                className="text-2xl font-semibold tracking-tight text-black"
+              >
+                {experience.role} · {experience.company}
+              </h2>
+              <p className="text-sm text-black/70">{experience.details.overview}</p>
+            </div>
+            <div className="space-y-6 py-6 text-sm leading-relaxed">
+              <section className="space-y-2">
                 <h3 className="text-xs uppercase tracking-[0.4em] text-black/55">
-                  {section.title}
+                  {experience.details.headline}
                 </h3>
-                <ul className="space-y-2">
-                  {section.items.map((item) => (
-                    <li key={item} className="pl-4 text-black/80">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+                <p className="text-sm text-black/75">{experience.summary}</p>
               </section>
-            ))}
+              {experience.details.sections.map((section) => (
+                <section key={section.title} className="space-y-2">
+                  <h4 className="text-xs uppercase tracking-[0.36em] text-black/55">
+                    {section.title}
+                  </h4>
+                  <ul className="space-y-2">
+                    {section.items.map((item) => (
+                      <li key={item} className="relative pl-5 text-sm text-black/80">
+                        <span
+                          className="absolute left-0 top-2 h-[3px] w-[3px] rounded-full bg-black"
+                          aria-hidden="true"
+                        />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+            <footer className="border-t border-dashed border-black/20 pt-6 text-sm italic text-black/70">
+              {experience.details.closing}
+            </footer>
           </div>
-          <footer className="border-t border-black/10 pt-6 text-sm text-black/75">
-            {experience.details.closing}
-          </footer>
         </div>
       </div>
     </div>,
