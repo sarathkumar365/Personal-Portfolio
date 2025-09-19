@@ -172,9 +172,7 @@ export default function Home() {
             heroComplete ? "opacity-100" : "opacity-0"
           }`}
         >
-          <p>
-            {hero.contact.phone} · {hero.contact.location}
-          </p>
+          <p>{hero.contact.phone}</p>
           <p>
             <a
               href={`mailto:${hero.contact.email}`}
