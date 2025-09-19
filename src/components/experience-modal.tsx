@@ -1,9 +1,11 @@
+
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import type { ExperienceDetail } from "@/types/experiences";
+import type { GSAP, Timeline, Tween } from "gsap";
 
 interface ExperienceModalProps {
   experience: ExperienceDetail;
@@ -15,6 +17,10 @@ export default function ExperienceModal({
   onClose,
 }: ExperienceModalProps) {
   const [isMounted, setIsMounted] = useState(false);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const scrollTweenRef = useRef<Tween | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -51,6 +57,116 @@ export default function ExperienceModal({
     };
   }, [isMounted, onClose]);
 
+  useEffect(() => {
+    if (!isMounted) {
+      return undefined;
+    }
+
+    const overlayElement = overlayRef.current;
+    const modalElement = modalRef.current;
+    const scrollElement = scrollRef.current;
+
+    let cancelled = false;
+    let wheelHandler: ((event: WheelEvent) => void) | undefined;
+    let introTimeline: Timeline | undefined;
+    let gsapInstance: GSAP | undefined;
+
+    void (async () => {
+      const [gsapModule, scrollToModule] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollToPlugin"),
+      ]);
+
+      if (cancelled) {
+        return;
+      }
+
+      const { gsap } = gsapModule;
+      const ScrollToPlugin =
+        scrollToModule.ScrollToPlugin ?? scrollToModule.default;
+
+      gsap.registerPlugin(ScrollToPlugin);
+      gsapInstance = gsap as GSAP;
+
+      if (overlayElement && modalElement) {
+        gsap.set(overlayElement, { opacity: 0, willChange: "opacity" });
+        gsap.set(modalElement, {
+          opacity: 0,
+          y: 28,
+          scale: 0.96,
+          willChange: "transform, opacity",
+        });
+
+        introTimeline = gsap
+          .timeline({ defaults: { ease: "power2.out" } })
+          .to(overlayElement, {
+            opacity: 1,
+            duration: 0.28,
+            ease: "power1.out",
+          })
+          .to(
+            modalElement,
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.5,
+            },
+            0,
+          )
+          .add(() => {
+            gsap.set([overlayElement, modalElement], { clearProps: "willChange" });
+          });
+      }
+
+      if (!scrollElement) {
+        return;
+      }
+
+      wheelHandler = (event: WheelEvent) => {
+        if (!gsapInstance) {
+          return;
+        }
+
+        const delta =
+          event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
+
+        if (delta === 0) {
+          return;
+        }
+
+        event.preventDefault();
+
+        const maxScroll = scrollElement.scrollHeight - scrollElement.clientHeight;
+        const target = gsap.utils.clamp(
+          0,
+          maxScroll,
+          scrollElement.scrollTop + delta,
+        );
+
+        scrollTweenRef.current?.kill();
+        scrollTweenRef.current = gsapInstance.to(scrollElement, {
+          duration: 0.45,
+          scrollTo: { y: target },
+          ease: "power2.out",
+        });
+      };
+
+      scrollElement.addEventListener("wheel", wheelHandler, {
+        passive: false,
+      });
+    })();
+
+    return () => {
+      cancelled = true;
+      scrollTweenRef.current?.kill();
+      if (wheelHandler && scrollElement) {
+        scrollElement.removeEventListener("wheel", wheelHandler);
+      }
+      introTimeline?.kill();
+    };
+  }, [isMounted]);
+
   const headingId = useMemo(
     () => `experience-modal-${experience.id}-headline`,
     [experience.id],
@@ -66,10 +182,12 @@ export default function ExperienceModal({
 
   return createPortal(
     <div
+      ref={overlayRef}
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-md px-4 py-10"
       onClick={onClose}
     >
       <div
+        ref={modalRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={headingId}
@@ -89,6 +207,7 @@ export default function ExperienceModal({
           Close ✕
         </button>
         <div
+          ref={scrollRef}
           className="max-h-[95vh] overflow-y-auto p-8 text-black/80 sm:p-10 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           id={descriptionId}
         >
