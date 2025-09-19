@@ -6,13 +6,36 @@ import type { GSAPContext, GSAPTween } from "gsap";
 import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 
 import HeroName from "@/components/hero-name";
+import ExperienceModal from "@/components/experience-modal";
 import { getHomeData } from "@/data/portfolio";
+import type { ExperienceDetail } from "@/types/experiences";
 
 const { hero, stats, experiences, skills, credentials, cta } = getHomeData();
 
 export default function Home() {
   const [heroComplete, setHeroComplete] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [selectedExperience, setSelectedExperience] =
+    useState<ExperienceDetail | null>(null);
+  const [visibleExperiences, setVisibleExperiences] = useState<
+    Record<string, boolean>
+  >({});
+  const experienceRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const registerExperienceRef = useCallback(
+    (id: string) => (node: HTMLDivElement | null) => {
+      if (node) {
+        experienceRefs.current[id] = node;
+      } else {
+        delete experienceRefs.current[id];
+      }
+    },
+    [],
+  );
+
+  const closeExperience = useCallback(() => {
+    setSelectedExperience(null);
+  }, []);
 
   const handleHeroComplete = useCallback(() => {
     setHeroComplete(true);
@@ -40,6 +63,51 @@ export default function Home() {
     }, 300);
 
     return () => window.clearTimeout(timeout);
+  }, [heroComplete]);
+
+  useEffect(() => {
+    if (!heroComplete) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          const id = (entry.target as HTMLElement).dataset.experienceId;
+
+          if (!id) {
+            return;
+          }
+
+          setVisibleExperiences((prev) => {
+            if (prev[id]) {
+              return prev;
+            }
+
+            return {
+              ...prev,
+              [id]: true,
+            };
+          });
+        });
+      },
+      { threshold: 0.4 },
+    );
+
+    const elements = Object.values(experienceRefs.current).filter(
+      (node): node is HTMLDivElement => Boolean(node),
+    );
+
+    elements.forEach((element) => observer.observe(element));
+
+    return () => {
+      elements.forEach((element) => observer.unobserve(element));
+      observer.disconnect();
+    };
   }, [heroComplete]);
 
   useEffect(() => {
@@ -248,20 +316,49 @@ export default function Home() {
           </h2>
         </header>
         <div className="space-y-6">
-          {experiences.map((experience) => (
-            <article
-              key={`${experience.period}-${experience.company}`}
-              className="border border-black/25 bg-white/40 p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)] transition duration-200 hover:-translate-y-1 hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.8),0_16px_32px_rgba(0,0,0,0.08)]"
-            >
-              <p className="text-[0.6rem] uppercase tracking-[0.42em] text-black/60">
-                {experience.period}
-              </p>
-              <h3 className="mt-2 text-xl font-semibold">
-                {experience.role} · {experience.company}
-              </h3>
-              <p className="mt-3 text-sm text-black/75">{experience.summary}</p>
-            </article>
-          ))}
+          {experiences.map((experience) => {
+            const isUnlocked = Boolean(visibleExperiences[experience.id]);
+
+            return (
+              <article
+                key={experience.id}
+                ref={registerExperienceRef(experience.id)}
+                data-experience-id={experience.id}
+                className="border border-black/25 bg-white/40 p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)] transition duration-200 hover:-translate-y-1 hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.8),0_16px_32px_rgba(0,0,0,0.08)]"
+              >
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.6rem] uppercase tracking-[0.42em] text-black/60">
+                  <span>{experience.period}</span>
+                  <span className="text-black/30">·</span>
+                  <span>{experience.location}</span>
+                </div>
+                <h3 className="mt-2 text-xl font-semibold">
+                  {experience.role} · {experience.company}
+                </h3>
+                <p className="mt-3 text-sm text-black/75">{experience.summary}</p>
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <p className="text-xs uppercase tracking-[0.32em] text-black/55">
+                    {experience.details.headline}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (isUnlocked) {
+                        setSelectedExperience(experience);
+                      }
+                    }}
+                    disabled={!isUnlocked}
+                    className={`rounded-sm border border-black/40 px-4 py-2 text-[0.65rem] uppercase tracking-[0.3em] transition ${
+                      isUnlocked
+                        ? "bg-black text-white hover:-translate-y-0.5 hover:bg-black/90"
+                        : "cursor-not-allowed bg-white/40 text-black/40"
+                    }`}
+                  >
+                    {isUnlocked ? "Open letter" : "Scroll to unlock"}
+                  </button>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
@@ -336,6 +433,12 @@ export default function Home() {
         <p className="max-w-2xl text-sm text-black/75">{cta.body}</p>
         <p className="text-sm text-black/75">{cta.closing}</p>
       </section>
+      {selectedExperience ? (
+        <ExperienceModal
+          experience={selectedExperience}
+          onClose={closeExperience}
+        />
+      ) : null}
     </div>
   );
 }

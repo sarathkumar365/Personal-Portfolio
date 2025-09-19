@@ -1,9 +1,9 @@
 {
   "hero": {
-    "locationLabel": "Typed in Toronto · Ontario",
+    "locationLabel": "Typed in Toronto \u00b7 Ontario",
     "name": "Sarath Kumar",
     "title": "Full-Stack Developer",
-    "summary": "Passionate about turning complex datasets into intuitive products—from high-performance dashboards and streaming AI copilots to cross-platform Salesforce experiences backed by React and Java.",
+    "summary": "Passionate about turning complex datasets into intuitive products\u2014from high-performance dashboards and streaming AI copilots to cross-platform Salesforce experiences backed by React and Java.",
     "contact": {
       "phone": "905.922.5917",
       "location": "Toronto, ON",
@@ -19,47 +19,96 @@
     },
     {
       "label": "Primary Stack",
-      "value": "React · Java · Salesforce"
+      "value": "React \u00b7 Java \u00b7 Salesforce"
     },
     {
       "label": "Location",
-      "value": "Toronto · ON"
+      "value": "Toronto \u00b7 ON"
     }
   ],
   "experiences": [
     {
-      "period": "2025 — Present",
+      "id": "2creative-full-stack-developer",
+      "period": "2025 \u2014 Present",
       "role": "Full Stack Developer",
       "company": "2Creative",
-      "summary": "Rebuilding analytics dashboards with React, D3.js, and Java services, resolving pagination bottlenecks, and enabling saved chart views that lifted retention by 22%."
+      "location": "Toronto, ON",
+      "summary": "Scaled data-rich dashboards and AI copilots for enterprise analytics teams while partnering across Salesforce integrations.",
+      "details": {
+        "headline": "Dashboard analytics, AI copilots, and cross-platform reliability",
+        "overview": "Blended D3.js visualization work, streaming AI chat, and Salesforce collaboration to modernize 2Creative's customer analytics suite.",
+        "sections": [
+          {
+            "title": "Dashboard Analytics & Data Visualization (React.js, D3.js, Java)",
+            "items": [
+              "\u2022 Worked extensively on an existing suite of advanced, responsive D3.js charts across multiple customer dashboards.",
+              "\u2022 Rearchitected the dashboard implementation to align with evolving business requirements \u2014 including redesigning the pagination logic \u2014 which significantly improved performance and resolved a major bottleneck in the live environment.",
+              "\u2022 Optimized chart rendering and implemented user-specific customization features, allowing users to save and load personalized chart views, contributing to a 22% increase in user retention.",
+              "\u2022 Proactively identified and resolved a wide range of UI bugs and performance issues, resulting in a smoother and more reliable user experience."
+            ]
+          },
+          {
+            "title": "AI-Powered Chatbot Integration (React.js, Java, OpenAI API)",
+            "items": [
+              "\u2022 Designed and developed a fully interactive AI chatbot UI using React, integrated with OpenAI\u2019s Davinci model via a Java backend.",
+              "\u2022 Implemented Server-Sent Events (SSE) in the UI using Microsoft\u2019s fetchEventSource, enabling the chatbot to initiate a request and stream responses in real-time as they become available from the backend \u2014 enhancing responsiveness and improving user experience.",
+              "\u2022 Enabled the bot to interpret live dashboard data and generate contextual summaries, insights, and actionable recommendations.",
+              "\u2022 Boosted user interaction by 35% and increased customer time-on-site by 28%, significantly enhancing overall product usability."
+            ]
+          },
+          {
+            "title": "Cross-Platform Debugging & Collaboration",
+            "items": [
+              "\u2022 Collaborated with Salesforce teams to troubleshoot UI-related issues caused by backend data inconsistencies.",
+              "\u2022 Contributed to multiple cross-platform fixes, improving data integrity and ensuring consistent behavior across integrated systems."
+            ]
+          }
+        ],
+        "closing": "Outcome-focused collaboration paired streaming AI experiences with reliable dashboards and Salesforce alignment."
+      }
     },
     {
-      "period": "2024",
-      "role": "AI Chat Features",
-      "company": "2Creative",
-      "summary": "Delivered a streaming OpenAI-powered chatbot UI using fetchEventSource over Java APIs, grounding conversations in live dashboard data and boosting interaction 35%."
-    },
-    {
-      "period": "2023 — 2025",
+      "id": "lambton-full-stack-program",
+      "period": "2023 \u2014 2025",
       "role": "Full Stack Software Development",
       "company": "Lambton College",
-      "summary": "Completed the post-graduate program (GPA 3.4/4.0) while shipping MERN, cloud, and AI-driven capstones for real clients and academic showcases."
+      "location": "Toronto, ON",
+      "summary": "Post-graduate certificate program balancing MERN, cloud, and AI projects with a 3.4/4.0 GPA.",
+      "details": {
+        "headline": "Applied post-graduate program work",
+        "overview": "Combined client-ready MERN builds, cloud deployments, and AI-driven capstones while completing graduate coursework.",
+        "sections": [
+          {
+            "title": "Program Highlights",
+            "items": [
+              "Post-Graduate Certificate in Full Stack Software Development, Lambton College, Toronto \u2014 GPA: 3.4/4.0"
+            ]
+          },
+          {
+            "title": "Undergraduate Foundation",
+            "items": [
+              "Kalam Technical University, India \u2014 Final year project on NutBaaS: Blockchain-as-a-Service platform; completed core CS courses covering data structures, algorithms, and software engineering principles \u2014 GPA: 8.0/10."
+            ]
+          }
+        ],
+        "closing": "Graduated ready to deliver end-to-end product experiences informed by both postgraduate and undergraduate training."
+      }
     }
   ],
   "skills": {
     "heading": "Skills & Technologies",
     "items": [
-      "React · Next.js",
+      "React \u00b7 Next.js",
       "JavaScript / TypeScript",
       "Java & Spring",
-      "Node.js · Express",
+      "Node.js \u00b7 Express",
       "Salesforce Platform",
       "D3.js Data Viz",
       "OpenAI API & SSE",
-      "Postgres · Prisma",
+      "Postgres \u00b7 Prisma",
       "MongoDB",
-      "Docker · Jenkins",
-      "Azure · AWS · GCP",
+      "Docker \u00b7 Jenkins",
+      "Azure \u00b7 AWS \u00b7 GCP",
       "Git & GitHub"
     ]
   },
@@ -72,7 +121,7 @@
     ]
   },
   "cta": {
-    "heading": "Let’s ship data-rich experiences",
+    "heading": "Let\u2019s ship data-rich experiences",
     "body": "From high-impact dashboards to AI copilots grounded in real data, I love partnering with teams who value measurable outcomes and thoughtfully crafted interfaces.",
     "closing": "Drop a line at Sarathkumarks.dev@gmail.com or connect on LinkedIn to start a conversation."
   }

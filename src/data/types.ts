@@ -1,3 +1,5 @@
+import type { ExperienceDetail } from "../types/experiences";
+
 export interface ContactInfo {
   phone: string;
   location: string;
@@ -9,13 +11,6 @@ export interface ContactInfo {
 export interface Stat {
   label: string;
   value: string;
-}
-
-export interface Experience {
-  period: string;
-  role: string;
-  company: string;
-  summary: string;
 }
 
 export interface SkillsSection {
@@ -45,7 +40,7 @@ export interface HeroSection {
 export interface HomeData {
   hero: HeroSection;
   stats: Stat[];
-  experiences: Experience[];
+  experiences: ExperienceDetail[];
   skills: SkillsSection;
   credentials: CredentialsSection;
   cta: CallToAction;
