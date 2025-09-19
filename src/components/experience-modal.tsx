@@ -66,7 +66,7 @@ export default function ExperienceModal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-md px-4 py-10"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/15 backdrop-blur-md px-4 py-10"
       onClick={onClose}
     >
       <div
@@ -74,18 +74,18 @@ export default function ExperienceModal({
         aria-modal="true"
         aria-labelledby={headingId}
         aria-describedby={descriptionId}
-        className="relative w-full max-w-3xl rounded-md border border-black/30 bg-white/90 shadow-[0_20px_60px_rgba(0,0,0,0.2)]"
+        className="relative w-full max-w-3xl overflow-hidden rounded-md border border-black/25 bg-white/90 shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
         onClick={(event) => event.stopPropagation()}
       >
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 text-xs uppercase tracking-[0.35em] text-black/60 transition hover:text-black"
+          className="absolute right-5 top-5 text-xs uppercase tracking-[0.32em] text-black/60 transition hover:text-black"
         >
           Close ✕
         </button>
         <div
-          className="max-h-[95vh] overflow-y-auto px-8 pb-10 pt-12 text-black/80 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="max-h-[95vh] overflow-y-auto px-8 pb-12 pt-16 text-black/80 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           id={descriptionId}
         >
           <header className="space-y-2 border-b border-black/10 pb-6">

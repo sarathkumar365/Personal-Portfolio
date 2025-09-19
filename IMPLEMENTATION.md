@@ -56,8 +56,8 @@ src/types/
 - `HeroName` client component (`src/components/hero-name.tsx`) scrambles the hero name via GSAP’s ScrambleTextPlugin; once the title fade completes it triggers `onComplete` and internally guards so the sequence only runs once per session.
 - Remaining hero copy, contact strip, stats, and each subsequent section fade in sequentially using Tailwind opacity transitions keyed on the `heroComplete` flag.
 - Final CTA section copies the `cta` object, keeping messaging editable without touching component code.
-- Experience cards now read the resume-detailed schema from `data-source/home.json`, unlock the "Open letter" button via an `IntersectionObserver`, and show "Scroll to unlock" until the card is on-screen.
-- Clicking an unlocked experience opens the `ExperienceModal` portal, which locks body scroll and renders the letter-pad layout with headline, overview, resume bullet sections, and closing copy.
+- Experience cards now read the resume-detailed schema from `data-source/home.json`, track unlock state with an `IntersectionObserver`, and flip the status copy from "Scroll to unlock" to "Tap to open the letter" once the card is on-screen—at which point the entire card becomes the trigger.
+- Clicking an unlocked experience opens the `ExperienceModal` portal, aligned with the existing typewriter aesthetic (soft paper whites, subtle borders), keeps body scroll locked, and renders the resume headline, overview, bullet sections, and closing copy with comfortable spacing beneath the close control.
 - `SignatureMark` (`src/components/signature-mark.tsx`) uses the Ballet signature script font to render a fixed top-left autograph that fades in after the hero sequence (or after a fallback delay on other pages).
 - `PageTransitionProvider` (`src/components/page-transition-provider.tsx`) wraps the app shell to coordinate GSAP-driven page transitions while respecting `prefers-reduced-motion`. `TransitionLink` (`src/components/transition-link.tsx`) intercepts internal navigation to run the out/in page timeline before pushing the new route.
 

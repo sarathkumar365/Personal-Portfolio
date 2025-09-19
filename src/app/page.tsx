@@ -324,7 +324,29 @@ export default function Home() {
                 key={experience.id}
                 ref={registerExperienceRef(experience.id)}
                 data-experience-id={experience.id}
-                className="border border-black/25 bg-white/40 p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)] transition duration-200 hover:-translate-y-1 hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.8),0_16px_32px_rgba(0,0,0,0.08)]"
+                role="button"
+                tabIndex={0}
+                onClick={() => {
+                  if (isUnlocked) {
+                    setSelectedExperience(experience);
+                  }
+                }}
+                onKeyDown={(event) => {
+                  if (!isUnlocked) {
+                    return;
+                  }
+
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setSelectedExperience(experience);
+                  }
+                }}
+                className={`border border-black/25 bg-white/40 p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)] transition duration-200 ${
+                      isUnlocked
+                        ? "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/50 hover:-translate-y-1 hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.8),0_16px_32px_rgba(0,0,0,0.08)]"
+                        : "cursor-not-allowed opacity-95"
+                    }`}
+                aria-disabled={!isUnlocked}
               >
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.6rem] uppercase tracking-[0.42em] text-black/60">
                   <span>{experience.period}</span>
@@ -335,27 +357,16 @@ export default function Home() {
                   {experience.role} · {experience.company}
                 </h3>
                 <p className="mt-3 text-sm text-black/75">{experience.summary}</p>
-                <div className="mt-4 flex items-center justify-between gap-3">
-                  <p className="text-xs uppercase tracking-[0.32em] text-black/55">
-                    {experience.details.headline}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (isUnlocked) {
-                        setSelectedExperience(experience);
-                      }
-                    }}
-                    disabled={!isUnlocked}
-                    className={`rounded-sm border border-black/40 px-4 py-2 text-[0.65rem] uppercase tracking-[0.3em] transition ${
-                      isUnlocked
-                        ? "bg-black text-white hover:-translate-y-0.5 hover:bg-black/90"
-                        : "cursor-not-allowed bg-white/40 text-black/40"
-                    }`}
-                  >
-                    {isUnlocked ? "Open letter" : "Scroll to unlock"}
-                  </button>
-                </div>
+                <p className="mt-4 text-xs uppercase tracking-[0.32em] text-black/55">
+                  {experience.details.headline}
+                </p>
+                <p
+                  className={`mt-2 text-[0.62rem] uppercase tracking-[0.32em] ${
+                    isUnlocked ? "text-black/60" : "text-black/35"
+                  }`}
+                >
+                  {isUnlocked ? "Tap to open the letter" : "Scroll to unlock"}
+                </p>
               </article>
             );
           })}
