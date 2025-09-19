@@ -26,11 +26,11 @@ export default function SignatureMark({ fontClass, name }: SignatureMarkProps) {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed left-6 top-8 z-40 flex w-full max-w-[200px] justify-start sm:left-10 sm:top-10">
+    <div className="pointer-events-none fixed left-6 top-8 z-40 flex w-full max-w-[200px] justify-start sm:left-12 sm:top-12">
       <span
-        className={`select-none text-2xl font-bold tracking-[0.08em] text-black/85 drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)] transition-all duration-500 sm:text-[1.85rem] ${
+        className={`select-none text-[1.35rem] font-bold tracking-[0.05em] text-black/80 drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)] transition-all duration-400 sm:text-[1.7rem] ${
           fontClass
-        } ${visible ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"}`}
+        } ${visible ? "translate-y-0 opacity-100" : "-translate-y-1.5 opacity-0"}`}
       >
         {name}
       </span>
