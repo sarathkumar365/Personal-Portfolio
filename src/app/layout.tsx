@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Ballet, Courier_Prime } from "next/font/google";
+import { Courier_Prime, Tangerine } from "next/font/google";
 import "./globals.css";
 import NavigationBar from "@/components/navigation";
 import SignatureMark from "@/components/signature-mark";
@@ -10,7 +10,7 @@ const courierPrime = Courier_Prime({
   variable: "--font-typewriter",
 });
 
-const signatureScript = Ballet({
+const signatureScript = Tangerine({
   subsets: ["latin"],
   weight: "400",
 });
@@ -30,10 +30,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`${courierPrime.variable} antialiased`}>
         <div className="site-canvas">
-          <SignatureMark
-            fontClass={signatureScript.className}
-            name="Sarath Kumar"
-          />
+          <SignatureMark fontClass={signatureScript.className} name="Sarath" />
           <div className="paper-sheet">
             <NavigationBar />
             <main className="page-content">{children}</main>
