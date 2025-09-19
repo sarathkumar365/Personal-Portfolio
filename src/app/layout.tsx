@@ -3,6 +3,10 @@ import { Courier_Prime, Tangerine } from "next/font/google";
 import "./globals.css";
 import NavigationBar from "@/components/navigation";
 import SignatureMark from "@/components/signature-mark";
+import {
+  PageTransitionContainer,
+  PageTransitionProvider,
+} from "@/components/page-transition-provider";
 
 const courierPrime = Courier_Prime({
   weight: ["400", "700"],
@@ -32,8 +36,12 @@ export default function RootLayout({
         <div className="site-canvas">
           <SignatureMark fontClass={signatureScript.className} name="Sarath" />
           <div className="paper-sheet">
-            <NavigationBar />
-            <main className="page-content">{children}</main>
+            <PageTransitionProvider>
+              <NavigationBar />
+              <PageTransitionContainer>
+                <main className="page-content">{children}</main>
+              </PageTransitionContainer>
+            </PageTransitionProvider>
           </div>
         </div>
       </body>

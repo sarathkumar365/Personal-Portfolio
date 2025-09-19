@@ -54,6 +54,7 @@ src/data/
 - Remaining hero copy, contact strip, stats, and each subsequent section fade in sequentially using Tailwind opacity transitions keyed on the `heroComplete` flag.
 - Final CTA section copies the `cta` object, keeping messaging editable without touching component code.
 - `SignatureMark` (`src/components/signature-mark.tsx`) uses the Ballet signature script font to render a fixed top-left autograph that fades in after the hero sequence (or after a fallback delay on other pages).
+- `PageTransitionProvider` (`src/components/page-transition-provider.tsx`) wraps the app shell to coordinate GSAP-driven page transitions while respecting `prefers-reduced-motion`. `TransitionLink` (`src/components/transition-link.tsx`) intercepts internal navigation to run the out/in page timeline before pushing the new route.
 
 ### Scroll Experience
 - `page-turn-scroll` branch introduces GSAP ScrollTrigger to animate each `[data-page-section]` block with a page-turn rotation/translation as the user scrolls.

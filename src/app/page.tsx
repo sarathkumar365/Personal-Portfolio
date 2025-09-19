@@ -47,6 +47,14 @@ export default function Home() {
       return undefined;
     }
 
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+
+    if (prefersReducedMotion.matches) {
+      return undefined;
+    }
+
     let ctx: GSAPContext | undefined;
     const tweens: GSAPTween[] = [];
     const triggers: ScrollTriggerType[] = [];

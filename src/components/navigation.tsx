@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import TransitionLink from "@/components/transition-link";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -26,7 +26,7 @@ export default function NavigationBar() {
 
             return (
               <li key={item.href} className="flex">
-                <Link
+                <TransitionLink
                   href={item.href}
                   className={`${baseLinkClasses} ${
                     isActive
@@ -35,7 +35,7 @@ export default function NavigationBar() {
                   }`}
                 >
                   {item.label}
-                </Link>
+                </TransitionLink>
               </li>
             );
           })}

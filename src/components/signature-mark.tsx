@@ -13,11 +13,17 @@ export default function SignatureMark({ fontClass, name }: SignatureMarkProps) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const reveal = () => setVisible(true);
+    let fallback = 0;
 
-    window.addEventListener(SIGNATURE_EVENT, reveal);
+    const reveal = () => {
+      setVisible(true);
+      window.removeEventListener(SIGNATURE_EVENT, reveal);
+      window.clearTimeout(fallback);
+    };
 
-    const fallback = window.setTimeout(reveal, 3200);
+    window.addEventListener(SIGNATURE_EVENT, reveal, { once: true });
+
+    fallback = window.setTimeout(reveal, 3200);
 
     return () => {
       window.removeEventListener(SIGNATURE_EVENT, reveal);

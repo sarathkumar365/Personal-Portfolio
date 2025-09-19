@@ -19,6 +19,18 @@ export default function HeroName({ name, title, onComplete }: HeroNameProps) {
     let cleanup: (() => void) | undefined;
     let isMounted = true;
 
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+
+    if (prefersReducedMotion.matches) {
+      heroNameAnimatedOnce = true;
+      window.requestAnimationFrame(() => onComplete?.());
+      return () => {
+        isMounted = false;
+      };
+    }
+
     if (heroNameAnimatedOnce) {
       window.requestAnimationFrame(() => onComplete?.());
       return () => {
