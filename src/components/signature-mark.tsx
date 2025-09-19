@@ -26,7 +26,7 @@ export default function SignatureMark({ fontClass, name }: SignatureMarkProps) {
   }, []);
 
   return (
-    <div className="pointer-events-none sticky top-5 z-40 mb-4 flex justify-start">
+    <div className="pointer-events-none fixed left-4 top-4 z-40 flex w-full max-w-[200px] justify-start sm:left-6 sm:top-6">
       <span
         className={`select-none text-2xl text-black/70 drop-shadow-[0_2px_3px_rgba(0,0,0,0.35)] transition-all duration-500 sm:text-3xl ${
           fontClass
