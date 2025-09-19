@@ -31,6 +31,22 @@ export default function Home() {
   }, [heroComplete]);
 
   useEffect(() => {
+    if (!heroComplete) {
+      return undefined;
+    }
+
+    const timeout = window.setTimeout(() => {
+      window.dispatchEvent(new Event("signature:show"));
+    }, 300);
+
+    return () => window.clearTimeout(timeout);
+  }, [heroComplete]);
+
+  useEffect(() => {
+    if (!heroComplete) {
+      return undefined;
+    }
+
     let ctx: GSAPContext | undefined;
     const tweens: GSAPTween[] = [];
     const triggers: ScrollTriggerType[] = [];
@@ -131,7 +147,7 @@ export default function Home() {
       tweens.forEach((tween) => tween.kill());
       triggers.forEach((trigger) => trigger.kill());
     };
-  }, []);
+  }, [heroComplete]);
 
   return (
     <div ref={containerRef} className="space-y-20">
@@ -145,14 +161,14 @@ export default function Home() {
           onComplete={handleHeroComplete}
         />
         <div
-          className={`max-w-2xl text-base text-black/80 transition-opacity duration-700 sm:text-lg ${
+          className={`max-w-2xl text-base text-black/80 transition-opacity duration-500 sm:text-lg ${
             heroComplete ? "opacity-100" : "opacity-0"
           }`}
         >
           {hero.summary}
         </div>
         <div
-          className={`space-y-1 text-sm uppercase tracking-[0.3em] text-black/70 transition-opacity duration-700 delay-100 ${
+          className={`space-y-1 text-sm uppercase tracking-[0.3em] text-black/70 transition-opacity duration-500 delay-75 ${
             heroComplete ? "opacity-100" : "opacity-0"
           }`}
         >
@@ -178,7 +194,7 @@ export default function Home() {
         </div>
 
         <div
-          className={`grid gap-4 transition-opacity duration-700 delay-200 sm:grid-cols-3 ${
+          className={`grid gap-4 transition-opacity duration-500 delay-[120ms] sm:grid-cols-3 ${
             heroComplete ? "opacity-100" : "opacity-0"
           }`}
         >
@@ -203,7 +219,7 @@ export default function Home() {
 
       <section
         data-page-section
-        className={`page-turn-section space-y-6 transition-opacity duration-700 delay-[350ms] ${
+        className={`page-turn-section space-y-6 transition-opacity duration-500 delay-[220ms] ${
           heroComplete ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -240,7 +256,7 @@ export default function Home() {
 
       <section
         data-page-section
-        className={`page-turn-section grid gap-10 transition-opacity duration-700 delay-[450ms] lg:grid-cols-[2fr_1fr] ${
+        className={`page-turn-section grid gap-10 transition-opacity duration-500 delay-[280ms] lg:grid-cols-[2fr_1fr] ${
           heroComplete ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -289,7 +305,7 @@ export default function Home() {
 
       <section
         data-page-section
-        className={`page-turn-section space-y-4 transition-opacity duration-700 delay-[550ms] ${
+        className={`page-turn-section space-y-4 transition-opacity duration-500 delay-[360ms] ${
           heroComplete ? "opacity-100" : "opacity-0"
         }`}
       >

@@ -53,6 +53,7 @@ src/data/
 - `HeroName` client component (`src/components/hero-name.tsx`) scrambles the hero name via GSAP’s ScrambleTextPlugin; once the title fade completes it triggers `onComplete` and internally guards so the sequence only runs once per session.
 - Remaining hero copy, contact strip, stats, and each subsequent section fade in sequentially using Tailwind opacity transitions keyed on the `heroComplete` flag.
 - Final CTA section copies the `cta` object, keeping messaging editable without touching component code.
+- `SignatureMark` (`src/components/signature-mark.tsx`) uses the Great Vibes script font to render a sticky signature that fades in after the hero sequence (or after a fallback delay on other pages).
 
 ### Scroll Experience
 - `page-turn-scroll` branch introduces GSAP ScrollTrigger to animate each `[data-page-section]` block with a page-turn rotation/translation as the user scrolls.
