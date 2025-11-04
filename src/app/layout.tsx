@@ -20,7 +20,7 @@ const signatureScript = Tangerine({
 });
 
 export const metadata: Metadata = {
-  title: "Typewriter Portfolio",
+  title: "Sarath Kumar",
   description:
     "A modern developer portfolio inspired by early 1900s typewritten pages.",
 };
