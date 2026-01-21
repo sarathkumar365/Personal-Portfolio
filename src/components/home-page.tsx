@@ -395,7 +395,7 @@ export default function HomePage({ data }: HomePageProps) {
         </header>
 
         <div className="grid gap-5 lg:grid-cols-[1.35fr_1fr]">
-          <div className="rounded-md border border-black/20 bg-white/60 p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
+          <div className=" border border-black/20 bg-white/60 p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               {skills.categories.map((category) => (
                 <div
@@ -419,7 +419,7 @@ export default function HomePage({ data }: HomePageProps) {
               ))}
             </div>
           </div>
-          <aside className="space-y-4 rounded-md border border-black/20 bg-white/60 p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
+          <aside className="space-y-4  border border-black/20 bg-white/60 p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
             <div className="space-y-2">
               <p className="text-[0.65rem] uppercase tracking-[0.4em] text-black/60">
                 {credentials.heading}
