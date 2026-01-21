@@ -9,9 +9,9 @@ import ExperienceModal from "@/components/experience-modal";
 import type { ExperienceDetail } from "@/types/experiences";
 import type { HomeData } from "@/data/types";
 
-type GsapModule = typeof import("gsap");
-type GsapContext = ReturnType<GsapModule["context"]>;
-type GsapTween = ReturnType<GsapModule["fromTo"]>;
+type GsapContext = { revert: () => void } | undefined;
+type GsapTween = { kill: () => void; scrollTrigger?: ScrollTriggerType };
+type SnapFunction = (input: number) => number;
 
 interface HomePageProps {
   data: HomeData;
@@ -130,9 +130,9 @@ export default function HomePage({ data }: HomePageProps) {
       return undefined;
     }
 
-    let ctx: GsapContext | undefined;
+    let ctx: GsapContext;
     const tweens: GsapTween[] = [];
-    const triggers: ScrollTriggerType[] = [];
+    const triggers: Array<{ kill: () => void }> = [];
     let isMounted = true;
 
     void (async () => {
@@ -144,7 +144,7 @@ export default function HomePage({ data }: HomePageProps) {
       const gsap = gsapModule.gsap;
       const ScrollTrigger = (
         scrollTriggerModule.ScrollTrigger ?? scrollTriggerModule.default
-      ) as ScrollTriggerType | undefined;
+      ) as unknown as ScrollTriggerType | undefined;
 
       if (!isMounted || !containerRef.current) {
         return;
@@ -163,10 +163,16 @@ export default function HomePage({ data }: HomePageProps) {
           return;
         }
 
-        const snapFn =
-          sections.length > 1 && ScrollTrigger?.utils
-            ? ScrollTrigger.utils.snap(1 / (sections.length - 1))
-            : undefined;
+        let snapFn: SnapFunction | undefined;
+        if (sections.length > 1) {
+          const snapCandidate = (ScrollTrigger as unknown as { utils?: { snap: SnapFunction } })?.utils?.snap(
+            1 / (sections.length - 1),
+          );
+
+          if (typeof snapCandidate === "function") {
+            snapFn = snapCandidate as SnapFunction;
+          }
+        }
 
         sections.forEach((section, index) => {
           const direction = index % 2 === 0 ? 1 : -1;
@@ -210,12 +216,13 @@ export default function HomePage({ data }: HomePageProps) {
         });
 
         if (snapFn && ScrollTrigger) {
-          const snapTrigger = ScrollTrigger.create({
+          const snapTrigger = (
+            ScrollTrigger as unknown as { create: (options: unknown) => { kill: () => void } }
+          ).create({
             start: 0,
-            end: () => ScrollTrigger.maxScroll(window),
+              end: () => (ScrollTrigger as unknown as { maxScroll: (target: unknown) => number }).maxScroll(window),
             snap: {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              snapTo: (value: any) => snapFn(value),
+              snapTo: (value: number) => (snapFn ? snapFn(value) : value),
               duration: { min: 0.18, max: 0.35 },
               ease: "power2.inOut",
               delay: 0, // Ensure no delay on snap
