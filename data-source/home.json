@@ -1,9 +1,9 @@
 {
   "hero": {
-    "locationLabel": "Typed in Toronto \u00b7 Ontario",
+    "locationLabel": "Typed in Toronto · Ontario",
     "name": "Sarath Kumar",
     "title": "Full-Stack Developer",
-    "summary": "Passionate about turning complex datasets into intuitive products\u2014from high-performance dashboards and streaming AI copilots to cross-platform Salesforce experiences backed by React and Java.",
+    "summary": "Full-stack developer focused on building data-heavy web applications, AI-assisted workflows, and reliable integrations across modern frontend systems and backend services.",
     "contact": {
       "phone": "905.922.5917",
       "location": "Toronto, ON",
@@ -12,117 +12,189 @@
       "github": "https://github.com/sarathkumar365"
     }
   },
+
   "stats": [
     {
       "label": "Experience",
-      "value": "1+ years"
+      "value": "1.5 years"
     },
     {
       "label": "Primary Stack",
-      "value": "React \u00b7 Java \u00b7 Salesforce"
+      "value": "React · Node · Java · PostgreSQL"
     },
     {
       "label": "Location",
-      "value": "Toronto \u00b7 ON"
+      "value": "Toronto · ON"
     }
   ],
+
   "experiences": [
     {
       "id": "2creative-full-stack-developer",
-      "period": "2025 \u2014 Present",
+      "period": "2024 — Present",
       "role": "Full Stack Developer",
       "company": "2Creative",
       "location": "Toronto, ON",
-      "summary": "Scaled data-rich dashboards and AI copilots for enterprise analytics teams while partnering across Salesforce integrations.",
+      "summary": "Building enterprise dashboards and AI-driven features used by analytics teams, with a focus on performance, reliability, and data integrity.",
       "details": {
-        "headline": "Dashboard analytics, AI copilots, and cross-platform reliability",
-        "overview": "Blended D3.js visualization work, streaming AI chat, and Salesforce collaboration to modernize 2Creative's customer analytics suite.",
+        "headline": "Data platforms, AI copilots, and production reliability",
+        "overview": "Worked across frontend, backend, and automation layers to deliver real-time dashboards, AI-powered interfaces, and resilient system behavior.",
         "sections": [
           {
-            "title": "Dashboard Analytics & Data Visualization (React.js, D3.js, Java)",
+            "title": "Dashboard Systems & Data Visualization",
             "items": [
-              "\u2022 Worked extensively on an existing suite of advanced, responsive D3.js charts across multiple customer dashboards.",
-              "\u2022 Rearchitected the dashboard implementation to align with evolving business requirements \u2014 including redesigning the pagination logic \u2014 which significantly improved performance and resolved a major bottleneck in the live environment.",
-              "\u2022 Optimized chart rendering and implemented user-specific customization features, allowing users to save and load personalized chart views, contributing to a 22% increase in user retention.",
-              "\u2022 Proactively identified and resolved a wide range of UI bugs and performance issues, resulting in a smoother and more reliable user experience."
+              "Engineered a cascading filter system allowing hierarchical, real-time filtering across all dashboard charts.",
+              "Rearchitected core pagination logic to resolve production performance bottlenecks.",
+              "Optimized chart rendering and added user-level customization, contributing to a 22% increase in user retention.",
+              "Maintained and extended complex D3.js visualizations across multiple customer dashboards."
             ]
           },
           {
-            "title": "AI-Powered Chatbot Integration (React.js, Java, OpenAI API)",
+            "title": "AI-Powered Chat & Automation",
             "items": [
-              "\u2022 Designed and developed a fully interactive AI chatbot UI using React, integrated with OpenAI\u2019s Davinci model via a Java backend.",
-              "\u2022 Implemented Server-Sent Events (SSE) in the UI using Microsoft\u2019s fetchEventSource, enabling the chatbot to initiate a request and stream responses in real-time as they become available from the backend \u2014 enhancing responsiveness and improving user experience.",
-              "\u2022 Enabled the bot to interpret live dashboard data and generate contextual summaries, insights, and actionable recommendations.",
-              "\u2022 Boosted user interaction by 35% and increased customer time-on-site by 28%, significantly enhancing overall product usability."
+              "Designed and built a streaming AI chatbot using React and a Java backend integrated with OpenAI APIs.",
+              "Implemented Server-Sent Events (SSE) with fetchEventSource to stream responses in real time.",
+              "Enabled contextual AI insights grounded in live dashboard data.",
+              "Improved user engagement and time-on-site through responsive AI-driven workflows."
             ]
           },
           {
-            "title": "Cross-Platform Debugging & Collaboration",
+            "title": "Reliability & Cross-Platform Integration",
             "items": [
-              "\u2022 Collaborated with Salesforce teams to troubleshoot UI-related issues caused by backend data inconsistencies.",
-              "\u2022 Contributed to multiple cross-platform fixes, improving data integrity and ensuring consistent behavior across integrated systems."
+              "Resolved system-critical deadlock issues in production components.",
+              "Built backend features to control widget refresh behavior and prevent data-related failures.",
+              "Collaborated with Salesforce teams to debug integration issues and ensure consistent data behavior."
             ]
           }
         ],
-        "closing": "Outcome-focused collaboration paired streaming AI experiences with reliable dashboards and Salesforce alignment."
+        "closing": "Delivered production features across data visualization, AI automation, and system reliability."
       }
     },
+
     {
       "id": "lambton-full-stack-program",
-      "period": "2023 \u2014 2025",
+      "period": "2023 — 2025",
       "role": "Full Stack Software Development",
       "company": "Lambton College",
       "location": "Toronto, ON",
-      "summary": "Post-graduate certificate program balancing MERN, cloud, and AI projects with a 3.4/4.0 GPA.",
+      "summary": "Post-graduate program focused on full-stack systems, cloud platforms, and applied AI.",
       "details": {
-        "headline": "Applied post-graduate program work",
-        "overview": "Combined client-ready MERN builds, cloud deployments, and AI-driven capstones while completing graduate coursework.",
+        "headline": "Applied engineering foundation",
+        "overview": "Built multiple end-to-end systems using modern web stacks, automation pipelines, and schema-driven design.",
         "sections": [
           {
             "title": "Program Highlights",
             "items": [
-              "Post-Graduate Certificate in Full Stack Software Development, Lambton College, Toronto \u2014 GPA: 3.4/4.0"
+              "Post-Graduate Certificate in Full Stack Software Development — GPA: 3.4/4.0"
             ]
           },
           {
             "title": "Undergraduate Foundation",
             "items": [
-              "Kalam Technical University, India \u2014 Final year project on NutBaaS: Blockchain-as-a-Service platform; completed core CS courses covering data structures, algorithms, and software engineering principles \u2014 GPA: 8.0/10."
+              "Bachelor of Computer Science — Final-year project on NutBaaS (Blockchain-as-a-Service), alongside core CS coursework — GPA: 8.0/10."
             ]
           }
         ],
-        "closing": "Graduated ready to deliver end-to-end product experiences informed by both postgraduate and undergraduate training."
+        "closing": "Graduated with strong fundamentals in system design and applied engineering."
       }
     }
   ],
+
   "skills": {
-    "heading": "Skills & Technologies",
-    "items": [
-      "React \u00b7 Next.js",
-      "JavaScript / TypeScript",
-      "Java & Spring",
-      "Node.js \u00b7 Express",
-      "Salesforce Platform",
-      "D3.js Data Viz",
-      "OpenAI API & SSE",
-      "Postgres \u00b7 Prisma",
-      "MongoDB",
-      "Docker \u00b7 Jenkins",
-      "Azure \u00b7 AWS \u00b7 GCP",
-      "Git & GitHub"
+    "heading": "How I Build Software",
+    "categories": [
+      {
+        "title": "System Design & Architecture",
+        "items": [
+          "End-to-end web systems",
+          "REST API design",
+          "Microservices fundamentals",
+          "Workflow-based architectures"
+        ]
+      },
+      {
+        "title": "User Interfaces",
+        "items": [
+          "React",
+          "Next.js",
+          "TypeScript",
+          "State and component design"
+        ]
+      },
+      {
+        "title": "Backend Services",
+        "items": [
+          "Node.js (Express)",
+          "Java (Spring Boot)",
+          "Python services",
+          "Authentication & authorization"
+        ]
+      },
+      {
+        "title": "Data Layer",
+        "items": [
+          "PostgreSQL",
+          "MongoDB",
+          "Schema design",
+          "ORM (Prisma)"
+        ]
+      },
+      {
+        "title": "Infrastructure & Delivery",
+        "items": [
+          "Dockerized deployments",
+          "CI/CD (GitHub Actions, Jenkins)",
+          "AWS & Azure",
+          "Environment configuration"
+        ]
+      },
+      {
+        "title": "Automation & AI Tooling",
+        "items": [
+          "Workflow automation (n8n)",
+          "LLM-assisted development",
+          "Schema-grounded AI prompts"
+        ]
+      },
+      {
+        "title": "Debugging & Testing",
+        "items": [
+          "API testing (Postman)",
+          "Browser debugging",
+          "Request inspection"
+        ]
+      }
     ]
   },
+
   "credentials": {
-    "heading": "Education & Credentials",
-    "items": [
-      "Post-Grad Certificate in Full Stack Software Development, Lambton College (GPA 3.4/4.0).",
-      "Salesforce Certified Administrator & Omnistudio Developer.",
-      "Architecting with Google Compute Engine specialization; led campus debugging challenge."
+    "heading": "Proof",
+    "certifications": [
+      "AWS Certified Cloud Practitioner",
+      "Salesforce Certified Administrator",
+      "Salesforce Certified Omnistudio Developer",
+      "Architecting with Google Compute Engine Specialization",
+      "Introduction to DevOps — Azure"
+    ],
+    "education": [
+      {
+        "school": "Lambton College",
+        "period": "2023 — 2025",
+        "program": "Post-Graduate Certificate · Full Stack Software Development",
+        "location": "Toronto, Canada"
+      },
+      {
+        "school": "Kalam Technical University",
+        "period": "2017 — 2021",
+        "program": "Bachelor of Computer Science",
+        "location": "India"
+      }
     ]
   },
+
   "cta": {
-    "heading": "Let\u2019s ship data-rich experiences",
-    "body": "From high-impact dashboards to AI copilots grounded in real data, I love partnering with teams who value measurable outcomes and thoughtfully crafted interfaces.",
-    "closing": "Drop a line at Sarathkumarks.dev@gmail.com or connect on LinkedIn to start a conversation."
+    "heading": "Let’s build real systems",
+    "body": "I enjoy working on data-heavy products, AI-assisted tools, and automation pipelines that solve real problems.",
+    "closing": "Reach out at Sarathkumarks.dev@gmail.com or connect on LinkedIn."
   }
 }

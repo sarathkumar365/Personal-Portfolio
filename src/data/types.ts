@@ -13,14 +13,29 @@ export interface Stat {
   value: string;
 }
 
+export interface SkillCategory {
+  title: string;
+  items: string[];
+}
+
 export interface SkillsSection {
   heading: string;
-  items: string[];
+  categories: SkillCategory[];
+}
+
+export interface EducationEntry {
+  school: string;
+  period: string;
+  program: string;
+  location: string;
+  gpa?: string;
+  note?: string;
 }
 
 export interface CredentialsSection {
   heading: string;
-  items: string[];
+  certifications: string[];
+  education: EducationEntry[];
 }
 
 export interface CallToAction {
@@ -56,6 +71,7 @@ export interface Project {
   year: string;
   stack: string;
   description: string;
+  highlights: string[];
   links: ProjectLink[];
 }
 

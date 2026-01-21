@@ -38,9 +38,9 @@ function hexToRgb(hex: string): [number, number, number] {
   const normalized = hex.replace("#", "");
   const value = normalized.length === 3
     ? normalized
-        .split("")
-        .map((char) => char + char)
-        .join("")
+      .split("")
+      .map((char) => char + char)
+      .join("")
     : normalized;
   const num = parseInt(value, 16);
   const r = (num >> 16) & 255;
@@ -154,7 +154,7 @@ export default function RippleGrid({
 }: RippleGridProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const rendererRef = useRef<Renderer | null>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
   type Uniform<T> = { value: T };
   type RippleUniforms = {
     iTime: Uniform<number>;
@@ -302,7 +302,8 @@ export default function RippleGrid({
       container.removeEventListener("mouseenter", handleMouseEnter);
       container.removeEventListener("mouseleave", handleMouseLeave);
       if (meshRef.current) {
-        meshRef.current.delete();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (meshRef.current as any).delete();
         meshRef.current = null;
       }
       if (rendererRef.current) {

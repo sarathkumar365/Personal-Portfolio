@@ -1,37 +1,38 @@
 [
   {
-    "title": "FormSpec",
+    "title": "ApplyDrift",
     "year": "2024",
-    "stack": "Next.js · TypeScript · Prisma/Postgres",
-    "description": "Schema-driven form builder that compiles custom specs into JSON Schema/UI Schema with live preview, publication share links, and immutable submission workflows.",
-    "links": [
-      {
-        "label": "Live",
-        "url": "#"
-      },
-      {
-        "label": "GitHub",
-        "url": "#"
-      }
-    ]
-  },
-  {
-    "title": "Analytics & NL-to-Query Chat",
-    "year": "2024",
-    "stack": "Next.js · Postgres JSONB · LLM",
-    "description": "Designed a JSON DSL for KPIs, charts, and filters, built SQL compilation over JSONB storage, and added a grounded chat interface that emits executable analytics queries.",
+    "stack": "React · TypeScript · WebSockets · TanStack · Zustand",
+    "description": "AI-powered resume editor with real-time collaboration, live preview rendering, checklist scoring, and schema-driven resume templates.",
+    "highlights": [
+      "Built multi-pane UI with shared state and real-time syncing.",
+      "Implemented AI orchestration with retry flows and task gating.",
+      "Designed JSON-schema contracts to keep templates, APIs, and AI inputs in sync."
+    ],
     "links": []
   },
   {
-    "title": "Pokémon Match Game",
-    "year": "2023",
-    "stack": "React · CSS Animations · Netlify",
-    "description": "Responsive memory game with flip interactions, score tracking, and Netlify deployment for quick play-and-share sessions across devices.",
-    "links": [
-      {
-        "label": "Play",
-        "url": "#"
-      }
-    ]
+    "title": "FormSpec",
+    "year": "2024",
+    "stack": "Next.js · TypeScript · Prisma · PostgreSQL",
+    "description": "Schema-driven form builder and runtime engine that compiles custom form definitions into JSON Schema and UI Schema with live preview and public rendering.",
+    "highlights": [
+      "Built visual form builder with real-time schema compilation.",
+      "Designed JSON DSL for KPIs and analytics queries.",
+      "Implemented grounded chat interface emitting executable queries."
+    ],
+    "links": []
+  },
+  {
+    "title": "Docura",
+    "year": "2025",
+    "stack": "React · NestJS · Python · RabbitMQ · Docker",
+    "description": "Workflow automation platform that extracts structured data from IDs and documents and auto-fills PDF forms using configurable pipelines.",
+    "highlights": [
+      "Designed event-driven architecture using RabbitMQ.",
+      "Built document ingestion and field extraction services.",
+      "Implemented end-to-end workflow engine for PDF generation."
+    ],
+    "links": []
   }
 ]
