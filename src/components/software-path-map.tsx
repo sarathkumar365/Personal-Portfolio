@@ -622,9 +622,10 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
   return (
     <div
       ref={mapRef}
-      className="timeline-depth-stage relative h-[560px] overflow-hidden border border-black/20 bg-white/35"
+      className="timeline-depth-stage relative h-[560px] overflow-hidden border border-black/20 bg-white/28"
       onMouseLeave={hideCard}
     >
+      <div className="timeline-cinematic-overlay absolute inset-0" aria-hidden="true" />
       <div
         ref={sceneRef}
         className={`timeline-map-scene absolute inset-0 ${isSceneDragging ? "cursor-grabbing" : "cursor-grab"}`}

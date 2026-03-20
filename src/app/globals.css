@@ -176,6 +176,27 @@ body {
   transform-origin: 50% 50%;
   transform: rotateX(var(--scene-rotate-x)) rotateY(var(--scene-rotate-y)) rotateZ(var(--scene-rotate-z));
   touch-action: pan-y pinch-zoom;
+  z-index: 1;
+}
+
+.timeline-cinematic-overlay {
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(
+      140% 105% at 50% 45%,
+      rgba(255, 255, 255, 0) 48%,
+      rgba(9, 14, 22, 0.11) 86%,
+      rgba(6, 10, 17, 0.2) 100%
+    ),
+    linear-gradient(
+      115deg,
+      rgba(10, 28, 46, 0.09) 0%,
+      rgba(255, 255, 255, 0.01) 44%,
+      rgba(63, 31, 23, 0.08) 100%
+    );
+  mix-blend-mode: multiply;
+  opacity: 0.56;
 }
 
 .timeline-contour-overlay {
@@ -316,7 +337,9 @@ body {
 }
 
 .timeline-node-label {
-  box-shadow: 0 4px 14px -11px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 8px 16px -12px rgba(0, 0, 0, 0.42),
+    0 2px 6px -4px rgba(0, 0, 0, 0.26);
 }
 
 .timeline-node-halo {
@@ -393,6 +416,10 @@ body {
   .timeline-map-watermark {
     opacity: 0.2;
   }
+
+  .timeline-cinematic-overlay {
+    opacity: 0.36;
+  }
 }
 
 @media (max-width: 640px) {
@@ -433,5 +460,9 @@ body {
     opacity: 0.4;
     transform: translate3d(0, 0, calc(var(--depth-z-route) + 1px)) scale(0.92);
     transform-origin: right top;
+  }
+
+  .timeline-cinematic-overlay {
+    opacity: 0.46;
   }
 }
