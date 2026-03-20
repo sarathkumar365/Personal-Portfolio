@@ -82,7 +82,15 @@
     "heading": "How I Build Software",
     "categories": [
       {
-        "title": "Frontend Engineering",
+        "title": "Plan",
+        "items": [
+          "Agile/SCRUM",
+          "Microservices concepts",
+          "JWT/OAuth/CORS"
+        ]
+      },
+      {
+        "title": "Build",
         "items": [
           "React",
           "Next.js",
@@ -90,12 +98,7 @@
           "JavaScript",
           "D3.js",
           "Zustand",
-          "TanStack"
-        ]
-      },
-      {
-        "title": "Backend & APIs",
-        "items": [
+          "TanStack",
           "Node.js",
           "Express",
           "Java Spring Boot",
@@ -106,7 +109,7 @@
         ]
       },
       {
-        "title": "Data & Messaging",
+        "title": "Integrate",
         "items": [
           "PostgreSQL",
           "MongoDB",
@@ -117,18 +120,7 @@
         ]
       },
       {
-        "title": "AI & Automation",
-        "items": [
-          "OpenAI API",
-          "Prompt engineering",
-          "SSE streaming",
-          "AI orchestration",
-          "n8n",
-          "LLM workflows"
-        ]
-      },
-      {
-        "title": "Cloud, DevOps & Observability",
+        "title": "Ship",
         "items": [
           "Docker",
           "GitHub Actions",
@@ -136,18 +128,21 @@
           "AWS",
           "Azure",
           "OpenShift",
-          "Datadog"
+          "Datadog",
+          "CI/CD",
+          "Production on-call",
+          "Idempotent retry logic"
         ]
       },
       {
-        "title": "Practices & Security",
+        "title": "Evolve",
         "items": [
-          "Agile/SCRUM",
-          "CI/CD",
-          "Microservices concepts",
-          "Production on-call",
-          "JWT/OAuth/CORS",
-          "Idempotent retry logic"
+          "OpenAI API",
+          "Prompt engineering",
+          "SSE streaming",
+          "AI orchestration",
+          "n8n",
+          "LLM workflows"
         ]
       }
     ]

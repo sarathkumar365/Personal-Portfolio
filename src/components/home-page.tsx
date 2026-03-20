@@ -6,6 +6,7 @@ import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 
 import HeroName from "@/components/hero-name";
 import ExperienceModal from "@/components/experience-modal";
+import SoftwarePathMap from "@/components/software-path-map";
 import type { ExperienceDetail } from "@/types/experiences";
 import type { HomeData } from "@/data/types";
 
@@ -18,7 +19,7 @@ interface HomePageProps {
 }
 
 export default function HomePage({ data }: HomePageProps) {
-  const { hero, stats, experiences, skills, credentials, cta } = data;
+  const { hero, stats, experiences, skills, cta } = data;
 
   const [heroComplete, setHeroComplete] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -344,84 +345,7 @@ export default function HomePage({ data }: HomePageProps) {
           </h2>
         </header>
 
-        <div className="grid gap-5 lg:grid-cols-[1.35fr_1fr]">
-          <div className=" border border-black/20 bg-white/60 p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {skills.categories.map((category) => (
-                <div
-                  key={category.title}
-                  className="border border-black/15 bg-white/75 px-3 py-2 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.7)]"
-                >
-                  <p className="text-[0.62rem] uppercase tracking-[0.32em] text-black/60">
-                    {category.title}
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {category.items.map((item) => (
-                      <span
-                        key={item}
-                        className="inline-flex items-center border border-black/25 bg-white/85 px-2.5 py-1 text-[0.68rem] font-medium uppercase tracking-[0.26em] text-black/80 shadow-[0_1px_0_rgba(0,0,0,0.05)] hover-lift"
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <aside className="space-y-4  border border-black/20 bg-white/60 p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
-            <div className="space-y-2">
-              <p className="text-[0.65rem] uppercase tracking-[0.4em] text-black/60">
-                {credentials.heading}
-              </p>
-              <div className="space-y-1.5">
-                {credentials.certifications.map((certification) => (
-                  <div
-                    key={certification}
-                    className="hover-lift border border-black/25 bg-white/80 px-3 py-2 text-sm text-black/85 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.55)]"
-                  >
-                    <p className="font-medium tracking-tight">{certification}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="h-px w-full bg-black/15" aria-hidden="true" />
-            <div className="space-y-2">
-              <p className="text-[0.65rem] uppercase tracking-[0.4em] text-black/60">
-                Education
-              </p>
-              <div className="space-y-2">
-                {credentials.education.map((education) => (
-                  <div
-                    key={`${education.school}-${education.period}`}
-                    className="hover-lift border border-black/25 bg-white/80 px-3 py-2 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.55)]"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-sm font-semibold tracking-tight text-black">
-                        {education.school}
-                      </p>
-                      <span className="text-[0.6rem] uppercase tracking-[0.28em] text-black/60">
-                        {education.period}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-xs text-black/80">
-                      {education.program}
-                    </p>
-                    <p className="text-[0.7rem] uppercase tracking-[0.28em] text-black/60">
-                      {education.location}
-                      {education.gpa ? ` \u00b7 GPA ${education.gpa}` : ""}
-                    </p>
-                    {education.note ? (
-                      <p className="mt-2 text-xs text-black/75">
-                        {education.note}
-                      </p>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </aside>
-        </div>
+        <SoftwarePathMap skills={skills} />
       </section>
 
       <div
