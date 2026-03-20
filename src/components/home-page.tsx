@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { IconPlayCardStar } from "@tabler/icons-react";
 
 import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 
@@ -369,28 +370,10 @@ export default function HomePage({ data }: HomePageProps) {
         </header>
         <div className="relative space-y-4 border border-black/25 bg-white/40 p-4 pr-12 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)] sm:p-5 sm:pr-14">
           <span
-            className="absolute right-3 top-3 inline-flex h-6 w-10 items-center justify-center border border-black/25 bg-white/75 text-black/70 sm:right-4 sm:top-4 sm:h-7 sm:w-11"
+            className="absolute right-3 top-3 inline-flex h-6 w-10 items-center justify-center text-black/70 sm:right-4 sm:top-4 sm:h-7 sm:w-11"
             aria-hidden="true"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-3.5 w-5"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M3.75 6.75h16.5a.75.75 0 0 1 .75.75v9a.75.75 0 0 1-.75.75H3.75a.75.75 0 0 1-.75-.75v-9a.75.75 0 0 1 .75-.75Z"
-                stroke="currentColor"
-                strokeWidth="1.3"
-              />
-              <path
-                d="M4.5 7.5 12 12.75 19.5 7.5"
-                stroke="currentColor"
-                strokeWidth="1.3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <IconPlayCardStar size={22} stroke={1.7} />
           </span>
           <div className="space-y-2">
             {cta.lines.map((line, index) => (
