@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type { BlogPost } from "@/data/types";
 
@@ -17,6 +17,34 @@ export default function BlogsClient({ posts }: BlogsClientProps) {
   );
 
   const closeModal = () => setActiveSlug(null);
+
+  useEffect(() => {
+    if (!activePost) {
+      return undefined;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [activePost]);
+
+  useEffect(() => {
+    if (!activePost) {
+      return undefined;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [activePost]);
 
   return (
     <div className="space-y-16">

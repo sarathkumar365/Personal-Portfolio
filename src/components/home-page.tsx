@@ -18,27 +18,13 @@ interface HomePageProps {
 }
 
 export default function HomePage({ data }: HomePageProps) {
-  const { hero, experiences, skills, credentials, cta } = data;
+  const { hero, stats, experiences, skills, credentials, cta } = data;
 
   const [heroComplete, setHeroComplete] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [selectedExperience, setSelectedExperience] =
     useState<ExperienceDetail | null>(null);
-  const [visibleExperiences, setVisibleExperiences] = useState<
-    Record<string, boolean>
-  >({});
-  const experienceRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
-  const registerExperienceRef = useCallback(
-    (id: string) => (node: HTMLDivElement | null) => {
-      if (node) {
-        experienceRefs.current[id] = node;
-      } else {
-        delete experienceRefs.current[id];
-      }
-    },
-    [],
-  );
+  const impactSnapshot = experiences[0]?.details.closing;
 
   const closeExperience = useCallback(() => {
     setSelectedExperience(null);
@@ -70,51 +56,6 @@ export default function HomePage({ data }: HomePageProps) {
     }, 300);
 
     return () => window.clearTimeout(timeout);
-  }, [heroComplete]);
-
-  useEffect(() => {
-    if (!heroComplete) {
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
-
-          const id = (entry.target as HTMLElement).dataset.experienceId;
-
-          if (!id) {
-            return;
-          }
-
-          setVisibleExperiences((prev) => {
-            if (prev[id]) {
-              return prev;
-            }
-
-            return {
-              ...prev,
-              [id]: true,
-            };
-          });
-        });
-      },
-      { threshold: 0.4 },
-    );
-
-    const elements = Object.values(experienceRefs.current).filter(
-      (node): node is HTMLDivElement => Boolean(node),
-    );
-
-    elements.forEach((element) => observer.observe(element));
-
-    return () => {
-      elements.forEach((element) => observer.unobserve(element));
-      observer.disconnect();
-    };
   }, [heroComplete]);
 
   useEffect(() => {
@@ -260,8 +201,17 @@ export default function HomePage({ data }: HomePageProps) {
         >
           {hero.summary}
         </div>
+        {impactSnapshot ? (
+          <p
+            className={`max-w-2xl border-l-2 border-black/25 pl-3 text-sm uppercase tracking-[0.18em] text-black/70 transition-opacity duration-500 delay-75 ${
+              heroComplete ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            Impact snapshot: {impactSnapshot}
+          </p>
+        ) : null}
         <div
-          className={`space-y-1 text-sm uppercase tracking-[0.3em] text-black/70 transition-opacity duration-500 delay-75 ${
+          className={`space-y-1 text-sm uppercase tracking-[0.3em] text-black/70 transition-opacity duration-500 delay-100 ${
             heroComplete ? "opacity-100" : "opacity-0"
           }`}
         >
@@ -293,6 +243,25 @@ export default function HomePage({ data }: HomePageProps) {
             </a>
           </p>
         </div>
+        <div
+          className={`grid gap-3 pt-2 sm:grid-cols-3 transition-opacity duration-500 delay-[140ms] ${
+            heroComplete ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="border border-black/25 bg-white/45 p-3 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)]"
+            >
+              <p className="text-[0.55rem] uppercase tracking-[0.34em] text-black/55">
+                {stat.label}
+              </p>
+              <p className="mt-2 text-xs uppercase tracking-[0.2em] text-black/80">
+                {stat.value}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
       <div
@@ -316,36 +285,19 @@ export default function HomePage({ data }: HomePageProps) {
         </header>
         <div className="space-y-6">
           {experiences.map((experience) => {
-            const isUnlocked = Boolean(visibleExperiences[experience.id]);
-
             return (
               <article
                 key={experience.id}
-                ref={registerExperienceRef(experience.id)}
-                data-experience-id={experience.id}
                 role="button"
                 tabIndex={0}
-                onClick={() => {
-                  if (isUnlocked) {
-                    setSelectedExperience(experience);
-                  }
-                }}
+                onClick={() => setSelectedExperience(experience)}
                 onKeyDown={(event) => {
-                  if (!isUnlocked) {
-                    return;
-                  }
-
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
                     setSelectedExperience(experience);
                   }
                 }}
-                className={`border border-black/25 bg-white/40 p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)] transition duration-200 ${
-                  isUnlocked
-                    ? "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/50 hover-lift"
-                    : "cursor-not-allowed opacity-95"
-                }`}
-                aria-disabled={!isUnlocked}
+                className="cursor-pointer border border-black/25 bg-white/40 p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)] transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/50 hover-lift"
               >
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.6rem] uppercase tracking-[0.42em] text-black/60">
                   <span>{experience.period}</span>
@@ -362,11 +314,9 @@ export default function HomePage({ data }: HomePageProps) {
                   {experience.details.headline}
                 </p>
                 <p
-                  className={`mt-2 text-[0.62rem] uppercase tracking-[0.32em] ${
-                    isUnlocked ? "text-[var(--ink-red)]" : "text-black/35"
-                  }`}
+                  className="mt-2 text-[0.62rem] uppercase tracking-[0.32em] text-[var(--ink-red)]"
                 >
-                  {isUnlocked ? "Tap to open the letter" : "Scroll to unlock"}
+                  Open the letter
                 </p>
               </article>
             );

@@ -3,7 +3,7 @@
     "locationLabel": "Typed in Toronto · Ontario",
     "name": "Sarath Kumar",
     "title": "Full-Stack Developer",
-    "summary": "Full-stack developer focused on building data-heavy web applications, AI-assisted workflows, and reliable integrations across modern frontend systems and backend services.",
+    "summary": "Full-stack developer who brings production reliability, AI-driven execution, and strong React, Java, and TypeScript engineering to build scalable products that deliver measurable business impact.",
     "contact": {
       "phone": "905.922.5917",
       "location": "Toronto, ON",
@@ -12,189 +12,176 @@
       "github": "https://github.com/sarathkumar365"
     }
   },
-
   "stats": [
     {
-      "label": "Experience",
-      "value": "1.5 years"
+      "label": "Track Record",
+      "value": "Production systems under ownership"
     },
     {
-      "label": "Primary Stack",
-      "value": "React · Node · Java · PostgreSQL"
+      "label": "Core Strength",
+      "value": "React · Java · TypeScript"
     },
     {
-      "label": "Location",
-      "value": "Toronto · ON"
+      "label": "Delivery Edge",
+      "value": "Reliability-first · AI-assisted execution"
     }
   ],
-
   "experiences": [
     {
       "id": "2creative-full-stack-developer",
-      "period": "2024 — Present",
+      "period": "Dec 2024 — Present",
       "role": "Full Stack Developer",
       "company": "2Creative",
       "location": "Toronto, ON",
-      "summary": "Building enterprise dashboards and AI-driven features used by analytics teams, with a focus on performance, reliability, and data integrity.",
+      "summary": "Building and operating production analytics products with a focus on reliability, performance, AI-assisted workflows, and secure cross-platform integrations.",
       "details": {
-        "headline": "Data platforms, AI copilots, and production reliability",
-        "overview": "Worked across frontend, backend, and automation layers to deliver real-time dashboards, AI-powered interfaces, and resilient system behavior.",
+        "headline": "Production reliability, platform architecture, and AI UX",
+        "overview": "Lead full-stack delivery across frontend, backend, and operations, including CI/CD ownership with Jenkins and Harness plus production rollout validation through OpenShift Console.",
         "sections": [
           {
-            "title": "Dashboard Systems & Data Visualization",
+            "title": "Production Reliability & Observability",
             "items": [
-              "Engineered a cascading filter system allowing hierarchical, real-time filtering across all dashboard charts.",
-              "Rearchitected core pagination logic to resolve production performance bottlenecks.",
-              "Optimized chart rendering and added user-level customization, contributing to a 22% increase in user retention.",
-              "Maintained and extended complex D3.js visualizations across multiple customer dashboards."
+              "Sustain production reliability through on-call rotations using Datadog logs and traces for root-cause analysis and incident resolution.",
+              "Resolved a system-critical deadlock in a core Java component, preventing downtime and stabilizing customer-facing dashboards.",
+              "Led architecture refactors toward production-ready standards using metric-driven PBIs to validate reliability and performance gains."
             ]
           },
           {
-            "title": "AI-Powered Chat & Automation",
+            "title": "Data Platform & Performance",
             "items": [
-              "Designed and built a streaming AI chatbot using React and a Java backend integrated with OpenAI APIs.",
-              "Implemented Server-Sent Events (SSE) with fetchEventSource to stream responses in real time.",
-              "Enabled contextual AI insights grounded in live dashboard data.",
-              "Improved user engagement and time-on-site through responsive AI-driven workflows."
+              "Engineered dynamic cascading filters enabling multi-attribute segmentation across dashboards and faster data exploration.",
+              "Built an embeddable data insights module and used Redis caching to persist dashboard state across integrated products.",
+              "Improved chart rendering performance and user-level customization, contributing to a 22% increase in user retention."
             ]
           },
           {
-            "title": "Reliability & Cross-Platform Integration",
+            "title": "AI Features & Workflow Systems",
             "items": [
-              "Resolved system-critical deadlock issues in production components.",
-              "Built backend features to control widget refresh behavior and prevent data-related failures.",
-              "Collaborated with Salesforce teams to debug integration issues and ensure consistent data behavior."
+              "Implemented SSE streaming with fetchEventSource to deliver real-time OpenAI chatbot responses with lower perceived latency.",
+              "Designed and implemented an AI chatbot interface in React integrated with OpenAI through Java REST services.",
+              "Delivered full-stack controls that allowed super-users to disable widget refresh and prevent shared-widget failures."
+            ]
+          },
+          {
+            "title": "CI/CD, Platform Operations & Collaboration",
+            "items": [
+              "Owned day-to-day CI/CD execution across Jenkins and Harness pipelines, including build orchestration, deployment sequencing, and rollback-ready release flow.",
+              "Used OpenShift Console to monitor deployment health, inspect pod/runtime behavior, and validate production rollouts after pipeline runs.",
+              "Automated test-and-release stages to reduce manual handoffs and keep delivery cycles fast and repeatable.",
+              "Used Docker and GitHub Actions to support rapid CI/CD, automated testing, and controlled releases.",
+              "Mentored interns on full-stack fundamentals, code quality, Git workflows, and scalable design patterns.",
+              "Collaborated in Agile/SCRUM delivery cycles across engineering and product stakeholders."
             ]
           }
         ],
-        "closing": "Delivered production features across data visualization, AI automation, and system reliability."
-      }
-    },
-
-    {
-      "id": "lambton-full-stack-program",
-      "period": "2023 — 2025",
-      "role": "Full Stack Software Development",
-      "company": "Lambton College",
-      "location": "Toronto, ON",
-      "summary": "Post-graduate program focused on full-stack systems, cloud platforms, and applied AI.",
-      "details": {
-        "headline": "Applied engineering foundation",
-        "overview": "Built multiple end-to-end systems using modern web stacks, automation pipelines, and schema-driven design.",
-        "sections": [
-          {
-            "title": "Program Highlights",
-            "items": [
-              "Post-Graduate Certificate in Full Stack Software Development — GPA: 3.4/4.0"
-            ]
-          },
-          {
-            "title": "Undergraduate Foundation",
-            "items": [
-              "Bachelor of Computer Science — Final-year project on NutBaaS (Blockchain-as-a-Service), alongside core CS coursework — GPA: 8.0/10."
-            ]
-          }
-        ],
-        "closing": "Graduated with strong fundamentals in system design and applied engineering."
+        "closing": "Delivered measurable reliability and retention gains while scaling full-stack platform capabilities in production."
       }
     }
   ],
-
   "skills": {
     "heading": "How I Build Software",
     "categories": [
       {
-        "title": "System Design & Architecture",
-        "items": [
-          "End-to-end web systems",
-          "REST API design",
-          "Microservices fundamentals",
-          "Workflow-based architectures"
-        ]
-      },
-      {
-        "title": "User Interfaces",
+        "title": "Frontend Engineering",
         "items": [
           "React",
           "Next.js",
           "TypeScript",
-          "State and component design"
+          "JavaScript",
+          "D3.js",
+          "Zustand",
+          "TanStack"
         ]
       },
       {
-        "title": "Backend Services",
+        "title": "Backend & APIs",
         "items": [
-          "Node.js (Express)",
-          "Java (Spring Boot)",
-          "Python services",
-          "Authentication & authorization"
+          "Node.js",
+          "Express",
+          "Java Spring Boot",
+          "FastAPI",
+          "REST APIs",
+          "Prisma",
+          "Python"
         ]
       },
       {
-        "title": "Data Layer",
+        "title": "Data & Messaging",
         "items": [
           "PostgreSQL",
           "MongoDB",
-          "Schema design",
-          "ORM (Prisma)"
+          "JSONB",
+          "Prisma ORM",
+          "Redis",
+          "RabbitMQ"
         ]
       },
       {
-        "title": "Infrastructure & Delivery",
+        "title": "AI & Automation",
         "items": [
-          "Dockerized deployments",
-          "CI/CD (GitHub Actions, Jenkins)",
-          "AWS & Azure",
-          "Environment configuration"
+          "OpenAI API",
+          "Prompt engineering",
+          "SSE streaming",
+          "AI orchestration",
+          "n8n",
+          "LLM workflows"
         ]
       },
       {
-        "title": "Automation & AI Tooling",
+        "title": "Cloud, DevOps & Observability",
         "items": [
-          "Workflow automation (n8n)",
-          "LLM-assisted development",
-          "Schema-grounded AI prompts"
+          "Docker",
+          "GitHub Actions",
+          "Jenkins",
+          "AWS",
+          "Azure",
+          "OpenShift",
+          "Datadog"
         ]
       },
       {
-        "title": "Debugging & Testing",
+        "title": "Practices & Security",
         "items": [
-          "API testing (Postman)",
-          "Browser debugging",
-          "Request inspection"
+          "Agile/SCRUM",
+          "CI/CD",
+          "Microservices concepts",
+          "Production on-call",
+          "JWT/OAuth/CORS",
+          "Idempotent retry logic"
         ]
       }
     ]
   },
-
   "credentials": {
     "heading": "Proof",
     "certifications": [
-      "AWS Certified Cloud Practitioner",
+      "AWS Cloud Practitioner",
+      "Introduction to DevOps — Azure",
       "Salesforce Certified Administrator",
       "Salesforce Certified Omnistudio Developer",
-      "Architecting with Google Compute Engine Specialization",
-      "Introduction to DevOps — Azure"
+      "Architecting with Google Compute Engine Specialization"
     ],
     "education": [
       {
         "school": "Lambton College",
         "period": "2023 — 2025",
-        "program": "Post-Graduate Certificate · Full Stack Software Development",
-        "location": "Toronto, Canada"
+        "program": "Postgraduate Certificate · Full Stack Software Development",
+        "location": "Toronto, ON",
+        "gpa": "3.4 / 4.0"
       },
       {
         "school": "Kalam Technical University",
         "period": "2017 — 2021",
         "program": "Bachelor of Computer Science",
-        "location": "India"
+        "location": "India",
+        "gpa": "8.0 / 10",
+        "note": "Final-year project: NutBaaS (Blockchain as a Service), with core CS coursework in data structures and algorithms."
       }
     ]
   },
-
   "cta": {
-    "heading": "Let’s build real systems",
-    "body": "I enjoy working on data-heavy products, AI-assisted tools, and automation pipelines that solve real problems.",
+    "heading": "Let’s build reliable product systems",
+    "body": "I am looking to contribute to teams building scalable web products where reliability, AI-assisted workflows, and fast delivery all matter.",
     "closing": "Reach out at Sarathkumarks.dev@gmail.com or connect on LinkedIn."
   }
 }
