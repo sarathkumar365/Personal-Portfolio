@@ -25,7 +25,6 @@ export default function HomePage({ data }: HomePageProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [selectedExperience, setSelectedExperience] =
     useState<ExperienceDetail | null>(null);
-  const impactSnapshot = experiences[0]?.details.closing;
 
   const closeExperience = useCallback(() => {
     setSelectedExperience(null);
@@ -202,15 +201,6 @@ export default function HomePage({ data }: HomePageProps) {
         >
           {hero.summary}
         </div>
-        {impactSnapshot ? (
-          <p
-            className={`max-w-2xl border-l-2 border-black/25 pl-3 text-sm uppercase tracking-[0.18em] text-black/70 transition-opacity duration-500 delay-75 ${
-              heroComplete ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            Impact snapshot: {impactSnapshot}
-          </p>
-        ) : null}
         <div
           className={`space-y-1 text-sm uppercase tracking-[0.3em] text-black/70 transition-opacity duration-500 delay-100 ${
             heroComplete ? "opacity-100" : "opacity-0"
