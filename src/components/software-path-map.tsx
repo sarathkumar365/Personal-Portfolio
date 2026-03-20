@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { SkillCategory, SkillsSection } from "@/data/types";
 
@@ -10,8 +10,27 @@ type Milestone = {
   side: "left" | "right";
   labelClassName: string;
   cardPlacement?: "side" | "top";
+  fixedPosition?: { left: string; top: string };
   t: number;
   categoryTitles: string[];
+};
+
+type PointerKind = "mouse" | "touch" | "pen";
+
+type DepthConfig = {
+  tiltXDeg: number;
+  tiltYDeg: number;
+  shiftX: number;
+  shiftY: number;
+  scrollDriftY: number;
+};
+
+const DEPTH_CONFIG: DepthConfig = {
+  tiltXDeg: 3.2,
+  tiltYDeg: 2.6,
+  shiftX: 16,
+  shiftY: 12,
+  scrollDriftY: 12,
 };
 
 const PATH_D =
@@ -31,6 +50,7 @@ const milestones: Milestone[] = [
     label: "Build",
     side: "right",
     labelClassName: "left-3 -top-7",
+    fixedPosition: { left: "28.5198%", top: "18.5%" },
     t: 0.24,
     categoryTitles: ["Build"],
   },
@@ -69,13 +89,26 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const pathRef = useRef<SVGPathElement | null>(null);
   const milestoneRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  const cardVisibleRef = useRef(false);
+  const depthEnabledRef = useRef(true);
+  const pointerKindRef = useRef<PointerKind>("mouse");
+  const rafRef = useRef<number | null>(null);
+  const sceneCurrentRef = useRef({ x: 0, y: 0, scroll: 0 });
+  const sceneTargetRef = useRef({ x: 0, y: 0, scroll: 0 });
+
   const [positions, setPositions] = useState<Record<string, { x: number; y: number }>>({});
   const [activeId, setActiveId] = useState<string>(milestones[0].id);
   const [cardVisible, setCardVisible] = useState(false);
+  const [pinnedMilestoneId, setPinnedMilestoneId] = useState<string | null>(null);
   const [cardPosition, setCardPosition] = useState<{ left: number; top: number }>({
     left: 16,
     top: 16,
   });
+
+  useEffect(() => {
+    cardVisibleRef.current = cardVisible;
+  }, [cardVisible]);
 
   const categoriesByTitle = useMemo(
     () =>
@@ -90,28 +123,182 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
     .map((title) => categoriesByTitle.get(title))
     .filter((value): value is SkillCategory => Boolean(value));
 
-  const positionMilestones = () => {
-    const path = pathRef.current;
-    if (!path) return;
-    const totalLength = path.getTotalLength();
-    const next: Record<string, { x: number; y: number }> = {};
+  const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
 
-    milestones.forEach((item) => {
-      const point = path.getPointAtLength(totalLength * item.t);
-      next[item.id] = {
-        x: (point.x / 800) * 100,
-        y: (point.y / 600) * 100,
-      };
-    });
+  const setMapDepthVars = useCallback((x: number, y: number, scroll: number) => {
+    const map = mapRef.current;
+    if (!map) {
+      return;
+    }
 
-    setPositions(next);
-  };
+    const damp = cardVisibleRef.current ? 0.55 : 1;
+
+    map.style.setProperty("--map-tilt-x", `${-y * DEPTH_CONFIG.tiltXDeg * damp}deg`);
+    map.style.setProperty("--map-tilt-y", `${x * DEPTH_CONFIG.tiltYDeg * damp}deg`);
+    map.style.setProperty("--map-shift-x", `${x * DEPTH_CONFIG.shiftX * damp}px`);
+    map.style.setProperty("--map-shift-y", `${y * DEPTH_CONFIG.shiftY * damp}px`);
+    map.style.setProperty("--map-scroll-drift-y", `${scroll * DEPTH_CONFIG.scrollDriftY * damp}px`);
+  }, []);
+
+  const requestFrame = useCallback(() => {
+    if (rafRef.current !== null) {
+      return;
+    }
+
+    const step = () => {
+      const next = sceneTargetRef.current;
+      const current = sceneCurrentRef.current;
+      const ease = 0.14;
+
+      current.x += (next.x - current.x) * ease;
+      current.y += (next.y - current.y) * ease;
+      current.scroll += (next.scroll - current.scroll) * ease;
+
+      setMapDepthVars(current.x, current.y, current.scroll);
+
+      const settled =
+        Math.abs(next.x - current.x) < 0.0015 &&
+        Math.abs(next.y - current.y) < 0.0015 &&
+        Math.abs(next.scroll - current.scroll) < 0.0015;
+
+      if (settled) {
+        sceneCurrentRef.current = { ...next };
+        setMapDepthVars(next.x, next.y, next.scroll);
+        rafRef.current = null;
+        return;
+      }
+
+      rafRef.current = window.requestAnimationFrame(step);
+    };
+
+    rafRef.current = window.requestAnimationFrame(step);
+  }, [setMapDepthVars]);
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const positionMilestones = () => {
+      const path = pathRef.current;
+      if (!path) {
+        return;
+      }
+
+      const totalLength = path.getTotalLength();
+      const next: Record<string, { x: number; y: number }> = {};
+
+      milestones.forEach((item) => {
+        const point = path.getPointAtLength(totalLength * item.t);
+        next[item.id] = {
+          x: (point.x / 800) * 100,
+          y: (point.y / 600) * 100,
+        };
+      });
+
+      setPositions(next);
+    };
+
+    const updateScrollTarget = () => {
+      if (!depthEnabledRef.current) {
+        sceneTargetRef.current.scroll = 0;
+        requestFrame();
+        return;
+      }
+
+      const map = mapRef.current;
+      if (!map) {
+        return;
+      }
+
+      const rect = map.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const progress = clamp(
+        (viewportHeight - rect.top) / (viewportHeight + rect.height),
+        0,
+        1,
+      );
+
+      sceneTargetRef.current.scroll = (progress - 0.5) * 2;
+      requestFrame();
+    };
+
+    const syncMotionPreference = () => {
+      depthEnabledRef.current = !mediaQuery.matches;
+      if (!depthEnabledRef.current) {
+        sceneTargetRef.current.x = 0;
+        sceneTargetRef.current.y = 0;
+      }
+
+      updateScrollTarget();
+    };
+
+    syncMotionPreference();
+
+    const onPreferenceChange = () => {
+      syncMotionPreference();
+    };
+
+    mediaQuery.addEventListener("change", onPreferenceChange);
+
     positionMilestones();
-    window.addEventListener("resize", positionMilestones);
+    updateScrollTarget();
+
+    const onResize = () => {
+      positionMilestones();
+      updateScrollTarget();
+    };
+
+    const onScroll = () => {
+      updateScrollTarget();
+    };
+
+    window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
-      window.removeEventListener("resize", positionMilestones);
+      mediaQuery.removeEventListener("change", onPreferenceChange);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [requestFrame]);
+
+  useEffect(() => {
+    if (!pinnedMilestoneId) {
+      return;
+    }
+
+    const closePinnedOnOutsideTap = (event: PointerEvent) => {
+      const map = mapRef.current;
+      if (!map) {
+        return;
+      }
+
+      if (!map.contains(event.target as Node)) {
+        setPinnedMilestoneId(null);
+        setCardVisible(false);
+      }
+    };
+
+    window.addEventListener("pointerdown", closePinnedOnOutsideTap);
+
+    return () => {
+      window.removeEventListener("pointerdown", closePinnedOnOutsideTap);
+    };
+  }, [pinnedMilestoneId]);
+
+  useEffect(() => {
+    const syncMousePointerKind = (event: PointerEvent) => {
+      if (event.pointerType === "mouse") {
+        pointerKindRef.current = "mouse";
+      }
+    };
+
+    window.addEventListener("pointermove", syncMousePointerKind, { passive: true });
+
+    return () => {
+      window.removeEventListener("pointermove", syncMousePointerKind);
     };
   }, []);
 
@@ -119,12 +306,15 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
     const map = mapRef.current;
     const node = milestoneRefs.current[milestoneId];
     const milestone = milestones.find((item) => item.id === milestoneId);
-    if (!map || !node || !milestone) return;
+    if (!map || !node || !milestone) {
+      return;
+    }
 
     const mapRect = map.getBoundingClientRect();
     const nodeRect = node.getBoundingClientRect();
     const isTopPlacement = milestone.cardPlacement === "top";
     const offsetX = milestone.side === "left" ? -260 : 24;
+
     const left = isTopPlacement
       ? nodeRect.left - mapRect.left - 120
       : nodeRect.left - mapRect.left + offsetX;
@@ -136,67 +326,126 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
       left: Math.max(10, Math.min(left, mapRect.width - 296)),
       top: Math.max(10, Math.min(top, mapRect.height - 182)),
     });
+
     setActiveId(milestoneId);
     setCardVisible(true);
   };
 
   const hideCard = () => {
+    if (pinnedMilestoneId) {
+      return;
+    }
+
     setCardVisible(false);
+  };
+
+  const handleMilestonePointerDown = (
+    event: React.PointerEvent<HTMLButtonElement>,
+    milestoneId: string,
+  ) => {
+    pointerKindRef.current = (event.pointerType as PointerKind) || "mouse";
+
+    const isTouchLike = event.pointerType === "touch" || event.pointerType === "pen";
+    if (!isTouchLike) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (pinnedMilestoneId === milestoneId) {
+      setPinnedMilestoneId(null);
+      setCardVisible(false);
+      return;
+    }
+
+    setPinnedMilestoneId(milestoneId);
+    showCard(milestoneId);
+  };
+
+  const handleMilestoneMouseEnter = (milestoneId: string) => {
+    if (pinnedMilestoneId || pointerKindRef.current !== "mouse") {
+      return;
+    }
+
+    showCard(milestoneId);
+  };
+
+  const handleMilestoneFocus = (milestoneId: string) => {
+    showCard(milestoneId);
+  };
+
+  const handleMilestoneBlur = () => {
+    hideCard();
   };
 
   return (
     <div
       ref={mapRef}
-      className="relative h-[560px] overflow-hidden border border-black/20 bg-white/35"
+      className="timeline-depth-stage relative h-[560px] overflow-hidden border border-black/20 bg-white/35"
       onMouseLeave={hideCard}
     >
-      <svg viewBox="0 0 800 600" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
-        <path
-          ref={pathRef}
-          d={PATH_D}
-          className="fill-none stroke-black/60 [stroke-dasharray:3.5_8] [stroke-linecap:round] [stroke-linejoin:round]"
-          strokeWidth={2.2}
-        />
-      </svg>
+      <div className="timeline-route-plane absolute inset-0">
+        <svg viewBox="0 0 800 600" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+          <path
+            ref={pathRef}
+            d={PATH_D}
+            className="timeline-route-base fill-none [stroke-dasharray:3.5_8] [stroke-linecap:round] [stroke-linejoin:round]"
+            strokeWidth={2.2}
+          />
+        </svg>
+      </div>
 
-      {milestones.map((item) => {
-        const position = positions[item.id];
-        const style =
-          position !== undefined ? { left: `${position.x}%`, top: `${position.y}%` } : undefined;
+      <div className="timeline-node-plane absolute inset-0">
+        {milestones.map((item) => {
+          const position = positions[item.id];
+          const style = item.fixedPosition
+            ? item.fixedPosition
+            : position !== undefined
+              ? { left: `${position.x}%`, top: `${position.y}%` }
+              : undefined;
 
-        return (
-          <button
-            key={item.id}
-            ref={(node) => {
-              milestoneRefs.current[item.id] = node;
-            }}
-            type="button"
-            className="group absolute h-0 w-0 -translate-x-1/2 -translate-y-1/2 overflow-visible bg-transparent p-0 text-inherit"
-            style={style}
-            aria-label={item.label}
-            onMouseEnter={() => showCard(item.id)}
-            onMouseLeave={hideCard}
-            onFocus={() => showCard(item.id)}
-            onBlur={hideCard}
-          >
-            <span
-              className={`absolute left-0 top-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] bg-white transition group-hover:border-[var(--ink-blue)] group-focus-visible:border-[var(--ink-blue)] ${
-                activeId === item.id && cardVisible
-                  ? "border-[var(--ink-blue)] shadow-[0_0_0_6px_rgba(11,114,133,0.16)]"
-                  : "border-black/75 shadow-[0_0_0_6px_rgba(0,0,0,0)]"
-              }`}
-            />
-            <span
-              className={`absolute whitespace-nowrap border border-black/20 bg-[rgba(247,247,242,0.9)] px-2 py-1 text-[0.6rem] uppercase tracking-[0.22em] leading-none text-black ${item.labelClassName}`}
+          const isActive = activeId === item.id && cardVisible;
+
+          return (
+            <button
+              key={item.id}
+              ref={(node) => {
+                milestoneRefs.current[item.id] = node;
+              }}
+              type="button"
+              className="group absolute h-0 w-0 -translate-x-1/2 -translate-y-1/2 overflow-visible bg-transparent p-0 text-inherit"
+              style={style}
+              aria-label={item.label}
+              onPointerDown={(event) => handleMilestonePointerDown(event, item.id)}
+              onMouseEnter={() => handleMilestoneMouseEnter(item.id)}
+              onMouseLeave={hideCard}
+              onFocus={() => handleMilestoneFocus(item.id)}
+              onBlur={handleMilestoneBlur}
             >
-              {item.label}
-            </span>
-          </button>
-        );
-      })}
+              <span
+                className={`timeline-node-halo absolute left-0 top-0 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full ${
+                  isActive ? "opacity-100" : "opacity-0"
+                }`}
+              />
+              <span
+                className={`timeline-node-core absolute left-0 top-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] transition group-hover:border-[var(--ink-blue)] group-focus-visible:border-[var(--ink-blue)] ${
+                  isActive
+                    ? "border-[var(--ink-blue)] bg-[rgba(255,255,255,0.97)] shadow-[0_0_0_7px_rgba(11,114,133,0.14)]"
+                    : "border-black/75 bg-white/95 shadow-[0_2px_4px_rgba(0,0,0,0.22)]"
+                }`}
+              />
+              <span
+                className={`timeline-node-label absolute whitespace-nowrap border border-black/20 bg-[rgba(247,247,242,0.9)] px-2 py-1 text-[0.6rem] uppercase tracking-[0.22em] leading-none text-black ${item.labelClassName}`}
+              >
+                {item.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
 
       <div
-        className={`pointer-events-none absolute z-10 min-w-[220px] max-w-[300px] border border-black/20 bg-white/90 p-3 shadow-[0_14px_28px_-18px_rgba(0,0,0,0.45)] transition-all duration-200 ${
+        className={`timeline-card-plane pointer-events-none absolute z-10 min-w-[220px] max-w-[300px] border border-black/20 bg-white/92 p-3 shadow-[0_18px_36px_-20px_rgba(0,0,0,0.5)] transition-all duration-200 ${
           cardVisible ? "translate-y-0 opacity-100" : "translate-y-1.5 opacity-0"
         }`}
         style={{ left: `${cardPosition.left}px`, top: `${cardPosition.top}px` }}

@@ -10,6 +10,24 @@
   --paper-fold: rgba(0, 0, 0, 0.045);
   --paper-border: rgba(0, 0, 0, 0.18);
   --paper-shadow: rgba(0, 0, 0, 0.25);
+  --depth-z-bg: 4px;
+  --depth-z-route: 24px;
+  --depth-z-nodes: 46px;
+  --depth-z-card: 68px;
+  --tilt-max: 5deg;
+  --parallax-route-x: 0.75;
+  --parallax-route-y: 0.65;
+  --parallax-node-x: 1;
+  --parallax-node-y: 0.9;
+  --parallax-card-x: 1.05;
+  --parallax-card-y: 1.1;
+  --shadow-soft: 0 16px 28px -20px rgba(0, 0, 0, 0.45);
+  --shadow-node: 0 5px 8px -6px rgba(0, 0, 0, 0.46);
+  --map-tilt-x: 0deg;
+  --map-tilt-y: 0deg;
+  --map-shift-x: 0px;
+  --map-shift-y: 0px;
+  --map-scroll-drift-y: 0px;
   --font-serif: var(--font-serif), serif;
 }
 
@@ -140,6 +158,68 @@ body {
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.09);
 }
 
+.timeline-depth-stage {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  isolation: isolate;
+}
+
+.timeline-route-plane {
+  transform-style: preserve-3d;
+  transform:
+    translate3d(
+      calc(var(--map-shift-x) * var(--parallax-route-x)),
+      calc(var(--map-shift-y) * var(--parallax-route-y) + var(--map-scroll-drift-y)),
+      var(--depth-z-route)
+    )
+    rotateX(var(--map-tilt-x))
+    rotateY(var(--map-tilt-y));
+  transition: opacity 0.2s ease;
+}
+
+.timeline-route-base {
+  stroke: rgba(0, 0, 0, 0.6);
+}
+
+.timeline-node-plane {
+  transform-style: preserve-3d;
+  transform:
+    translate3d(
+      calc(var(--map-shift-x) * var(--parallax-route-x)),
+      calc(var(--map-shift-y) * var(--parallax-route-y) + var(--map-scroll-drift-y)),
+      var(--depth-z-route)
+    )
+    rotateX(var(--map-tilt-x))
+    rotateY(var(--map-tilt-y));
+}
+
+.timeline-node-core {
+  transform: translate3d(-50%, -50%, 0);
+  box-shadow: var(--shadow-node);
+}
+
+.timeline-node-label {
+  box-shadow: 0 4px 14px -11px rgba(0, 0, 0, 0.4);
+}
+
+.timeline-node-halo {
+  background: radial-gradient(circle, rgba(11, 114, 133, 0.3), rgba(11, 114, 133, 0));
+  transition: opacity 0.2s ease;
+}
+
+.timeline-card-plane {
+  transform-style: preserve-3d;
+  transform:
+    translate3d(
+      calc(var(--map-shift-x) * var(--parallax-card-x)),
+      calc(var(--map-shift-y) * var(--parallax-card-y) + var(--map-scroll-drift-y) * 1.08),
+      var(--depth-z-card)
+    )
+    rotateX(calc(var(--map-tilt-x) * 0.58))
+    rotateY(calc(var(--map-tilt-y) * 0.58));
+  box-shadow: var(--shadow-soft);
+}
+
 @layer base {
   a {
     color: inherit;
@@ -169,6 +249,20 @@ body {
     animation: none;
     opacity: 0.18;
   }
+
+  .timeline-depth-stage {
+    --map-tilt-x: 0deg;
+    --map-tilt-y: 0deg;
+    --map-shift-x: 0px;
+    --map-shift-y: 0px;
+    --map-scroll-drift-y: 0px;
+  }
+
+  .timeline-route-plane,
+  .timeline-node-plane,
+  .timeline-card-plane {
+    transition: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -183,5 +277,17 @@ body {
 
   .paper-sheet {
     padding: 2rem 1.15rem 3rem;
+  }
+
+  .timeline-depth-stage {
+    --depth-z-route: 16px;
+    --depth-z-nodes: 30px;
+    --depth-z-card: 38px;
+    --parallax-route-x: 0.5;
+    --parallax-route-y: 0.42;
+    --parallax-node-x: 0.58;
+    --parallax-node-y: 0.54;
+    --parallax-card-x: 0.62;
+    --parallax-card-y: 0.6;
   }
 }
