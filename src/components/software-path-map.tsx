@@ -105,6 +105,7 @@ const milestones: Milestone[] = [
     label: "Integrate",
     side: "left",
     labelClassName: "right-3 -top-7",
+    fixedPosition: { left: "435px", top: "181px" },
     t: 0.46,
     categoryTitles: ["Integrate"],
   },
@@ -271,19 +272,22 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const positionMilestones = () => {
+      const map = mapRef.current;
       const path = pathRef.current;
-      if (!path) {
+      if (!path || !map) {
         return;
       }
 
       const totalLength = path.getTotalLength();
+      const mapRect = map.getBoundingClientRect();
       const next: Record<string, { x: number; y: number }> = {};
 
       milestones.forEach((item) => {
         const point = path.getPointAtLength(totalLength * item.t);
         next[item.id] = {
-          x: (point.x / 800) * 100,
-          y: (point.y / 600) * 100,
+          // Snap to physical pixels to keep circles/labels consistently crisp.
+          x: Math.round((point.x / 800) * mapRect.width),
+          y: Math.round((point.y / 600) * mapRect.height),
         };
       });
 
@@ -685,7 +689,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
             const style = item.fixedPosition
               ? item.fixedPosition
               : position !== undefined
-                ? { left: `${position.x}%`, top: `${position.y}%` }
+                ? { left: `${position.x}px`, top: `${position.y}px` }
                 : undefined;
 
             const isActive = activeId === item.id && cardVisible;
