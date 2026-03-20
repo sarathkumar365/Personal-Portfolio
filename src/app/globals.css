@@ -159,9 +159,23 @@ body {
 }
 
 .timeline-depth-stage {
-  perspective: 1200px;
+  --scene-perspective: 900px;
+  --scene-origin-y: 78%;
+  --scene-rotate-x: 7.2deg;
+  --scene-rotate-y: -2.8deg;
+  --scene-rotate-z: 0.45deg;
+  --scene-card-z: var(--depth-z-card);
   transform-style: preserve-3d;
   isolation: isolate;
+}
+
+.timeline-map-scene {
+  perspective: var(--scene-perspective);
+  perspective-origin: 50% var(--scene-origin-y);
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  transform: rotateX(var(--scene-rotate-x)) rotateY(var(--scene-rotate-y)) rotateZ(var(--scene-rotate-z));
+  touch-action: pan-y pinch-zoom;
 }
 
 .timeline-route-plane {
@@ -213,7 +227,7 @@ body {
     translate3d(
       calc(var(--map-shift-x) * var(--parallax-card-x)),
       calc(var(--map-shift-y) * var(--parallax-card-y) + var(--map-scroll-drift-y) * 1.08),
-      var(--depth-z-card)
+      var(--scene-card-z)
     )
     rotateX(calc(var(--map-tilt-x) * 0.58))
     rotateY(calc(var(--map-tilt-y) * 0.58));
@@ -258,6 +272,14 @@ body {
     --map-scroll-drift-y: 0px;
   }
 
+  .timeline-map-scene {
+    --scene-rotate-x: 0deg;
+    --scene-rotate-y: 0deg;
+    --scene-rotate-z: 0deg;
+    perspective-origin: 50% 50%;
+    transform: none;
+  }
+
   .timeline-route-plane,
   .timeline-node-plane,
   .timeline-card-plane {
@@ -289,5 +311,13 @@ body {
     --parallax-node-y: 0.54;
     --parallax-card-x: 0.62;
     --parallax-card-y: 0.6;
+  }
+
+  .timeline-map-scene {
+    --scene-perspective: 820px;
+    --scene-origin-y: 74%;
+    --scene-rotate-x: 6deg;
+    --scene-rotate-y: -2deg;
+    --scene-rotate-z: 0.35deg;
   }
 }
