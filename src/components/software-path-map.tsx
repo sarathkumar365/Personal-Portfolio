@@ -643,6 +643,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
         onPointerUp={endSceneDrag}
         onPointerCancel={endSceneDrag}
       >
+        <div className="timeline-contour-overlay absolute inset-0" aria-hidden="true" />
         <div className="timeline-route-plane absolute inset-0">
           <svg viewBox="0 0 800 600" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
             <path
@@ -705,6 +706,17 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
               </button>
             );
           })}
+        </div>
+      </div>
+      <div className="timeline-map-watermark absolute top-4 right-6" aria-hidden="true">
+        <div className="timeline-compass-mark">
+          <span className="timeline-compass-n">N</span>
+          <span className="timeline-compass-v" />
+          <span className="timeline-compass-h" />
+        </div>
+        <div className="timeline-scale-mark">
+          <span className="timeline-scale-bar" />
+          <span className="timeline-scale-label">2 KM</span>
         </div>
       </div>
       <div
