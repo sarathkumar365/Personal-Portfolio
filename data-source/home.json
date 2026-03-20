@@ -96,6 +96,7 @@
           "Next.js",
           "TypeScript",
           "JavaScript",
+          "Rust",
           "D3.js",
           "Zustand",
           "TanStack",
@@ -116,13 +117,15 @@
           "JSONB",
           "Prisma ORM",
           "Redis",
-          "RabbitMQ"
+          "RabbitMQ",
+          "Kafka"
         ]
       },
       {
         "title": "Ship",
         "items": [
           "Docker",
+          "GitHub",
           "GitHub Actions",
           "Jenkins",
           "AWS",

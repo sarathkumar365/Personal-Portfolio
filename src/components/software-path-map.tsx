@@ -128,6 +128,37 @@ const milestones: Milestone[] = [
   },
 ];
 
+const PRIORITY_SKILLS = new Set([
+  "microservices",
+  "react",
+  "java",
+  "typescript",
+  "rust",
+  "postgresql",
+  "jsonb",
+  "redis",
+  "kafka",
+  "rabbitmq",
+  "docker",
+  "aws",
+  "openshift",
+  "github",
+  "datadog",
+  "ai orchestration",
+  "llm workflows",
+]);
+
+const normalizeSkill = (value: string) => value.trim().toLowerCase().replace(/[^\w\s]/g, "");
+const PRIORITY_SKILL_ALIASES = ["microservices", "github", "ai orchestration", "llm workflows"];
+const isPrioritySkill = (value: string) => {
+  const normalized = normalizeSkill(value);
+  if (PRIORITY_SKILLS.has(normalized)) {
+    return true;
+  }
+
+  return PRIORITY_SKILL_ALIASES.some((alias) => normalized.includes(alias));
+};
+
 type SoftwarePathMapProps = {
   skills: SkillsSection;
 };
@@ -647,6 +678,10 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
   }, [applySceneDragRotation]);
 
   const handleScenePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDevMode) {
+      return;
+    }
+
     dismissHoverCue();
     if (event.pointerType === "touch") {
       return;
@@ -769,7 +804,9 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
       <div className="timeline-cinematic-overlay absolute inset-0" aria-hidden="true" />
       <div
         ref={sceneRef}
-        className={`timeline-map-scene absolute inset-0 ${isSceneDragging ? "cursor-grabbing" : "cursor-grab"}`}
+        className={`timeline-map-scene absolute inset-0 ${
+          isDevMode ? (isSceneDragging ? "cursor-grabbing" : "cursor-grab") : ""
+        }`}
         style={
           {
             "--scene-perspective": `${depthTuning.perspective}px`,
@@ -884,12 +921,21 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {category.items.map((item) => (
+                  (() => {
+                    const isHighlighted = isPrioritySkill(item);
+                    return (
                   <span
                     key={`${category.title}-${item}`}
-                    className="border border-black/20 bg-white/85 px-2 py-1 text-[0.52rem] uppercase tracking-[0.2em] text-black/80"
+                    className={`border px-2 py-1 text-[0.52rem] uppercase tracking-[0.2em] ${
+                      isHighlighted
+                        ? "timeline-skill-chip-priority border-[rgba(156,38,38,0.64)] bg-[rgba(255,248,246,0.94)] text-[rgba(120,32,32,0.92)]"
+                        : "border-black/20 bg-white/85 text-black/80"
+                    }`}
                   >
                     {item}
                   </span>
+                    );
+                  })()
                 ))}
               </div>
             </div>
