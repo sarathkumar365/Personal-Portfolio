@@ -136,6 +136,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
   const isDevMode = process.env.NODE_ENV !== "production";
   const mapRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
+  const hoverCueRef = useRef<HTMLDivElement | null>(null);
   const pathRef = useRef<SVGPathElement | null>(null);
   const milestoneRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
@@ -149,16 +150,22 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
   const dragPointerIdRef = useRef<number | null>(null);
   const dragFrameRef = useRef<number | null>(null);
   const dragNextRotationRef = useRef<{ rotateX: number; rotateY: number } | null>(null);
+  const cueFrameRef = useRef<number | null>(null);
   const dragStartRef = useRef<{ x: number; y: number; rotateX: number; rotateY: number } | null>(
     null,
   );
   const sceneCurrentRef = useRef({ x: 0, y: 0, scroll: 0 });
   const sceneTargetRef = useRef({ x: 0, y: 0, scroll: 0 });
+  const cueCurrentRef = useRef({ x: 0, y: 0 });
+  const cueTargetRef = useRef({ x: 0, y: 0 });
 
   const [positions, setPositions] = useState<Record<string, { x: number; y: number }>>({});
   const [activeId, setActiveId] = useState<string>(milestones[0].id);
   const [cardVisible, setCardVisible] = useState(false);
   const [pinnedMilestoneId, setPinnedMilestoneId] = useState<string | null>(null);
+  const [hoverCueVisible, setHoverCueVisible] = useState(false);
+  const [hoverCueDismissed, setHoverCueDismissed] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [controlsOpen, setControlsOpen] = useState(false);
   const [isSceneDragging, setIsSceneDragging] = useState(false);
   const [depthTuning, setDepthTuning] = useState<DepthTuning>(DEPTH_TUNING_DEFAULTS);
@@ -180,6 +187,9 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
       }
       if (hideTimerRef.current !== null) {
         window.clearTimeout(hideTimerRef.current);
+      }
+      if (cueFrameRef.current !== null) {
+        window.cancelAnimationFrame(cueFrameRef.current);
       }
     };
   }, []);
@@ -300,12 +310,14 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
     };
 
     const syncMotionPreference = () => {
+      setPrefersReducedMotion(mediaQuery.matches);
       depthEnabledRef.current = !mediaQuery.matches;
       if (!depthEnabledRef.current) {
         sceneTargetRef.current.x = 0;
         sceneTargetRef.current.y = 0;
         mapRef.current?.style.setProperty("--map-tilt-x", "0deg");
         mapRef.current?.style.setProperty("--map-tilt-y", "0deg");
+        setHoverCueVisible(false);
       }
 
       updateScrollTarget();
@@ -426,6 +438,74 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
     }, 40);
   };
 
+  const dismissHoverCue = useCallback(() => {
+    setHoverCueVisible(false);
+
+    if (hoverCueDismissed) {
+      return;
+    }
+
+    setHoverCueDismissed(true);
+  }, [hoverCueDismissed]);
+
+  const requestHoverCueFrame = useCallback(() => {
+    if (cueFrameRef.current !== null) {
+      return;
+    }
+
+    const step = () => {
+      const cue = hoverCueRef.current;
+      if (!cue) {
+        cueFrameRef.current = null;
+        return;
+      }
+
+      const current = cueCurrentRef.current;
+      const target = cueTargetRef.current;
+      const ease = 0.24;
+
+      current.x += (target.x - current.x) * ease;
+      current.y += (target.y - current.y) * ease;
+
+      cue.style.transform = `translate3d(${current.x}px, ${current.y}px, 0)`;
+
+      const settled = Math.abs(target.x - current.x) < 0.4 && Math.abs(target.y - current.y) < 0.4;
+
+      if (settled) {
+        cue.style.transform = `translate3d(${target.x}px, ${target.y}px, 0)`;
+        cueCurrentRef.current = { ...target };
+        cueFrameRef.current = null;
+        return;
+      }
+
+      cueFrameRef.current = window.requestAnimationFrame(step);
+    };
+
+    cueFrameRef.current = window.requestAnimationFrame(step);
+  }, []);
+
+  const updateHoverCueTarget = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const map = mapRef.current;
+      if (!map) {
+        return;
+      }
+
+      const rect = map.getBoundingClientRect();
+      const cue = hoverCueRef.current;
+      const cueWidth = cue?.offsetWidth ?? 130;
+      const cueHeight = cue?.offsetHeight ?? 30;
+      const x = event.clientX - rect.left + 14;
+      const y = event.clientY - rect.top + 14;
+
+      cueTargetRef.current = {
+        x: Math.max(8, Math.min(x, rect.width - cueWidth - 8)),
+        y: Math.max(8, Math.min(y, rect.height - cueHeight - 8)),
+      };
+    },
+    [],
+  );
+
   const hideCard = () => {
     if (pinnedMilestoneId) {
       return;
@@ -449,6 +529,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
     event: React.PointerEvent<HTMLButtonElement>,
     milestoneId: string,
   ) => {
+    dismissHoverCue();
     pointerKindRef.current = (event.pointerType as PointerKind) || "mouse";
 
     const isTouchLike = event.pointerType === "touch" || event.pointerType === "pen";
@@ -469,6 +550,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
   };
 
   const handleMilestoneMouseEnter = (milestoneId: string) => {
+    dismissHoverCue();
     if (pinnedMilestoneId || pointerKindRef.current !== "mouse") {
       return;
     }
@@ -477,6 +559,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
   };
 
   const handleMilestoneFocus = (milestoneId: string) => {
+    dismissHoverCue();
     showCard(milestoneId);
   };
 
@@ -564,6 +647,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
   }, [applySceneDragRotation]);
 
   const handleScenePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    dismissHoverCue();
     if (event.pointerType === "touch") {
       return;
     }
@@ -639,11 +723,48 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
     }
   };
 
+  const handleMapPointerEnter = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "mouse" || hoverCueDismissed || prefersReducedMotion) {
+      return;
+    }
+
+    updateHoverCueTarget(event);
+    cueCurrentRef.current = { ...cueTargetRef.current };
+    const cue = hoverCueRef.current;
+    if (cue) {
+      cue.style.transform = `translate3d(${cueCurrentRef.current.x}px, ${cueCurrentRef.current.y}px, 0)`;
+    }
+    setHoverCueVisible(true);
+  };
+
+  const handleMapPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (
+      event.pointerType === "mouse" &&
+      !hoverCueDismissed &&
+      hoverCueVisible &&
+      !prefersReducedMotion
+    ) {
+      updateHoverCueTarget(event);
+      requestHoverCueFrame();
+    }
+  };
+
+  const handleMapPointerLeave = () => {
+    setHoverCueVisible(false);
+    if (cueFrameRef.current !== null) {
+      window.cancelAnimationFrame(cueFrameRef.current);
+      cueFrameRef.current = null;
+    }
+  };
+
   return (
     <div
       ref={mapRef}
       className="timeline-depth-stage relative h-[560px] overflow-hidden border border-black/20 bg-white/28"
       onMouseLeave={hideCard}
+      onPointerEnter={handleMapPointerEnter}
+      onPointerMove={handleMapPointerMove}
+      onPointerLeave={handleMapPointerLeave}
     >
       <div className="timeline-cinematic-overlay absolute inset-0" aria-hidden="true" />
       <div
@@ -774,6 +895,93 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
             </div>
           ))}
         </div>
+      </div>
+      {prefersReducedMotion && !hoverCueDismissed ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-3 top-3 z-20 inline-flex items-center gap-1.5 rounded-sm border border-black bg-black px-2.5 py-1 text-[0.5rem] uppercase tracking-[0.22em] text-white shadow-[0_10px_18px_-14px_rgba(0,0,0,0.58)]"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            className="h-[11px] w-[11px] text-white/85"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19 5v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M8 6h.01"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M16 18h.01"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M11.75 14.112l-1.63 .853a.294 .294 0 0 1 -.425 -.307l.31 -1.808l-1.317 -1.28a.292 .292 0 0 1 .163 -.499l1.82 -.264l.815 -1.644a.294 .294 0 0 1 .527 0l.814 1.644l1.82 .264a.292 .292 0 0 1 .164 .499l-1.318 1.28l.31 1.807a.292 .292 0 0 1 -.425 .308l-1.628 -.853"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span>Hover milestones</span>
+        </div>
+      ) : null}
+      <div
+        ref={hoverCueRef}
+        aria-hidden="true"
+        className={`pointer-events-none absolute left-0 top-0 z-20 inline-flex items-center gap-1.5 rounded-sm border border-black bg-black px-2.5 py-1 text-[0.5rem] uppercase tracking-[0.22em] text-white shadow-[0_10px_18px_-14px_rgba(0,0,0,0.58)] transition-opacity duration-150 ${
+          hoverCueVisible ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          className="h-[11px] w-[11px] text-white/85"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19 5v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M8 6h.01"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M16 18h.01"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M11.75 14.112l-1.63 .853a.294 .294 0 0 1 -.425 -.307l.31 -1.808l-1.317 -1.28a.292 .292 0 0 1 .163 -.499l1.82 -.264l.815 -1.644a.294 .294 0 0 1 .527 0l.814 1.644l1.82 .264a.292 .292 0 0 1 .164 .499l-1.318 1.28l.31 1.807a.292 .292 0 0 1 -.425 .308l-1.628 -.853"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <span>Hover milestones</span>
       </div>
       {isDevMode ? (
       <div className="absolute bottom-3 right-3 z-20">
