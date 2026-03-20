@@ -51,10 +51,24 @@ const DEPTH_CONFIG: DepthConfig = {
 const DEPTH_TUNING_DEFAULTS: DepthTuning = {
   perspective: 900,
   originY: 78,
-  rotateX: 21.0098046875,
-  rotateY: -4.940273437499999,
+  rotateX: 10.8,
+  rotateY: -4.8,
   rotateZ: 0.45,
   cardZ: 68,
+};
+
+const normalizeDepthTuning = (input: Partial<DepthTuning>): DepthTuning => {
+  const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
+  const merged = { ...DEPTH_TUNING_DEFAULTS, ...input };
+
+  return {
+    perspective: clamp(merged.perspective, 760, 1320),
+    originY: clamp(merged.originY, 60, 90),
+    rotateX: clamp(merged.rotateX, -8, 14),
+    rotateY: clamp(merged.rotateY, -24, 24),
+    rotateZ: clamp(merged.rotateZ, -2, 2),
+    cardZ: clamp(merged.cardZ, 38, 108),
+  };
 };
 
 const VIEW_PRESETS: Array<{ label: string; tuning: Partial<DepthTuning> }> = [
@@ -177,7 +191,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
 
     try {
       const parsed = JSON.parse(raw) as Partial<DepthTuning>;
-      const merged = { ...DEPTH_TUNING_DEFAULTS, ...parsed };
+      const merged = normalizeDepthTuning(parsed);
       setSavedDefaults(merged);
       setDepthTuning(merged);
     } catch {
@@ -502,7 +516,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
 
     try {
       const parsed = JSON.parse(raw) as Partial<DepthTuning>;
-      const merged = { ...depthTuning, ...parsed };
+      const merged = normalizeDepthTuning({ ...depthTuning, ...parsed });
       setDepthTuning(merged);
       setSettingsMessage("Pasted");
     } catch {
@@ -511,8 +525,10 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
   };
 
   const saveAsDefault = () => {
-    window.localStorage.setItem(DEPTH_TUNING_STORAGE_KEY, JSON.stringify(depthTuning));
-    setSavedDefaults(depthTuning);
+    const normalized = normalizeDepthTuning(depthTuning);
+    window.localStorage.setItem(DEPTH_TUNING_STORAGE_KEY, JSON.stringify(normalized));
+    setSavedDefaults(normalized);
+    setDepthTuning(normalized);
     setSettingsMessage("Default saved");
   };
 
@@ -581,7 +597,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
     const dx = event.clientX - dragStartRef.current.x;
     const dy = event.clientY - dragStartRef.current.y;
     const rotateY = clamp(dragStartRef.current.rotateY + dx * 0.11, -28, 28);
-    const rotateX = clamp(dragStartRef.current.rotateX - dy * 0.11, -8, 24);
+    const rotateX = clamp(dragStartRef.current.rotateX - dy * 0.11, -8, 14);
 
     dragNextRotationRef.current = {
       rotateX,
@@ -637,6 +653,11 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
             "--scene-rotate-y": `${depthTuning.rotateY}deg`,
             "--scene-rotate-z": `${depthTuning.rotateZ}deg`,
             "--scene-card-z": `${depthTuning.cardZ}px`,
+            "--scene-perspective-num": `${depthTuning.perspective}`,
+            "--scene-origin-y-num": `${depthTuning.originY}`,
+            "--scene-pitch-num": `${depthTuning.rotateX}`,
+            "--scene-yaw-num": `${depthTuning.rotateY}`,
+            "--scene-roll-num": `${depthTuning.rotateZ}`,
           } as React.CSSProperties
         }
         onPointerDown={handleScenePointerDown}
@@ -652,6 +673,8 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
               d={PATH_D}
               className="timeline-route-base fill-none [stroke-dasharray:3.5_8] [stroke-linecap:round] [stroke-linejoin:round]"
               strokeWidth={2.2}
+              shapeRendering="geometricPrecision"
+              vectorEffect="non-scaling-stroke"
             />
           </svg>
         </div>
@@ -846,7 +869,7 @@ export default function SoftwarePathMap({ skills }: SoftwarePathMapProps) {
               <input
                 type="range"
                 min={-4}
-                max={20}
+                max={14}
                 step={0.1}
                 value={depthTuning.rotateX}
                 onChange={updateDepthTuning("rotateX")}

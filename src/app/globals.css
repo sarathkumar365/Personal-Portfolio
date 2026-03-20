@@ -173,8 +173,7 @@ body {
   perspective: var(--scene-perspective);
   perspective-origin: 50% var(--scene-origin-y);
   transform-style: preserve-3d;
-  transform-origin: 50% 50%;
-  transform: rotateX(var(--scene-rotate-x)) rotateY(var(--scene-rotate-y)) rotateZ(var(--scene-rotate-z));
+  transform: translateZ(0);
   touch-action: pan-y pinch-zoom;
   z-index: 1;
 }
@@ -202,7 +201,13 @@ body {
 .timeline-contour-overlay {
   pointer-events: none;
   z-index: 0;
-  transform: translate3d(0, 0, calc(var(--depth-z-route) - 10px));
+  transform:
+    translate(
+      calc(var(--scene-yaw-num, 0) * 0.14px),
+      calc(var(--scene-pitch-num, 0) * -0.18px)
+    )
+    rotate(calc(var(--scene-roll-num, 0) * 1deg))
+    scale(calc(1 + ((900 - var(--scene-perspective-num, 900)) * 0.00022)));
   background:
     repeating-radial-gradient(
       ellipse at 24% 26%,
@@ -303,15 +308,14 @@ body {
 }
 
 .timeline-route-plane {
-  transform-style: preserve-3d;
   transform:
-    translate3d(
-      calc(var(--map-shift-x) * var(--parallax-route-x)),
-      calc(var(--map-shift-y) * var(--parallax-route-y) + var(--map-scroll-drift-y)),
-      var(--depth-z-route)
+    translate(
+      calc((var(--map-shift-x) * var(--parallax-route-x)) + (var(--scene-yaw-num, 0) * 0.26px)),
+      calc((var(--map-shift-y) * var(--parallax-route-y) + var(--map-scroll-drift-y)) + (var(--scene-pitch-num, 0) * -0.24px))
     )
-    rotateX(var(--map-tilt-x))
-    rotateY(var(--map-tilt-y));
+    rotate(calc(var(--scene-roll-num, 0) * 1deg))
+    skewX(calc(var(--scene-yaw-num, 0) * -0.2deg))
+    scaleY(calc(1 - (var(--scene-pitch-num, 0) * 0.005)));
   transition: opacity 0.2s ease;
 }
 
@@ -320,19 +324,19 @@ body {
 }
 
 .timeline-node-plane {
-  transform-style: preserve-3d;
+  z-index: 2;
   transform:
-    translate3d(
-      calc(var(--map-shift-x) * var(--parallax-route-x)),
-      calc(var(--map-shift-y) * var(--parallax-route-y) + var(--map-scroll-drift-y)),
-      var(--depth-z-route)
+    translate(
+      calc((var(--map-shift-x) * var(--parallax-route-x)) + (var(--scene-yaw-num, 0) * 0.26px)),
+      calc((var(--map-shift-y) * var(--parallax-route-y) + var(--map-scroll-drift-y)) + (var(--scene-pitch-num, 0) * -0.24px))
     )
-    rotateX(var(--map-tilt-x))
-    rotateY(var(--map-tilt-y));
+    rotate(calc(var(--scene-roll-num, 0) * 1deg))
+    skewX(calc(var(--scene-yaw-num, 0) * -0.2deg))
+    scaleY(calc(1 - (var(--scene-pitch-num, 0) * 0.005)));
 }
 
 .timeline-node-core {
-  transform: translate3d(-50%, -50%, 0);
+  transform: translate(-50%, -50%);
   box-shadow: var(--shadow-node);
 }
 
