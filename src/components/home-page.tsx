@@ -359,16 +359,78 @@ export default function HomePage({ data }: HomePageProps) {
           heroComplete ? "opacity-100" : "opacity-0"
         }`}
       >
-        <header>
+        <header className="space-y-1">
           <p className="text-xs uppercase tracking-[0.45em] text-black/55">
-            Next on the ribbon
+            {cta.label}
           </p>
           <h2 className="text-3xl font-serif text-shadow-sm tracking-tight">
             {cta.heading}
           </h2>
         </header>
-        <p className="max-w-2xl text-sm text-black/75">{cta.body}</p>
-        <p className="text-sm text-black/75">{cta.closing}</p>
+        <div className="relative space-y-4 border border-black/25 bg-white/40 p-4 pr-12 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)] sm:p-5 sm:pr-14">
+          <span
+            className="absolute right-3 top-3 inline-flex h-6 w-10 items-center justify-center border border-black/25 bg-white/75 text-black/70 sm:right-4 sm:top-4 sm:h-7 sm:w-11"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-3.5 w-5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3.75 6.75h16.5a.75.75 0 0 1 .75.75v9a.75.75 0 0 1-.75.75H3.75a.75.75 0 0 1-.75-.75v-9a.75.75 0 0 1 .75-.75Z"
+                stroke="currentColor"
+                strokeWidth="1.3"
+              />
+              <path
+                d="M4.5 7.5 12 12.75 19.5 7.5"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+          <div className="space-y-2">
+            {cta.lines.map((line, index) => (
+              <p key={`${line}-${index}`} className="max-w-2xl text-sm text-black/75">
+                {line}
+              </p>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-3 text-[0.62rem] uppercase tracking-[0.3em]">
+            <a
+              href={cta.primary.href}
+              className="border border-black bg-black px-3 py-2 text-white transition-colors duration-200 hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2"
+            >
+              {cta.primary.label}
+            </a>
+            {cta.secondary.map((item) => {
+              const isExternal = item.href.startsWith("http");
+
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="border border-black/40 bg-white/65 px-3 py-2 text-black/80 transition-colors duration-200 hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2"
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
+          </div>
+          <div className="ml-auto w-fit space-y-1 text-right">
+            <p className="text-[0.6rem] uppercase tracking-[0.3em] text-black/60">
+              {cta.meta}
+            </p>
+            {cta.signature ? (
+              <p className="text-sm italic text-black/70">{cta.signature}</p>
+            ) : null}
+          </div>
+        </div>
       </section>
       {selectedExperience ? (
         <ExperienceModal

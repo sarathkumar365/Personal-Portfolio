@@ -365,11 +365,6 @@ body {
     color: inherit;
   }
 
-  a:hover {
-    text-decoration: underline;
-    text-decoration-style: dotted;
-  }
-
   button {
     cursor: pointer;
   }

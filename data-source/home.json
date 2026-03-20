@@ -175,8 +175,26 @@
     ]
   },
   "cta": {
-    "heading": "Let’s build reliable product systems",
-    "body": "I am looking to contribute to teams building scalable web products where reliability, AI-assisted workflows, and fast delivery all matter.",
-    "closing": "Reach out at Sarathkumarks.dev@gmail.com or connect on LinkedIn."
+    "label": "Final note",
+    "heading": "Let’s build products that stay dependable at scale",
+    "lines": [
+      "If your team needs reliable full-stack execution with measurable product outcomes, let’s connect."
+    ],
+    "primary": {
+      "label": "Start a conversation",
+      "href": "mailto:Sarathkumarks.dev@gmail.com"
+    },
+    "secondary": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/sarath-kumar-ks/"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/sarathkumar365"
+      }
+    ],
+    "meta": "Toronto, ON",
+    "signature": "— Sarath Kumar"
   }
 }

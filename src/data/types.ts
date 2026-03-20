@@ -39,9 +39,19 @@ export interface CredentialsSection {
 }
 
 export interface CallToAction {
+  label: string;
   heading: string;
-  body: string;
-  closing: string;
+  lines: string[];
+  primary: {
+    label: string;
+    href: string;
+  };
+  secondary: Array<{
+    label: string;
+    href: string;
+  }>;
+  meta: string;
+  signature?: string;
 }
 
 export interface HeroSection {
