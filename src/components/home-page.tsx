@@ -80,9 +80,6 @@ export default function HomePage({ data }: HomePageProps) {
 
   useEffect(() => {
     router.prefetch("/projects");
-    void fetch("/api/projects/warm", { method: "POST" }).catch(() => {
-      // Best-effort warmup; failures should not affect landing page.
-    });
   }, [router]);
 
   useEffect(() => {

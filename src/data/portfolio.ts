@@ -1,12 +1,10 @@
 import homeJson from "../../data-source/home.json";
-import projectsJson from "../../data-source/projects.json";
 import fs from "fs/promises";
 import path from "path";
 
 import type { HomeData, Project } from "./types";
 
 const homeData: HomeData = homeJson;
-const projectsData: Project[] = projectsJson;
 const projectsVisibilityPath = path.join(
   process.cwd(),
   "data-source",
@@ -22,8 +20,8 @@ const projectsOverridesPath = path.join(
   "data-source",
   "projects-overrides.json",
 );
+const projectsDataPath = path.join(process.cwd(), "data-source", "projects.json");
 const githubApiBase = "https://api.github.com";
-const cacheTtlMs = 5 * 60 * 1000;
 const isDevMode = process.env.NODE_ENV !== "production";
 
 type ProjectCurationConfig = {
@@ -52,10 +50,6 @@ type GithubRepo = {
   disabled?: boolean;
   private?: boolean;
 };
-
-let projectsCache:
-  | { timestamp: number; projects: Project[]; source: "github" | "backup" }
-  | null = null;
 
 const titleFromRepo = (name: string) =>
   name
@@ -198,14 +192,13 @@ const getProjectKey = (project: Pick<Project, "repo" | "title">) => requireRepoK
 function applyCurationConfig(
   projects: Project[],
   curation: ProjectCurationConfig,
-  options?: { showHidden?: boolean; source?: "github" | "backup" },
+  options?: { showHidden?: boolean },
 ) {
   const visibility = curation.visibility;
   const order = curation.order;
   const overrides = curation.overrides;
   const orderIndex = new Map(order.map((repo, index) => [repo, index]));
   const showHidden = options?.showHidden ?? false;
-  const source = options?.source ?? "backup";
 
   const withVisibility = projects.map((project) => {
     const key = getProjectKey(project);
@@ -217,7 +210,7 @@ function applyCurationConfig(
     }
     const manualOverride = overrides[key] ?? {};
     const configuredVisibility = visibility[key];
-    const defaultVisibility = source === "github" ? false : true;
+    const defaultVisibility = true;
     const visible = configuredVisibility ?? project.visible ?? defaultVisibility;
 
     return {
@@ -306,6 +299,7 @@ async function fetchGithubProjects(): Promise<Project[] | null> {
 }
 
 async function getBackupProjects() {
+  const projectsData = await readJsonFile<Project[]>(projectsDataPath, []);
   const validProjects = projectsData.filter((project) => Boolean(requireRepoKey(project)));
   return validProjects.map((project) => ({
     ...project,
@@ -318,31 +312,78 @@ export function getHomeData(): HomeData {
 }
 
 export async function getProjects(options?: { showHidden?: boolean }): Promise<Project[]> {
-  const now = Date.now();
   const showHidden = options?.showHidden ?? false;
+  const baseProjects = await getBackupProjects();
+  const curation = await getProjectCurationConfig();
+  return applyCurationConfig(baseProjects, curation, { showHidden });
+}
 
-  if (!isDevMode && projectsCache && now - projectsCache.timestamp < cacheTtlMs) {
-    const curation = await getProjectCurationConfig();
-    return applyCurationConfig(projectsCache.projects, curation, {
-      showHidden,
-      source: projectsCache.source,
-    });
+export async function refreshProjectsFromGithub(): Promise<{ count: number; message?: string }> {
+  if (!isDevMode) {
+    throw new Error("Project refresh is disabled in production.");
   }
 
   const githubProjects = await fetchGithubProjects();
-  const source = githubProjects && githubProjects.length > 0 ? "github" : "backup";
-  const baseProjects = githubProjects && githubProjects.length > 0 ? githubProjects : await getBackupProjects();
+  if (!githubProjects || githubProjects.length === 0) {
+    return { count: 0, message: "No GitHub projects were fetched." };
+  }
 
-  projectsCache = {
-    timestamp: now,
-    projects: baseProjects,
-    source,
-  };
+  const existingProjects = await readJsonFile<Project[]>(projectsDataPath, []);
+  const existingMap = new Map(
+    existingProjects
+      .map((project) => [requireRepoKey(project), project] as const)
+      .filter(([key]) => Boolean(key)),
+  );
+
+  const mergedProjects = githubProjects.map((project) => {
+    const existing = existingMap.get(project.repo);
+    if (!existing) {
+      return project;
+    }
+
+    return {
+      ...project,
+      title: existing.title || project.title,
+      year: existing.year || project.year,
+      stack: existing.stack || project.stack,
+      description: existing.description || project.description,
+      highlights:
+        Array.isArray(existing.highlights) && existing.highlights.length > 0
+          ? existing.highlights
+          : project.highlights,
+      links: Array.isArray(existing.links) ? existing.links : project.links,
+    };
+  });
+
+  const githubRepoSet = new Set(mergedProjects.map((project) => project.repo));
+  const manualOnlyProjects = existingProjects.filter(
+    (project) => Boolean(requireRepoKey(project)) && !githubRepoSet.has(requireRepoKey(project)),
+  );
+  const finalProjects = [...mergedProjects, ...manualOnlyProjects];
+
+  await fs.writeFile(projectsDataPath, `${JSON.stringify(finalProjects, null, 2)}\n`);
 
   const curation = await getProjectCurationConfig();
-  return applyCurationConfig(baseProjects, curation, { showHidden, source });
-}
+  const repoSet = new Set(finalProjects.map((project) => requireRepoKey(project)).filter(Boolean));
+  const nextVisibility = { ...curation.visibility };
 
-export async function warmProjectsData() {
-  await getProjects({ showHidden: process.env.NODE_ENV !== "production" });
+  for (const repoKey of repoSet) {
+    if (!(repoKey in nextVisibility)) {
+      nextVisibility[repoKey] = false;
+    }
+  }
+
+  for (const key of Object.keys(nextVisibility)) {
+    if (!repoSet.has(key)) {
+      nextVisibility[key] = false;
+    }
+  }
+
+  await saveProjectCurationConfig({
+    visibility: nextVisibility,
+    order: curation.order,
+    overrides: curation.overrides,
+  });
+
+  return { count: mergedProjects.length };
 }

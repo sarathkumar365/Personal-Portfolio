@@ -1,41 +1,542 @@
 [
   {
-    "repo": "ApplyDrift",
-    "title": "ApplyDrift",
-    "year": "2024",
-    "stack": "React · TypeScript · WebSockets · TanStack · Zustand",
-    "description": "AI-powered resume editor with real-time collaboration, live preview rendering, checklist scoring, and schema-driven resume templates.",
-    "highlights": [
-      "Built multi-pane UI with shared state and real-time syncing.",
-      "Implemented AI orchestration with retry flows and task gating.",
-      "Designed JSON-schema contracts to keep templates, APIs, and AI inputs in sync."
-    ],
-    "links": []
-  },
-  {
-    "repo": "FormSpec",
-    "title": "FormSpec",
-    "year": "2024",
-    "stack": "Next.js · TypeScript · Prisma · PostgreSQL",
-    "description": "Schema-driven form builder and runtime engine that compiles custom form definitions into JSON Schema and UI Schema with live preview and public rendering.",
-    "highlights": [
-      "Built visual form builder with real-time schema compilation.",
-      "Designed JSON DSL for KPIs and analytics queries.",
-      "Implemented grounded chat interface emitting executable queries."
-    ],
-    "links": []
-  },
-  {
-    "repo": "Docura",
-    "title": "Docura",
+    "repo": "Personal-Portfolio",
+    "title": "Personal Portfolio",
     "year": "2025",
-    "stack": "React · NestJS · Python · RabbitMQ · Docker",
-    "description": "Workflow automation platform that extracts structured data from IDs and documents and auto-fills PDF forms using configurable pipelines.",
+    "stack": "TypeScript",
+    "description": "This is what you are seeing now ... ",
     "highlights": [
-      "Designed event-driven architecture using RabbitMQ.",
-      "Built document ingestion and field extraction services.",
-      "Implemented end-to-end workflow engine for PDF generation."
+      "Updated Mar 21, 2026."
     ],
-    "links": []
+    "links": [
+      {
+        "label": "Live",
+        "url": "https://sarathkumarks.dev/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Personal-Portfolio"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2026-03-21T21:34:19Z",
+    "topics": []
+  },
+  {
+    "repo": "FUB-Automation",
+    "title": "FUB Automation",
+    "year": "2026",
+    "stack": "Java",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Mar 19, 2026."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/FUB-Automation"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2026-03-20T00:37:10Z",
+    "topics": []
+  },
+  {
+    "repo": "Careeros",
+    "title": "Careeros",
+    "year": "2026",
+    "stack": "TypeScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Mar 18, 2026."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Careeros"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2026-03-19T00:29:42Z",
+    "topics": []
+  },
+  {
+    "repo": "Spendora",
+    "title": "Spendora",
+    "year": "2026",
+    "stack": "Rust",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Mar 5, 2026."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Spendora"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2026-03-05T15:30:15Z",
+    "topics": []
+  },
+  {
+    "repo": "Corvanta",
+    "title": "Corvanta",
+    "year": "2026",
+    "stack": "Shell",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Feb 25, 2026."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Corvanta"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2026-02-26T04:22:20Z",
+    "topics": []
+  },
+  {
+    "repo": "sarathkumar365",
+    "title": "Sarathkumar365",
+    "year": "2022",
+    "stack": "GitHub Repository",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Dec 2, 2025."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/sarathkumar365"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2025-12-02T17:23:46Z",
+    "topics": []
+  },
+  {
+    "repo": "Dynamic-Forms",
+    "title": "Dynamic Forms",
+    "year": "2025",
+    "stack": "TypeScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Sep 5, 2025."
+    ],
+    "links": [
+      {
+        "label": "Live",
+        "url": "https://dynamic-forms-coral.vercel.app"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Dynamic-Forms"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2025-09-05T22:16:24Z",
+    "topics": []
+  },
+  {
+    "repo": "llm-enabled-cli-chatbot",
+    "title": "Llm Enabled Cli Chatbot",
+    "year": "2025",
+    "stack": "Python",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Jul 30, 2025."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/llm-enabled-cli-chatbot"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2025-07-31T00:32:01Z",
+    "topics": []
+  },
+  {
+    "repo": "web3_wallet",
+    "title": "Web3 Wallet",
+    "year": "2024",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Dec 28, 2024."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/web3_wallet"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2024-12-29T03:43:42Z",
+    "topics": []
+  },
+  {
+    "repo": "Portfolio",
+    "title": "Portfolio",
+    "year": "2024",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Dec 24, 2024."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Portfolio"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2024-12-25T01:39:52Z",
+    "topics": []
+  },
+  {
+    "repo": "ContactFinder",
+    "title": "ContactFinder",
+    "year": "2024",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Dec 7, 2024."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/ContactFinder"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2024-12-07T20:50:06Z",
+    "topics": []
+  },
+  {
+    "repo": "SnapInspire",
+    "title": "SnapInspire",
+    "year": "2024",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Dec 5, 2024."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/SnapInspire"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2024-12-05T07:44:19Z",
+    "topics": []
+  },
+  {
+    "repo": "fronted--final_project",
+    "title": "Fronted Final Project",
+    "year": "2023",
+    "stack": "HTML",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Dec 14, 2023."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/fronted--final_project"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2023-12-14T22:02:58Z",
+    "topics": []
+  },
+  {
+    "repo": "OnlineExamination--Py--2",
+    "title": "OnlineExamination Py 2",
+    "year": "2023",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Dec 12, 2023."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/OnlineExamination--Py--2"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2023-12-12T06:13:37Z",
+    "topics": []
+  },
+  {
+    "repo": "frontend---project",
+    "title": "Frontend Project",
+    "year": "2023",
+    "stack": "HTML",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Dec 7, 2023."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/frontend---project"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2023-12-07T15:03:33Z",
+    "topics": []
+  },
+  {
+    "repo": "one_two_three_four",
+    "title": "One Two Three Four",
+    "year": "2023",
+    "stack": "Java",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Dec 2, 2023."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/one_two_three_four"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2023-12-03T03:27:41Z",
+    "topics": []
+  },
+  {
+    "repo": "DreamCity--Autolab",
+    "title": "DreamCity Autolab",
+    "year": "2023",
+    "stack": "CSS",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Aug 31, 2023."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/DreamCity--Autolab"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2023-08-31T05:38:04Z",
+    "topics": []
+  },
+  {
+    "repo": "frontend-project",
+    "title": "Frontend Project",
+    "year": "2023",
+    "stack": "HTML",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Jul 25, 2023."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/frontend-project"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2023-07-25T18:11:05Z",
+    "topics": []
+  },
+  {
+    "repo": "TodoApp",
+    "title": "TodoApp",
+    "year": "2023",
+    "stack": "JavaScript",
+    "description": "a basic todo app",
+    "highlights": [
+      "Updated Feb 6, 2023."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/TodoApp"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2023-02-06T15:48:46Z",
+    "topics": []
+  },
+  {
+    "repo": "my-react-template",
+    "title": "My React Template",
+    "year": "2022",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Sep 6, 2022."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/my-react-template"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2022-09-06T15:28:20Z",
+    "topics": []
+  },
+  {
+    "repo": "pokemon",
+    "title": "Pokemon",
+    "year": "2022",
+    "stack": "JavaScript",
+    "description": "pokemon matching game",
+    "highlights": [
+      "Updated Aug 24, 2022."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/pokemon"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2022-08-24T14:25:57Z",
+    "topics": []
+  },
+  {
+    "repo": "Quizzical",
+    "title": "Quizzical",
+    "year": "2022",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Jul 27, 2022."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Quizzical"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2022-07-27T14:28:31Z",
+    "topics": []
+  },
+  {
+    "repo": "SCRIPTS",
+    "title": "SCRIPTS",
+    "year": "2022",
+    "stack": "Shell",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Jul 21, 2022."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/SCRIPTS"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2022-07-21T07:56:00Z",
+    "topics": []
+  },
+  {
+    "repo": "natours",
+    "title": "Natours",
+    "year": "2021",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Jul 23, 2021."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/natours"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2021-07-23T11:37:18Z",
+    "topics": []
+  },
+  {
+    "repo": "forkify-project",
+    "title": "Forkify Project",
+    "year": "2021",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated May 30, 2021."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/forkify-project"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2021-05-30T14:45:40Z",
+    "topics": []
+  },
+  {
+    "repo": "Shopping-Cart-NodeJS",
+    "title": "Shopping Cart NodeJS",
+    "year": "2021",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Mar 29, 2021."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Shopping-Cart-NodeJS"
+      }
+    ],
+    "stars": 1,
+    "updatedAt": "2021-03-29T16:29:47Z",
+    "topics": []
+  },
+  {
+    "repo": "TicTacToe",
+    "title": "TicTacToe",
+    "year": "2020",
+    "stack": "Python",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Oct 2, 2020."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/TicTacToe"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2020-10-02T15:09:10Z",
+    "topics": []
+  },
+  {
+    "repo": "Helloworld",
+    "title": "Helloworld",
+    "year": "2020",
+    "stack": "GitHub Repository",
+    "description": "My first repo.",
+    "highlights": [
+      "Updated Jul 13, 2020."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Helloworld"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2020-07-13T14:37:51Z",
+    "topics": []
   }
 ]

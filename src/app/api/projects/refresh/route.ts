@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { warmProjectsData } from "@/data/portfolio";
+import { refreshProjectsFromGithub } from "@/data/portfolio";
 
-const WARM_COOLDOWN_MS = 15_000;
-let lastWarmAt = 0;
+const isDevMode = process.env.NODE_ENV !== "production";
 
 const getOriginFromRequest = (request: Request) => {
   const origin = request.headers.get("origin");
@@ -27,11 +26,11 @@ const isFirstPartyRequest = (request: Request) => {
   }
 
   if (!originUrl) {
-    // Some server-side/internal calls can omit origin; allow if referer host matches.
     const referer = request.headers.get("referer");
     if (!referer) {
       return true;
     }
+
     try {
       return new URL(referer).host === host;
     } catch {
@@ -43,16 +42,24 @@ const isFirstPartyRequest = (request: Request) => {
 };
 
 export async function POST(request: Request) {
+  if (!isDevMode) {
+    return NextResponse.json(
+      { ok: false, message: "Project refresh is disabled in production." },
+      { status: 403 },
+    );
+  }
+
   if (!isFirstPartyRequest(request)) {
     return NextResponse.json({ ok: false, message: "Forbidden origin." }, { status: 403 });
   }
 
-  const now = Date.now();
-  if (now - lastWarmAt < WARM_COOLDOWN_MS) {
-    return NextResponse.json({ ok: true, throttled: true });
+  try {
+    const result = await refreshProjectsFromGithub();
+    return NextResponse.json({ ok: true, count: result.count, message: result.message });
+  } catch {
+    return NextResponse.json(
+      { ok: false, message: "Failed to refresh projects from GitHub." },
+      { status: 500 },
+    );
   }
-  lastWarmAt = now;
-
-  await warmProjectsData();
-  return NextResponse.json({ ok: true });
 }

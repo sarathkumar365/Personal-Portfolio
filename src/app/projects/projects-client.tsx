@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import ProjectModal from "@/components/project-modal";
 import type { Project } from "@/data/types";
@@ -55,12 +56,15 @@ function toHighlightsArray(value: string) {
 }
 
 export default function ProjectsClient({ initialProjects, initialOverrides }: ProjectsClientProps) {
+  const router = useRouter();
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [overrides, setOverrides] = useState<ProjectOverrides>(initialOverrides);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [draggingRepo, setDraggingRepo] = useState<string | null>(null);
   const [editingRepo, setEditingRepo] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "error">("idle");
+  const [refreshStatus, setRefreshStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [refreshMessage, setRefreshMessage] = useState("");
 
   const visibleCount = useMemo(
     () => projects.filter((project) => project.visible).length,
@@ -141,6 +145,35 @@ export default function ProjectsClient({ initialProjects, initialOverrides }: Pr
     setDraggingRepo(null);
   };
 
+  const handleRefreshGithub = async () => {
+    if (!isDevMode || refreshStatus === "loading") {
+      return;
+    }
+
+    setRefreshStatus("loading");
+    setRefreshMessage("");
+
+    try {
+      const response = await fetch("/api/projects/refresh", { method: "POST" });
+      const payload = (await response.json()) as { ok?: boolean; count?: number; message?: string };
+
+      if (!response.ok || !payload.ok) {
+        setRefreshStatus("error");
+        setRefreshMessage(payload.message || "Refresh failed.");
+        return;
+      }
+
+      setRefreshStatus("success");
+      setRefreshMessage(
+        payload.message || `Synced ${payload.count ?? 0} GitHub project${payload.count === 1 ? "" : "s"}.`,
+      );
+      router.refresh();
+    } catch {
+      setRefreshStatus("error");
+      setRefreshMessage("Refresh failed.");
+    }
+  };
+
   return (
     <div className="space-y-16">
       <header className="space-y-4">
@@ -153,11 +186,26 @@ export default function ProjectsClient({ initialProjects, initialOverrides }: Pr
           measurable impact, and production-ready engineering.
         </p>
         {isDevMode ? (
-          <p className="text-[0.62rem] uppercase tracking-[0.3em] text-black/60">
-            Dev curation: {visibleCount}/{projects.length} visible
-            {saveStatus === "saving" ? " · Saving..." : ""}
-            {saveStatus === "error" ? " · Save failed" : ""}
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                void handleRefreshGithub();
+              }}
+              disabled={refreshStatus === "loading"}
+              className="inline-flex items-center border border-black/30 bg-white/75 px-3 py-1.5 text-[0.58rem] uppercase tracking-[0.26em] text-black/80 transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {refreshStatus === "loading" ? "Refreshing..." : "Refresh GitHub"}
+            </button>
+            <p className="text-[0.62rem] uppercase tracking-[0.3em] text-black/60">
+              Dev curation: {visibleCount}/{projects.length} visible
+              {saveStatus === "saving" ? " · Saving..." : ""}
+              {saveStatus === "error" ? " · Save failed" : ""}
+              {refreshStatus === "success" ? " · Synced" : ""}
+              {refreshStatus === "error" ? " · Refresh failed" : ""}
+            </p>
+            {refreshMessage ? <p className="text-xs text-black/65">{refreshMessage}</p> : null}
+          </div>
         ) : null}
       </header>
 

@@ -2,11 +2,11 @@
   "FUB-Automation": true,
   "Careeros": true,
   "Spendora": true,
-  "Corvanta": true,
   "Personal-Portfolio": true,
+  "Corvanta": true,
   "sarathkumar365": false,
   "Dynamic-Forms": false,
-  "llm-enabled-cli-chatbot": true,
+  "llm-enabled-cli-chatbot": false,
   "web3_wallet": true,
   "Portfolio": false,
   "ContactFinder": false,
@@ -25,6 +25,6 @@
   "natours": false,
   "forkify-project": false,
   "Shopping-Cart-NodeJS": false,
-  "TicTacToe": false,
-  "Helloworld": false
+  "TicTacToe": true,
+  "Helloworld": true
 }
