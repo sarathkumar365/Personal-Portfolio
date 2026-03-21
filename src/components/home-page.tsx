@@ -13,6 +13,17 @@ import type { HomeData } from "@/data/types";
 type GsapContext = { revert: () => void } | undefined;
 type GsapTween = { kill: () => void; scrollTrigger?: ScrollTriggerType };
 type SnapFunction = (input: number) => number;
+type ContactFormData = {
+  name: string;
+  email: string;
+  message: string;
+  honey: string;
+};
+type ContactFormErrors = Partial<Record<"name" | "email" | "message", string>>;
+type ContactFormStatus = { type: "idle" | "submitting" | "success" | "error"; message: string };
+const CONTACT_SHELL_ANIMATION_MS = 1000;
+const CONTACT_FORM_ANIMATION_MS = 560;
+const CONTACT_COLLAPSE_HANDOFF_MS = 1040;
 
 interface HomePageProps {
   data: HomeData;
@@ -23,8 +34,27 @@ export default function HomePage({ data }: HomePageProps) {
 
   const [heroComplete, setHeroComplete] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const contactPanelRef = useRef<HTMLDivElement | null>(null);
+  const contactNameRef = useRef<HTMLInputElement | null>(null);
   const [selectedExperience, setSelectedExperience] =
     useState<ExperienceDetail | null>(null);
+  const [contactExpanded, setContactExpanded] = useState(false);
+  const [contactClosing, setContactClosing] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [contactForm, setContactForm] = useState<ContactFormData>({
+    name: "",
+    email: "",
+    message: "",
+    honey: "",
+  });
+  const [contactErrors, setContactErrors] = useState<ContactFormErrors>({});
+  const [contactStatus, setContactStatus] = useState<ContactFormStatus>({
+    type: "idle",
+    message: "",
+  });
+  const closeTimeoutRef = useRef<number | null>(null);
+  const collapseTimeoutRef = useRef<number | null>(null);
+  const isContactPanelActive = contactExpanded || contactClosing;
 
   const closeExperience = useCallback(() => {
     setSelectedExperience(null);
@@ -45,6 +75,161 @@ export default function HomePage({ data }: HomePageProps) {
 
     return () => window.clearTimeout(fallback);
   }, [heroComplete]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setPrefersReducedMotion(mediaQuery.matches);
+    sync();
+    mediaQuery.addEventListener("change", sync);
+
+    return () => {
+      mediaQuery.removeEventListener("change", sync);
+      if (closeTimeoutRef.current !== null) {
+        window.clearTimeout(closeTimeoutRef.current);
+      }
+      if (collapseTimeoutRef.current !== null) {
+        window.clearTimeout(collapseTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const collapseContactPanel = useCallback(() => {
+    if (!contactExpanded) {
+      return;
+    }
+
+    setContactClosing(true);
+    setContactExpanded(false);
+
+    if (collapseTimeoutRef.current !== null) {
+      window.clearTimeout(collapseTimeoutRef.current);
+    }
+
+    collapseTimeoutRef.current = window.setTimeout(() => {
+      setContactClosing(false);
+      collapseTimeoutRef.current = null;
+    }, prefersReducedMotion ? 0 : CONTACT_COLLAPSE_HANDOFF_MS);
+  }, [contactExpanded, prefersReducedMotion]);
+
+  useEffect(() => {
+    if (!contactExpanded) {
+      return;
+    }
+
+    contactNameRef.current?.focus();
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (!contactPanelRef.current) {
+        return;
+      }
+      if (!contactPanelRef.current.contains(event.target as Node)) {
+        collapseContactPanel();
+      }
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        collapseContactPanel();
+      }
+    };
+
+    window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [collapseContactPanel, contactExpanded]);
+
+  const validateContactForm = useCallback((payload: ContactFormData): ContactFormErrors => {
+    const errors: ContactFormErrors = {};
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (payload.name.trim().length < 2) {
+      errors.name = "Please enter at least 2 characters.";
+    }
+    if (!emailPattern.test(payload.email.trim())) {
+      errors.email = "Please enter a valid email address.";
+    }
+    if (payload.message.trim().length < 10) {
+      errors.message = "Message should be at least 10 characters.";
+    }
+
+    return errors;
+  }, []);
+
+  const handleContactChange = useCallback(
+    (field: keyof ContactFormData) =>
+      (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = event.target.value;
+        setContactForm((current) => ({ ...current, [field]: value }));
+        if (field === "name" || field === "email" || field === "message") {
+          setContactErrors((current) => {
+            if (!current[field]) {
+              return current;
+            }
+            const next = { ...current };
+            delete next[field];
+            return next;
+          });
+        }
+      },
+    [],
+  );
+
+  const handleContactSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      const errors = validateContactForm(contactForm);
+      setContactErrors(errors);
+      if (Object.keys(errors).length > 0) {
+        setContactStatus({ type: "error", message: "Please correct the highlighted fields." });
+        return;
+      }
+
+      setContactStatus({ type: "submitting", message: "Sending your message..." });
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(contactForm),
+        });
+
+        const result = (await response.json()) as { ok?: boolean; message?: string };
+
+        if (!response.ok || !result.ok) {
+          setContactStatus({
+            type: "error",
+            message: result.message || "Unable to send right now. Please try again.",
+          });
+          return;
+        }
+
+        setContactStatus({ type: "success", message: "Message sent. I’ll get back to you soon." });
+        if (closeTimeoutRef.current !== null) {
+          window.clearTimeout(closeTimeoutRef.current);
+        }
+        closeTimeoutRef.current = window.setTimeout(() => {
+          collapseContactPanel();
+          setContactForm({ name: "", email: "", message: "", honey: "" });
+          setContactErrors({});
+          setContactStatus({ type: "idle", message: "" });
+          closeTimeoutRef.current = null;
+        }, 1300);
+      } catch {
+        setContactStatus({
+          type: "error",
+          message: "Network issue while sending. Please try again.",
+        });
+      }
+    },
+    [collapseContactPanel, contactForm, validateContactForm],
+  );
 
   useEffect(() => {
     if (!heroComplete) {
@@ -405,29 +590,221 @@ export default function HomePage({ data }: HomePageProps) {
               </p>
             ))}
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-[0.62rem] uppercase tracking-[0.3em]">
-            <a
-              href={cta.primary.href}
-              className="border border-black bg-black px-3 py-2 text-white transition-colors duration-200 hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2"
+          <div className="text-[0.62rem] uppercase tracking-[0.3em]">
+            <div
+              className={`flex gap-3 ${
+                isContactPanelActive
+                  ? "flex-col items-start"
+                  : "flex-wrap items-center"
+              }`}
             >
-              {cta.primary.label}
-            </a>
-            {cta.secondary.map((item) => {
-              const isExternal = item.href.startsWith("http");
-
-              return (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="border border-black/40 bg-white/65 px-3 py-2 text-black/80 transition-colors duration-200 hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2"
-                  target={isExternal ? "_blank" : undefined}
-                  rel={isExternal ? "noopener noreferrer" : undefined}
+              <div
+              ref={contactPanelRef}
+              className={`contact-expand-shell overflow-hidden border border-transparent transition-[width,max-height,padding,background-color,box-shadow,border-color] ${
+                prefersReducedMotion ? "duration-0" : "ease-out"
+              } ${
+                isContactPanelActive
+                  ? "w-full max-h-[36rem] border-black/15 bg-[rgba(247,247,242,0.94)] p-3.5 shadow-[0_10px_20px_-18px_rgba(0,0,0,0.3)] md:w-[46%]"
+                  : "w-[214px] max-h-12 bg-transparent p-0 shadow-none"
+              }`}
+              style={
+                prefersReducedMotion
+                  ? undefined
+                  : {
+                      transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+                      transitionDuration: `${CONTACT_SHELL_ANIMATION_MS}ms`,
+                    }
+              }
+            >
+              {!isContactPanelActive ? (
+                <button
+                  type="button"
+                  className="h-10 w-full border border-black bg-black px-3 py-2 text-white transition-colors duration-200 hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2"
+                  onClick={() => {
+                    setContactClosing(false);
+                    setContactExpanded(true);
+                    setContactStatus({ type: "idle", message: "" });
+                  }}
+                  aria-expanded={contactExpanded}
                 >
-                  {item.label}
-                </a>
-              );
-            })}
-          </div>
+                  {cta.primary.label}
+                </button>
+              ) : (
+                <form
+                  className={`space-y-3 rounded-sm border border-black/12 bg-white/72 p-2.5 transition-[opacity,transform] ${
+                    prefersReducedMotion ? "duration-0" : ""
+                  } ${contactExpanded ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"}`}
+                  style={
+                    prefersReducedMotion
+                      ? undefined
+                      : {
+                          transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+                          transitionDuration: `${CONTACT_FORM_ANIMATION_MS}ms`,
+                        }
+                  }
+                  onSubmit={handleContactSubmit}
+                  noValidate
+                >
+                  <div className="flex items-center justify-between border-b border-black/15 pb-2">
+                    <p className="text-[0.55rem] uppercase tracking-[0.25em] text-black/70">
+                      Send message
+                    </p>
+                    <button
+                      type="button"
+                      className="inline-flex h-6 w-6 items-center justify-center border border-black/25 bg-white text-black/70 transition-colors hover:bg-black hover:text-white"
+                      onClick={collapseContactPanel}
+                      aria-label="Close contact form"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-[11px] w-[11px]"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 6l12 12M18 6l-12 12"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label htmlFor="contact-name" className="text-[0.5rem] tracking-[0.2em] text-black/65">
+                      Name
+                    </label>
+                    <input
+                      ref={contactNameRef}
+                      id="contact-name"
+                      name="name"
+                      type="text"
+                      autoComplete="name"
+                      value={contactForm.name}
+                      onChange={handleContactChange("name")}
+                      className={`w-full border bg-white/95 px-2 py-1.5 text-[0.58rem] tracking-[0.08em] text-black/85 outline-none transition focus-visible:ring-2 focus-visible:ring-black/50 ${
+                        contactErrors.name ? "border-[var(--ink-red)]" : "border-black/25"
+                      }`}
+                    />
+                    {contactErrors.name ? (
+                      <p className="text-[0.48rem] tracking-[0.16em] text-[var(--ink-red)]">
+                        {contactErrors.name}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="space-y-1">
+                    <label htmlFor="contact-email" className="text-[0.5rem] tracking-[0.2em] text-black/65">
+                      Email
+                    </label>
+                    <input
+                      id="contact-email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      value={contactForm.email}
+                      onChange={handleContactChange("email")}
+                      className={`w-full border bg-white/95 px-2 py-1.5 text-[0.58rem] tracking-[0.08em] text-black/85 outline-none transition focus-visible:ring-2 focus-visible:ring-black/50 ${
+                        contactErrors.email ? "border-[var(--ink-red)]" : "border-black/25"
+                      }`}
+                    />
+                    {contactErrors.email ? (
+                      <p className="text-[0.48rem] tracking-[0.16em] text-[var(--ink-red)]">
+                        {contactErrors.email}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="space-y-1">
+                    <label htmlFor="contact-message" className="text-[0.5rem] tracking-[0.2em] text-black/65">
+                      Message
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      name="message"
+                      rows={5}
+                      value={contactForm.message}
+                      onChange={handleContactChange("message")}
+                      className={`w-full resize-y border bg-white/95 px-2 py-1.5 text-[0.58rem] tracking-[0.08em] text-black/85 outline-none transition focus-visible:ring-2 focus-visible:ring-black/50 ${
+                        contactErrors.message ? "border-[var(--ink-red)]" : "border-black/25"
+                      }`}
+                    />
+                    {contactErrors.message ? (
+                      <p className="text-[0.48rem] tracking-[0.16em] text-[var(--ink-red)]">
+                        {contactErrors.message}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <input
+                    type="text"
+                    name="company_website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={contactForm.honey}
+                    onChange={handleContactChange("honey")}
+                    className="hidden"
+                    aria-hidden="true"
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={contactStatus.type === "submitting"}
+                    className="h-9 w-full border border-black bg-black px-3 py-2 text-white transition-colors duration-200 hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {contactStatus.type === "submitting" ? "Sending..." : "Send message"}
+                  </button>
+
+                  <p className="min-h-[1rem] text-[0.5rem] tracking-[0.16em] text-black/65" aria-live="polite">
+                    {contactStatus.message}
+                  </p>
+                </form>
+              )}
+              </div>
+              {!isContactPanelActive ? (
+                <div className="flex flex-wrap items-center gap-3">
+                  {cta.secondary.map((item) => {
+                    const isExternal = item.href.startsWith("http");
+
+                    return (
+                      <a
+                        key={item.label}
+                        href={item.href}
+                        className="border border-black/40 bg-white/65 px-3 py-2 text-black/80 transition-colors duration-200 hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2"
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
+                      >
+                        {item.label}
+                      </a>
+                    );
+                  })}
+                </div>
+              ) : null}
+            </div>
+            {isContactPanelActive ? (
+              <div className="mt-3 w-full px-2.5 md:w-[46%]">
+                <div className="flex flex-wrap items-center gap-3">
+                {cta.secondary.map((item) => {
+                  const isExternal = item.href.startsWith("http");
+
+                  return (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      className="border border-black/40 bg-white/65 px-3 py-2 text-black/80 transition-colors duration-200 hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2"
+                      target={isExternal ? "_blank" : undefined}
+                      rel={isExternal ? "noopener noreferrer" : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  );
+                })}
+                </div>
+              </div>
+            ) : null}
+            </div>
           <div className="ml-auto w-fit space-y-1 text-right">
             <p className="text-[0.6rem] uppercase tracking-[0.3em] text-black/60">
               {cta.meta}
