@@ -4,6 +4,7 @@ import path from "path";
 import type { BlogPost, BlogSummary } from "./types";
 
 const blogsDir = path.join(process.cwd(), "data-source", "blogs");
+const isDevMode = process.env.NODE_ENV !== "production";
 
 let cachedPosts: BlogPost[] | null = null;
 
@@ -48,6 +49,10 @@ async function loadBlogPosts(): Promise<BlogPost[]> {
 }
 
 async function ensurePosts(): Promise<BlogPost[]> {
+  if (isDevMode) {
+    return loadBlogPosts();
+  }
+
   if (cachedPosts) {
     return cachedPosts;
   }

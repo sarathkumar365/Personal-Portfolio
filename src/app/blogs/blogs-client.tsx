@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
 import type { BlogPost } from "@/data/types";
 
@@ -9,6 +10,7 @@ type BlogsClientProps = {
 };
 
 export default function BlogsClient({ posts }: BlogsClientProps) {
+  const [isMounted, setIsMounted] = useState(false);
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
 
   const activePost = useMemo(
@@ -17,6 +19,10 @@ export default function BlogsClient({ posts }: BlogsClientProps) {
   );
 
   const closeModal = () => setActiveSlug(null);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!activePost) {
@@ -51,11 +57,11 @@ export default function BlogsClient({ posts }: BlogsClientProps) {
       <header className="space-y-4">
         <p className="text-xs uppercase tracking-[0.45em] text-black/55">Blogs</p>
         <h1 className="text-4xl font-serif text-shadow-sm tracking-tight">
-          Field notes & essays
+          Notes from shipped work
         </h1>
         <p className="max-w-2xl text-sm text-black/75">
-          Essays on engineering, design process, and building trustworthy digital experiences.
-          Tap a card to open a reader-friendly modal without leaving the page.
+          Practical writing on software delivery, architecture choices, and product
+          decisions shaped by real execution.
         </p>
       </header>
 
@@ -68,7 +74,7 @@ export default function BlogsClient({ posts }: BlogsClientProps) {
             <button
               type="button"
               onClick={() => setActiveSlug(post.slug)}
-              className="flex h-full w-full flex-col text-left"
+              className="flex h-full w-full flex-col text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--ink-blue)]"
             >
               <span className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--ink-red)] opacity-80">
                 {new Date(post.date).toLocaleDateString(undefined, {
@@ -88,16 +94,17 @@ export default function BlogsClient({ posts }: BlogsClientProps) {
         ))}
       </div>
 
-      {activePost ? (
+      {isMounted && activePost
+        ? createPortal(
         <div
           role="dialog"
           aria-modal="true"
           aria-label={activePost.title}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-10"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-md px-4 py-10"
           onClick={closeModal}
         >
           <div
-            className="relative w-full max-w-2xl border border-black bg-white px-6 pb-8 pt-6 shadow-[0_20px_45px_rgba(0,0,0,0.35)]"
+            className="relative w-full max-w-2xl border border-black/25 bg-[#fefbf6] px-6 pb-8 pt-6 shadow-[0_24px_60px_rgba(0,0,0,0.35)]"
             onClick={(event) => event.stopPropagation()}
           >
             <button
@@ -114,14 +121,17 @@ export default function BlogsClient({ posts }: BlogsClientProps) {
               })}
             </span>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight">{activePost.title}</h2>
-            <div className="mt-5 space-y-4 text-sm text-black/80">
+            <div className="mt-5 max-h-[75vh] space-y-4 overflow-y-auto pr-1 text-sm text-black/80 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               {activePost.content.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
           </div>
         </div>
-      ) : null}
+            ,
+            document.body,
+          )
+        : null}
     </div>
   );
 }

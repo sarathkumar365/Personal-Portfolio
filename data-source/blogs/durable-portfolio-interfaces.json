@@ -1,12 +1,12 @@
 {
   "slug": "durable-portfolio-interfaces",
-  "title": "Designing Durable Portfolio Interfaces",
+  "title": "Designing a Durable Interface for This Portfolio",
   "author": "Sarath Kumar",
   "date": "2024-11-01",
-  "summary": "How to combine storytelling, motion, and developer empathy when building personal sites.",
+  "summary": "How this portfolio balances storytelling, motion, and developer empathy without sacrificing clarity.",
   "content": [
-    "A memorable portfolio is less about shiny features and more about the narrative arc you create. Lead with context, offer proof, and invite conversation.",
-    "I start with foundational copy and sketch sections in low fidelity. Only after the structure feels inevitable do I reach for animation libraries to elevate the experience.",
-    "Small flourishes—subtle hover motion, tactile buttons, intentional typographic rhythm—carry more weight than large interactions that distract from the message."
+    "This portfolio is intentionally built as an editorial artifact, not a feature showcase. The core aim is simple: tell a clear story about how I work, back it with real delivery evidence, and make each section easy to scan for recruiters and engineering teams.",
+    "I design the information flow first: who I am, what I shipped, how I make decisions, and how to contact me. Motion and visual texture come after structure, and only when they improve reading. If an interaction delays proof, it gets reduced or removed.",
+    "Durability here means consistency across the entire system. Home, projects, blogs, and modals follow the same interaction language, typography rhythm, and accessibility behavior. The result should feel crafted without being fragile: expressive enough to be memorable, but disciplined enough to stay trustworthy."
   ]
 }
