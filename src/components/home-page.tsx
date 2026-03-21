@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 
@@ -31,6 +32,7 @@ interface HomePageProps {
 
 export default function HomePage({ data }: HomePageProps) {
   const { hero, stats, experiences, skills, cta } = data;
+  const router = useRouter();
 
   const [heroComplete, setHeroComplete] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -75,6 +77,13 @@ export default function HomePage({ data }: HomePageProps) {
 
     return () => window.clearTimeout(fallback);
   }, [heroComplete]);
+
+  useEffect(() => {
+    router.prefetch("/projects");
+    void fetch("/api/projects/warm", { method: "POST" }).catch(() => {
+      // Best-effort warmup; failures should not affect landing page.
+    });
+  }, [router]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");

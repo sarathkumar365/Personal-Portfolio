@@ -1,0 +1,26 @@
+{
+  "Personal-Portfolio": {
+    "stack": "Next.js · React · TypeScript · Tailwind CSS · GSAP"
+  },
+  "FUB-Automation": {
+    "stack": "Java 21 · Spring Boot · PostgreSQL · React · TypeScript",
+    "description": "Automation Engine is a Follow Up Boss call-automation system built with a production-style architecture (controller → service → port → adapter → repository). It ingests signed webhook events, processes call outcomes asynchronously, and automatically creates follow-up tasks so teams can close the loop from missed calls to action. It also provides an operations-focused admin layer with live webhook ingestion, processed-call visibility, and replay for failed flows."
+  },
+  "Careeros": {
+    "stack": "React · TypeScript · NestJS · FastAPI · RabbitMQ · PostgreSQL",
+    "description": "Careeros is an AI-powered resume intelligence platform focused on practical hiring outcomes. It analyzes resumes for ATS compatibility, scoring quality, and improvement opportunities, then delivers structured feedback through a full-stack product setup. The system is built as a multi-service architecture with a React frontend, NestJS BFF, and FastAPI AI service to support scalable analysis workflows and future automation layers."
+  },
+  "Corvanta": {
+    "stack": "NestJS · Python · RabbitMQ · PostgreSQL · Docker",
+    "highlights": [
+      "Corvanta is an autonomous HR operations platform designed for real estate brokerages, where onboarding velocity and compliance accuracy are critical. It automates core HR workflows such as new-agent onboarding, licensing/compliance checks, and operational follow-through while maintaining clear execution visibility. The product runs on a two-backend architecture: an orchestration service for workflow control and an intelligence service for specialized task execution."
+    ]
+  },
+  "Spendora": {
+    "stack": "React · Tauri · Rust · SQLite",
+    "title": "Spendora TauriShell React",
+    "highlights": [
+      "Spendora is a desktop-first personal expense tracker built with a React UI, Tauri native shell, Rust local services, and a single-user SQLite database. Instead of relying on a remote backend, it runs an expense-api and background expense-worker directly on your machine, with Tauri managing start/stop/status of both processes. The architecture is designed for local-first performance, clear service lifecycle control, and a practical path for modular financial integrations."
+    ]
+  }
+}

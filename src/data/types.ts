@@ -77,12 +77,17 @@ export interface ProjectLink {
 }
 
 export interface Project {
+  repo: string;
   title: string;
   year: string;
   stack: string;
   description: string;
   highlights: string[];
   links: ProjectLink[];
+  stars?: number;
+  updatedAt?: string;
+  topics?: string[];
+  visible?: boolean;
 }
 
 export interface BlogPost {

@@ -1,0 +1,5 @@
+docs/
+.sfdx/
+IMPLEMENTATION.md
+LANDING_PAGE_EXECUTION_PLAN.md
+tsconfig.tsbuildinfo

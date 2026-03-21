@@ -1,5 +1,6 @@
 [
   {
+    "repo": "ApplyDrift",
     "title": "ApplyDrift",
     "year": "2024",
     "stack": "React · TypeScript · WebSockets · TanStack · Zustand",
@@ -12,6 +13,7 @@
     "links": []
   },
   {
+    "repo": "FormSpec",
     "title": "FormSpec",
     "year": "2024",
     "stack": "Next.js · TypeScript · Prisma · PostgreSQL",
@@ -24,6 +26,7 @@
     "links": []
   },
   {
+    "repo": "Docura",
     "title": "Docura",
     "year": "2025",
     "stack": "React · NestJS · Python · RabbitMQ · Docker",

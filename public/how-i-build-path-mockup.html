@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How I Build Software Mockup</title>
+    <style>
+      :root {
+        --ink: #111;
+        --paper: #f7f7f2;
+        --paper-soft: #fbfaf6;
+        --line: rgba(0, 0, 0, 0.22);
+        --accent: #0b7285;
+        --accent-soft: rgba(11, 114, 133, 0.15);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at 20% 10%, rgba(0,0,0,0.06), transparent 55%), var(--paper);
+        color: var(--ink);
+        font-family: "Courier Prime", "Courier New", monospace;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+      .frame {
+        width: min(100%, 812px);
+        min-height: 420px;
+        border: 1.5px solid var(--line);
+        background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent 30%), var(--paper-soft);
+        box-shadow: 0 20px 44px -24px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.6);
+        padding: 20px;
+      }
+      .left { position: relative; }
+      .eyebrow {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .32em;
+        opacity: .65;
+        margin: 0 0 8px;
+      }
+      .title {
+        margin: 0 0 14px;
+        font-size: 30px;
+        letter-spacing: -0.01em;
+        font-family: Georgia, "Times New Roman", serif;
+      }
+      .map {
+        position: relative;
+        height: 560px;
+        border: 1px dashed rgba(0,0,0,0.18);
+        background: rgba(255,255,255,0.3);
+        overflow: hidden;
+      }
+      svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .path {
+        fill: none;
+        stroke: rgba(0,0,0,0.58);
+        stroke-width: 2.2;
+        stroke-dasharray: 3.5 8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .path-guide {
+        fill: none;
+        stroke: rgba(0,0,0,0.14);
+        stroke-width: 1.1;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .milestone {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        border: 0;
+        background: transparent;
+        padding: 0;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+        width: 0;
+        height: 0;
+        overflow: visible;
+      }
+      .dot {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        border: 1.5px solid rgba(0,0,0,0.75);
+        background: #fff;
+        box-shadow: 0 0 0 6px transparent;
+        transition: .18s ease;
+        transform: translate(-50%, -50%);
+      }
+      .label {
+        position: absolute;
+        font-size: 11px;
+        letter-spacing: .22em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        text-align: center;
+        line-height: 1;
+        background: rgba(247,247,242,0.9);
+        border: 1px solid rgba(0,0,0,0.2);
+        padding: 4px 6px;
+      }
+      .label-right { left: 14px; top: -6px; }
+      .label-left { right: 14px; top: -6px; }
+      .label-top { left: 0; bottom: 14px; transform: translateX(-50%); }
+      .label-bottom { left: 0; top: 14px; transform: translateX(-50%); }
+      .label-top-right { left: 14px; bottom: 14px; }
+      .label-top-left { right: 14px; bottom: 14px; }
+      .label-bottom-right { left: 14px; top: 14px; }
+      .label-bottom-left { right: 14px; top: 14px; }
+      .milestone:hover .dot,
+      .milestone.active .dot {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 6px var(--accent-soft);
+      }
+      .hover-card {
+        position: absolute;
+        min-width: 210px;
+        max-width: 280px;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,0.9);
+        box-shadow: 0 14px 28px -18px rgba(0,0,0,0.45);
+        padding: 12px;
+        z-index: 10;
+        opacity: 0;
+        transform: translateY(6px);
+        transition: opacity .18s ease, transform .18s ease;
+        pointer-events: none;
+      }
+      .hover-card.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .hover-card .kicker {
+        font-size: 10px;
+        letter-spacing: .3em;
+        text-transform: uppercase;
+        opacity: .65;
+      }
+      .hover-card h3 {
+        margin: 0;
+        font-size: 18px;
+        font-family: Georgia, "Times New Roman", serif;
+      }
+      .skills {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .pill {
+        border: 1px solid rgba(0,0,0,0.28);
+        background: rgba(255,255,255,0.8);
+        padding: 6px 8px;
+        font-size: 10px;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="frame">
+      <div class="left">
+        <p class="eyebrow">Toolkit</p>
+        <h2 class="title">How I Build Software</h2>
+        <div class="map">
+          <svg viewBox="0 0 800 600" preserveAspectRatio="none" aria-hidden="true">
+            <path id="route-path" class="path" d="m52,36.5c0,0 0,0 0,1c0,1 0,2 0,4c0,1 0,3 0,5c0,1 0.45881,2.69344 1,4c0.38268,0.92388 0,2 0,3c0,1 1,3 1,4c0,1 0.45881,2.69344 1,4c0.38268,0.92388 -0.76537,2.15224 0,4c0.54119,1.30656 0.23463,2.15224 1,4c0.54119,1.30656 0.61732,2.07612 1,3c0.54119,1.30656 1,2 2,3c1,1 2.85273,3.1731 4,4c1.814,1.30745 3.85273,2.1731 5,3c1.814,1.30745 4,2 6,3c2,1 5,2 8,3c3,1 7.08025,1.31074 10,2c2.17625,0.51374 4,1 6,1c2,0 4,0 6,0c1,0 3,0 5,0c3,0 6.03873,-0.51945 9,-1c3.12144,-0.50654 7,-2 11,-3c4,-1 9,-2 13,-3c4,-1 6.87856,-2.49346 10,-3c3.94835,-0.64073 7.03874,-0.51945 10,-1c3.12144,-0.50654 6.02248,-1.63345 9,-2c4.09221,-0.50378 7.02997,-1.51127 11,-2c4.09221,-0.50378 7.90779,-1.49622 12,-2c3.97003,-0.48873 8,0 12,0c3,0 7,0 11,0c3,0 7,0 10,0c3,0 7.01947,-0.39415 11,0c5.0742,0.50245 8.133,0.5695 12,2c2.09717,0.77579 5.48692,2.08052 8,4c2.86536,2.18855 5.20682,4.81266 7,7c2.28589,2.78832 3.11588,5.96384 4,9c1.15277,3.95868 2.08075,7.98453 3,13c1.09662,5.9831 1,12 1,19c0,7 0,13 -1,18c-1,5 -2.61066,8.15927 -4,11c-1.58411,3.23892 -3.19028,4.88152 -5,8c-2.24469,3.868 -3.75531,7.132 -6,11c-1.80972,3.11848 -3,6 -5,9c-2,3 -5.37134,5.74675 -8,10c-2.35114,3.80423 -4.75531,7.132 -7,11c-1.80972,3.11848 -5.41589,5.76108 -7,9c-1.38936,2.84073 -2.69255,5.186 -4,7c-1.65381,2.29454 -2.69255,4.186 -4,6c-1.65381,2.29454 -2.69255,3.186 -4,5c-1.65381,2.29454 -3.41589,4.76108 -5,8c-1.38936,2.84073 -2.78986,5.07843 -4,8c-0.85571,2.06586 -0.5405,5.0535 -1,7c-0.51375,2.17624 -1,5 -1,7c0,4 0.35927,7.05164 1,11c0.50655,3.12143 3.19028,6.88153 5,10c1.12234,1.93399 2.69255,4.186 4,6c1.65381,2.29453 3.41885,4.41885 5,6c1.58115,1.58115 3.69255,3.186 5,5c1.65381,2.29453 4.76108,4.41589 8,6c2.84073,1.38934 6,3 9,4c3,1 5,1 8,2c3,1 6.03873,1.51944 9,2c3.12143,0.50653 7,1 10,1c3,0 7.07217,0.75644 11,0c5.28799,-1.01837 10,-4 15,-6c5,-2 10.25406,-3.35724 16,-6c5.29749,-2.43649 10.16119,-5.7464 15,-9c4.14923,-2.78995 8.37201,-5.3851 12,-8c3.4418,-2.48071 5.5582,-5.51929 9,-8c3.62799,-2.6149 8.05664,-4.91754 11,-7c4.0817,-2.88785 7.37201,-5.3851 11,-8c3.4418,-2.48071 6.85077,-5.21005 11,-8c4.83881,-3.2536 9,-6 14,-9c5,-3 8.77637,-5.40894 14,-8c4.82428,-2.39297 9,-4 13,-6c4,-2 7.96384,-3.11586 11,-4c3.95868,-1.15277 7.04132,-1.84723 11,-3c3.03616,-0.88414 6.90778,-1.49623 11,-2c2.97751,-0.36655 7,-1 10,-1c3,0 6,0 7,0c2,0 2.69345,0.4588 4,1c1.84775,0.76537 2.81265,1.2068 5,3c2.78833,2.28587 5.71411,5.21167 8,8c3.5864,4.37468 7.41589,7.76108 9,11c1.38934,2.84073 2,5 2,6c0,1 0,3 0,5c0,2 0,5 -1,8c-1,3 -1.14429,5.93414 -2,8c-1.21014,2.92157 -1.51944,5.03873 -2,8c-0.50653,3.12143 -2,5 -3,7c-1,2 -2,5 -3,7c-1,2 -1.78986,4.07843 -3,7c-0.85571,2.06586 -1.5405,5.0535 -2,7c-0.51373,2.17624 -1.48627,3.82376 -2,6c-0.22977,0.97324 -1.1731,2.85272 -2,4c-1.30746,1.814 -1.4588,2.69345 -2,4c-0.38269,0.92389 -0.77023,3.02676 -1,4c-0.51373,2.17624 -0.78986,4.07843 -2,7c-0.85571,2.06586 -1.4588,2.69345 -2,4c-0.76538,1.84775 0.38269,3.07611 0,4c-0.5412,1.30655 -0.67963,3.02582 -1,5c-0.50653,3.12143 -1,8 -1,12c0,5 -0.37283,11.0116 0,17c0.50098,8.04669 1.9187,17.01208 3,24c0.93018,6.01123 3,11 4,15c1,4 2,7 3,10c1,3 3,6 5,10c2,4 3.64886,8.19577 6,12c2.62866,4.25327 3.69254,6.186 5,8c1.65381,2.29453 3,3 5,5c3,3 6,5 7,6c1,1 3.87854,2.49347 7,3c2.96124,0.48056 6.9845,1.08075 12,2c5.98309,1.09662 12,2 19,3c7,1 12.86194,2.47546 19,4c5.90338,1.46625 10.92578,2.49756 16,3c3.98053,0.39417 9,0 13,0c4,0 7,0 11,0c4,0 9,0 14,0c4,0 9.06458,-0.1991 14,-1c3.12146,-0.50653 6,-2 10,-2c4,0 7,-1 11,-1c2,0 5.03876,-0.48056 8,0c3.12146,0.50653 5.87854,1.49347 9,2c2.96124,0.48056 7.02246,0.63345 10,1c4.09222,0.50378 7.87854,2.49347 11,3c3.94836,0.64072 7.03876,0.51944 10,1c3.12146,0.50653 6.03876,1.51944 9,2c3.12146,0.50653 5.05353,1.5405 7,2c2.17627,0.51373 4,2 6,3c2,1 4.07843,1.78986 7,3c2.06586,0.85571 3.18604,2.69254 5,4c1.14728,0.8269 2.8244,1.0979 4,3c0.52576,0.85065 1,1 2,2c1,1 1.61731,1.07611 2,2c0.5412,1.30655 2,1 3,2c0,0 0.61731,1.07611 1,2c0.5412,1.30655 1.4588,0.69345 2,2c0.38269,0.92389 1,1 2,2c0,0 1,1 2,2c1,1 2,2 2,2c1,1 2.29291,1.29291 3,2c0.70709,0.70709 0.29291,1.29291 1,2c0.70709,0.70709 2,1 2,1c1,1 1.07611,1.61731 2,2c1.30658,0.5412 1,1 2,2c0,0 1,1 1,1c1,1 1,1 2,2c0,0 1,0 1,1c0,0 1,0 1,0c1,1 1,1 1,1c1,1 1,1 1,1c0,1 1,1 1,1l0,0l0,0" />
+          </svg>
+
+          <button class="milestone active" data-key="design" data-side="right" data-t="0.08" aria-label="Design">
+            <div class="dot"></div><div class="label label-bottom-right">Design</div>
+          </button>
+          <button class="milestone" data-key="build" data-side="left" data-t="0.26" aria-label="Build">
+            <div class="dot"></div><div class="label label-top-right">Build</div>
+          </button>
+          <button class="milestone" data-key="ship" data-side="right" data-t="0.46" aria-label="Ship">
+            <div class="dot"></div><div class="label label-bottom-right">Ship</div>
+          </button>
+          <button class="milestone" data-key="observe" data-side="left" data-t="0.66" aria-label="Observe">
+            <div class="dot"></div><div class="label label-top-left">Observe</div>
+          </button>
+          <button class="milestone" data-key="improve" data-side="left" data-t="0.88" aria-label="Improve">
+            <div class="dot"></div><div class="label label-top-left">Improve</div>
+          </button>
+          <div class="hover-card" id="hover-card">
+            <span class="kicker" id="kicker">Delivery Phase</span>
+            <h3 id="heading">Design</h3>
+            <div class="skills" id="skills"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const model = {
+        design: ["System Design", "API Design", "Data Modeling", "Architecture Notes"],
+        build: ["React", "TypeScript", "Java", "REST APIs"],
+        ship: ["Jenkins", "Harness", "Docker", "CI/CD"],
+        observe: ["Datadog", "Logs", "Traces", "Incident Response"],
+        improve: ["AI Workflows", "Refactors", "Performance", "Reliability"]
+      };
+
+      const map = document.querySelector('.map');
+      const routePath = document.getElementById('route-path');
+      const hoverCard = document.getElementById('hover-card');
+      const heading = document.getElementById('heading');
+      const kicker = document.getElementById('kicker');
+      const skills = document.getElementById('skills');
+      const milestones = Array.from(document.querySelectorAll('.milestone'));
+
+      function positionMilestones() {
+        if (!routePath) return;
+        const total = routePath.getTotalLength();
+        milestones.forEach((node) => {
+          const t = Number(node.dataset.t ?? "0");
+          const point = routePath.getPointAtLength(total * t);
+          const xPct = (point.x / 800) * 100;
+          const yPct = (point.y / 600) * 100;
+          node.style.left = `${xPct}%`;
+          node.style.top = `${yPct}%`;
+        });
+      }
+
+      function setPhase(key, node) {
+        milestones.forEach((node) => node.classList.toggle('active', node.dataset.key === key));
+        heading.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+        kicker.textContent = 'Delivery Phase';
+        skills.innerHTML = model[key].map((item) => `<span class="pill">${item}</span>`).join('');
+
+        if (!node) return;
+
+        const nodeRect = node.getBoundingClientRect();
+        const mapRect = map.getBoundingClientRect();
+        const side = node.dataset.side === 'left' ? 'left' : 'right';
+
+        const offsetX = side === 'left' ? -228 : 24;
+        const top = nodeRect.top - mapRect.top - 8;
+        const left = nodeRect.left - mapRect.left + offsetX;
+
+        const clampedLeft = Math.max(10, Math.min(left, mapRect.width - 290));
+        const clampedTop = Math.max(10, Math.min(top, mapRect.height - 132));
+
+        hoverCard.style.left = `${clampedLeft}px`;
+        hoverCard.style.top = `${clampedTop}px`;
+        hoverCard.classList.add('visible');
+      }
+
+      function hideCard() {
+        hoverCard.classList.remove('visible');
+      }
+
+      milestones.forEach((node) => {
+        node.addEventListener('mouseenter', () => setPhase(node.dataset.key, node));
+        node.addEventListener('focus', () => setPhase(node.dataset.key, node));
+        node.addEventListener('click', () => setPhase(node.dataset.key, node));
+        node.addEventListener('mouseleave', hideCard);
+        node.addEventListener('blur', hideCard);
+      });
+
+      map.addEventListener('mouseleave', hideCard);
+
+      positionMilestones();
+      window.addEventListener('resize', positionMilestones);
+
+      const initial = milestones[0];
+      if (initial) setPhase(initial.dataset.key, initial);
+      hideCard();
+    </script>
+  </body>
+</html>
