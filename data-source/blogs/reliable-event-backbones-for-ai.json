@@ -1,0 +1,14 @@
+{
+  "slug": "reliable-event-backbones-for-ai",
+  "title": "Reliability Is Not Optional for Production AI",
+  "author": "Sarath Kumar",
+  "date": "2026-06-21",
+  "summary": "What building a zero-event-loss automation engine taught me about treating AI systems as distributed systems first.",
+  "content": [
+    "When I built the GTM automation engine at 2Creative, the AI parts got all the attention — automated first-touch calls, lead qualification, follow-up generation. But the thing that actually made it work in production wasn't the model. It was the boring backbone underneath: an HMAC-verified webhook pipeline that could not lose an event.",
+    "Every CRM event had to trigger a downstream automation. A dropped event meant a missed lead and a lost sale — a silent failure with no error to chase. So I treated the ingestion path the way you'd treat any distributed system that can't afford to lose data: signed webhooks, an inbox pattern that durably stores each event before processing, and dynamic routing that sends every event type to the right workflow. The result was zero event loss in production, fully decoupled from CRM sync latency and outages.",
+    "The lesson that stuck with me is that an AI pipeline needs the same durability guarantees as anything else — arguably more. The moment you put a model behind a queue, you inherit every classic problem: tasks that run twice, retries that double-charge an API, partial failures that leave state inconsistent. On CareerOS I learned this again with RabbitMQ workers: idempotency keys, exponential backoff, and a dead-letter queue weren't polish, they were the difference between predictable output and quietly corrupted analysis.",
+    "I now frame async safety as a data-integrity question: what is the worst thing that happens if this runs twice? If the answer is 'something bad,' you need idempotency before you need anything else. That framing matters even more for agentic systems, where a single non-deterministic step can cascade.",
+    "If I were starting these systems over, the one thing I'd move earlier is observability. I shipped before the Datadog dashboards and alerting were solid, and that made every later incident slower to diagnose. Observability isn't for debugging after the fact — it's for making invisible systems legible before they fail. Build the event backbone and the traces first; let the intelligence sit on top of something you can trust."
+  ]
+}

@@ -150,7 +150,8 @@ body {
 }
 
 .page-turn-section {
-  will-change: transform, opacity;
+  /* will-change is applied/cleared per-section in home-page.tsx so settled
+     sections drop their compositor layer (keeps text crisp, no blur). */
   transform-style: preserve-3d;
 }
 
@@ -390,9 +391,11 @@ body {
     background-position: -28px -32px, 0 -24px, -20px -10px;
   }
 
-  body::before {
+  /* The drifting paper texture/highlight live in dedicated layers (divs),
+     not body::before — stop their infinite animations here. */
+  .paper-texture-layer,
+  .paper-highlight-layer {
     animation: none;
-    opacity: 0.18;
   }
 
   .timeline-depth-stage {

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
 import type { BlogPost } from "@/data/types";
+import { safeHttpUrl } from "@/lib/safe-url";
 
 type BlogsClientProps = {
   posts: BlogPost[];
@@ -125,6 +126,16 @@ export default function BlogsClient({ posts }: BlogsClientProps) {
               {activePost.content.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
+              {safeHttpUrl(activePost.sourceUrl) ? (
+                <a
+                  href={safeHttpUrl(activePost.sourceUrl) ?? undefined}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center border border-black px-3 py-2 text-[0.6rem] uppercase tracking-[0.35em] text-black transition-colors duration-200 hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60 focus-visible:ring-offset-2"
+                >
+                  {activePost.sourceLabel ?? "Read the original"} ↗
+                </a>
+              ) : null}
             </div>
           </div>
         </div>

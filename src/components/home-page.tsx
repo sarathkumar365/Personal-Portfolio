@@ -309,10 +309,25 @@ export default function HomePage({ data }: HomePageProps) {
         sections.forEach((section, index) => {
           const direction = index % 2 === 0 ? 1 : -1;
 
-          gsap.set(section, {
-            transformOrigin: direction > 0 ? "left center" : "right center",
-            transformPerspective: 1400,
-          });
+          // Arm the section for animating: re-establish the 3D context and
+          // promote it to its own layer only while it is in the active zone.
+          const arm = () => {
+            gsap.set(section, {
+              transformOrigin: direction > 0 ? "left center" : "right center",
+              transformPerspective: 1400,
+            });
+            section.style.willChange = "transform, opacity";
+          };
+
+          // Settle the section: strip the residual 3D transform (which keeps a
+          // perspective() in the matrix and rasterizes text blurry) and release
+          // the compositor layer once the element is no longer animating.
+          const settle = () => {
+            gsap.set(section, { clearProps: "transform,transformOrigin,perspective" });
+            section.style.willChange = "auto";
+          };
+
+          arm();
 
           const tween = gsap.fromTo(
             section,
@@ -337,6 +352,13 @@ export default function HomePage({ data }: HomePageProps) {
                 scrub: 0.35,
                 fastScrollEnd: true,
                 anticipatePin: 1,
+                onEnter: arm,
+                onEnterBack: arm,
+                onLeave: settle,
+                // Leaving back below the fold returns the section to its
+                // (scrubbed) pre-entry pose — keep it armed, don't clear the
+                // transform, or its rotation/offset snaps (a visible pop).
+                onLeaveBack: arm,
               },
             },
           );
@@ -375,7 +397,40 @@ export default function HomePage({ data }: HomePageProps) {
   }, [heroComplete]);
 
   return (
-    <div ref={containerRef} className="space-y-12 sm:space-y-16">
+    <div ref={containerRef} className="relative space-y-12 sm:space-y-16">
+      <a
+        href="https://www.linkedin.com/posts/sarath-kumar-ks_six-months-of-agentic-coding-ugcPost-7467951245748551680-1Dms/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Read my LinkedIn post: six months coding with AI"
+        className={`group absolute right-0 -top-[30px] z-30 hidden w-[170px] rotate-[2.4deg] md:block hover-lift transition-opacity duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/50 ${
+          heroComplete ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <svg
+          viewBox="0 0 24 40"
+          aria-hidden="true"
+          className="absolute -top-4 left-6 z-10 h-9 w-[18px] drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]"
+          fill="none"
+        >
+          <path
+            d="M7 12 V27 a5 5 0 0 0 10 0 V9 a3.3 3.3 0 0 0 -6.6 0 V26 a1.5 1.5 0 0 0 3 0 V13"
+            stroke="#9b9b97"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <div className="border border-black/25 bg-[rgba(255,255,253,0.97)] p-3 shadow-[0_10px_22px_-14px_rgba(0,0,0,0.45)]">
+          <p className="text-[0.5rem] uppercase tracking-[0.34em] text-black/55">Attached</p>
+          <p className="mt-1.5 font-serif text-[0.92rem] leading-snug text-black/85">
+            What 6 months with AI taught me
+          </p>
+          <p className="mt-2 inline-flex items-center gap-1 text-[0.52rem] uppercase tracking-[0.24em] text-[var(--ink-blue)] transition-colors group-hover:text-[var(--ink-red)]">
+            Read on LinkedIn <span aria-hidden="true">↗</span>
+          </p>
+        </div>
+      </a>
       <section data-page-section className="page-turn-section space-y-6">
         <p className="text-xs uppercase tracking-[0.5em] text-black/60">
           {hero.locationLabel}

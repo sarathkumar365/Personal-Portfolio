@@ -3,26 +3,44 @@
     "stack": "Next.js · React · TypeScript · Tailwind CSS · GSAP"
   },
   "FUB-Automation": {
-    "stack": "Java 21 · Spring Boot · PostgreSQL · React · TypeScript",
-    "description": "Automation Engine is a Follow Up Boss call-automation system built with a production-style architecture (controller → service → port → adapter → repository). It ingests signed webhook events, processes call outcomes asynchronously, and automatically creates follow-up tasks so teams can close the loop from missed calls to action. It also provides an operations-focused admin layer with live webhook ingestion, processed-call visibility, and replay for failed flows."
+    "title": "FUB Automation — GTM Workflow Engine",
+    "stack": "Java 21 · Spring Boot · React 19 · PostgreSQL · HMAC Webhooks",
+    "description": "An event-driven GTM workflow automation engine for real-estate teams, built with a production-style architecture (controller → service → port → adapter → repository). It ingests signed Follow Up Boss webhook events, processes call outcomes asynchronously, and fires multi-step automations — follow-up tasks, lead qualification, and AI-driven first contact — so inbound leads never go cold. An operations admin layer adds live webhook ingestion, processed-call visibility, and replay for failed flows.",
+    "highlights": [
+      "Event-driven workflow engine in Java 21 / Spring Boot that triggers multi-step automations the moment a CRM event lands — qualifying leads, creating follow-up tasks, and kicking off AI first contact.",
+      "HMAC-verified webhook ingestion using the inbox pattern with durable storage and dynamic trigger routing — zero event loss in production, fully decoupled from CRM sync latency.",
+      "Integrated an AI voice-calling service for automated first-touch qualification, capturing intent so agents enter each conversation with context instead of a cold call.",
+      "React 19 / TanStack Query operations console giving the team a single view of each lead with cross-linked calls, workflow runs, and activity history."
+    ]
   },
   "Careeros": {
-    "stack": "React · TypeScript · NestJS · FastAPI · RabbitMQ · PostgreSQL",
-    "description": "Careeros is an AI-powered resume intelligence platform focused on practical hiring outcomes. It analyzes resumes for ATS compatibility, scoring quality, and improvement opportunities, then delivers structured feedback through a full-stack product setup. The system is built as a multi-service architecture with a React frontend, NestJS BFF, and FastAPI AI service to support scalable analysis workflows and future automation layers."
+    "title": "CareerOS — AI Resume Intelligence",
+    "stack": "React · NestJS · FastAPI · PostgreSQL · pgvector · LangChain · RabbitMQ",
+    "description": "An AI-powered resume intelligence platform focused on practical hiring outcomes. It analyzes resumes for ATS compatibility, scoring quality, and improvement opportunities, then delivers structured feedback through a multi-service architecture — a React frontend, a NestJS BFF, and a Python FastAPI AI service — built for scalable analysis workflows and future automation layers.",
+    "highlights": [
+      "Multi-service platform — React web, NestJS BFF, Python FastAPI AI service — for resume analysis and ATS scoring.",
+      "Production RAG pipeline over career data with LangChain, OpenAI embeddings, and pgvector — tuned chunking, semantic retrieval, and reranking for grounded, hallucination-resistant responses.",
+      "Offloaded heavy AI inference to RabbitMQ workers with idempotency keys, exponential backoff, and a dead-letter queue for predictable, exactly-once analysis.",
+      "Persisted analysis and scoring with PostgreSQL + Prisma and containerized the full stack with Docker for consistent local-to-prod workflows."
+    ]
   },
   "Corvanta": {
     "stack": "NestJS · Python · RabbitMQ · PostgreSQL · Docker",
     "description": "Corvanta is an autonomous HR operations platform designed for real estate brokerages, where onboarding velocity and compliance accuracy are critical. It automates core HR workflows such as new-agent onboarding, licensing/compliance checks, and operational follow-through while maintaining clear execution visibility. The product runs on a two-backend architecture: an orchestration service for workflow control and an intelligence service for specialized task execution.",
     "highlights": [
-      "Corvanta is an autonomous HR operations platform designed for real estate brokerages, where onboarding velocity and compliance accuracy are critical. It automates core HR workflows such as new-agent onboarding, licensing/compliance checks, and operational follow-through while maintaining clear execution visibility. The product runs on a two-backend architecture: an orchestration service for workflow control and an intelligence service for specialized task execution."
+      "Automates core HR workflows for real-estate brokerages — new-agent onboarding, licensing and compliance checks, and operational follow-through — with clear execution visibility.",
+      "Two-backend architecture: an orchestration service for workflow control and an intelligence service for specialized task execution.",
+      "Built on NestJS and Python services coordinated over RabbitMQ, with PostgreSQL persistence, containerized with Docker."
     ]
   },
   "Spendora": {
-    "title": "Spendora TauriShell React",
+    "title": "Spendora — Local-First Expense Tracker",
     "stack": "React · Tauri · Rust · SQLite",
-    "description": "Spendora is a desktop-first personal expense tracker built with a React UI, Tauri native shell, Rust local services, and a single-user SQLite database. Instead of relying on a remote backend, it runs an expense-api and background expense-worker directly on your machine, with Tauri managing start/stop/status of both processes. The architecture is designed for local-first performance, clear service lifecycle control, and a practical path for modular financial integrations.",
+    "description": "A desktop-first personal expense tracker built with a React UI, a Tauri native shell, Rust local services, and a single-user SQLite database. Instead of relying on a remote backend, it runs an expense-api and a background expense-worker directly on your machine, with Tauri managing start/stop/status of both processes — designed for local-first performance, clear service lifecycle control, and a practical path for modular financial integrations.",
     "highlights": [
-      "Spendora is a desktop-first personal expense tracker built with a React UI, Tauri native shell, Rust local services, and a single-user SQLite database. Instead of relying on a remote backend, it runs an expense-api and background expense-worker directly on your machine, with Tauri managing start/stop/status of both processes. The architecture is designed for local-first performance, clear service lifecycle control, and a practical path for modular financial integrations."
+      "Desktop-first architecture: a React UI runs inside a Tauri shell and controls local Rust services (expense-api, expense-worker) — no remote backend required.",
+      "Local-first persistence with SQLite and migration-driven schema initialization for reliable single-user operation.",
+      "Service lifecycle and health-check controls (start/stop/status) so the native shell manages the local API and worker processes cleanly."
     ]
   }
 }

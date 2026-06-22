@@ -1,8 +1,10 @@
 import homeJson from "../../data-source/home.json";
 import fs from "fs/promises";
 import path from "path";
+import { cache } from "react";
 
-import type { HomeData, Project } from "./types";
+import type { HomeData, Project, ProjectLink } from "./types";
+import { safeHttpUrl } from "@/lib/safe-url";
 
 const homeData: HomeData = homeJson;
 const projectsVisibilityPath = path.join(
@@ -50,6 +52,16 @@ type GithubRepo = {
   disabled?: boolean;
   private?: boolean;
 };
+
+// Only http(s) URLs may become anchor hrefs. Blocks javascript:/data:/etc. from
+// a repo's free-text homepage field (or hand-edited JSON) reaching the DOM.
+const sanitizeLinks = (links: ProjectLink[] | undefined): ProjectLink[] =>
+  (links ?? [])
+    .map((link) => {
+      const url = safeHttpUrl(link.url);
+      return url ? { label: link.label, url } : null;
+    })
+    .filter((link): link is ProjectLink => link !== null);
 
 const titleFromRepo = (name: string) =>
   name
@@ -105,7 +117,7 @@ const mapGithubRepoToProject = (repo: GithubRepo): Project => {
     stack: stackFromRepo(repo),
     description: repo.description || "Repository-based project synced from GitHub.",
     highlights: highlightsFromRepo(repo),
-    links,
+    links: sanitizeLinks(links),
     stars: repo.stargazers_count,
     updatedAt: repo.updated_at,
     topics: repo.topics ?? [],
@@ -135,19 +147,25 @@ async function readJsonFile<T>(filePath: string, fallback: T): Promise<T> {
   }
 }
 
-export async function getProjectCurationConfig(): Promise<ProjectCurationConfig> {
-  const [visibility, order, overrides] = await Promise.all([
-    readJsonFile<Record<string, boolean>>(projectsVisibilityPath, {}),
-    readJsonFile<string[]>(projectsOrderPath, []),
-    readJsonFile<ProjectOverrides>(projectsOverridesPath, {}),
-  ]);
+// Wrapped in React cache() so the curation config is read from disk once per
+// request even though getProjects() and the page both ask for it. cache() is
+// per-request only, so dev-mode live curation still picks up file changes on
+// the next render.
+export const getProjectCurationConfig = cache(
+  async (): Promise<ProjectCurationConfig> => {
+    const [visibility, order, overrides] = await Promise.all([
+      readJsonFile<Record<string, boolean>>(projectsVisibilityPath, {}),
+      readJsonFile<string[]>(projectsOrderPath, []),
+      readJsonFile<ProjectOverrides>(projectsOverridesPath, {}),
+    ]);
 
-  return {
-    visibility,
-    order,
-    overrides,
-  };
-}
+    return {
+      visibility,
+      order,
+      overrides,
+    };
+  },
+);
 
 export async function saveProjectCurationConfig(config: ProjectCurationConfig) {
   const sanitizedOrder = [...new Set(config.order.map((item) => item.trim()).filter(Boolean))];
@@ -213,12 +231,16 @@ function applyCurationConfig(
     const defaultVisibility = true;
     const visible = configuredVisibility ?? project.visible ?? defaultVisibility;
 
-    return {
+    const merged = {
       ...project,
       ...manualOverride,
       repo: key,
       visible,
     };
+    // Re-sanitize at the final render chokepoint: an override (or hand-edited
+    // overrides file) can carry an unsanitized `links` array that the spread
+    // would otherwise let through unchecked.
+    return { ...merged, links: sanitizeLinks(merged.links) };
   });
 
   const sorted = [...withVisibility].sort((a, b) => {
@@ -298,14 +320,15 @@ async function fetchGithubProjects(): Promise<Project[] | null> {
   }
 }
 
-async function getBackupProjects() {
+const getBackupProjects = cache(async () => {
   const projectsData = await readJsonFile<Project[]>(projectsDataPath, []);
   const validProjects = projectsData.filter((project) => Boolean(requireRepoKey(project)));
   return validProjects.map((project) => ({
     ...project,
     repo: requireRepoKey(project),
+    links: sanitizeLinks(project.links),
   }));
-}
+});
 
 export function getHomeData(): HomeData {
   return homeData;

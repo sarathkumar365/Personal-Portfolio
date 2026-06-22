@@ -1,5 +1,89 @@
 [
   {
+    "repo": "camshaft-engine",
+    "title": "Camshaft Engine",
+    "year": "2026",
+    "stack": "Java 21 · Spring Boot 4 · PostgreSQL · Flyway · JSONata",
+    "description": "A domain-agnostic workflow execution engine for Spring Boot. Define a workflow as a DAG of steps, hand it a trigger, and Camshaft plans, persists, schedules, retries, and resumes the run — durably, with idempotency and per-subject supersession built in. The engine knows nothing about your domain; you teach it steps and context through small SPI extension points.",
+    "highlights": [
+      "Models each workflow as a versioned DAG of steps stored as JSONB; every run freezes its own graph snapshot, so editing a workflow never disturbs runs already in flight.",
+      "Concurrency-safe step queue built on Postgres FOR UPDATE … SKIP LOCKED — any number of workers drain due steps without ever claiming the same one.",
+      "Durable by construction: crash-safe resume, stale-step recovery, transient-failure retries with exponential backoff, and per-subject run supersession.",
+      "Idempotent planning via a SHA-256 key plus a unique constraint — the same event delivered twice produces exactly one run, even under a race.",
+      "JSONata templating resolves step config against run context at execution time; domain logic plugs in through SPIs (step types, context contributors, validators, an HTTP port)."
+    ],
+    "links": [
+      {
+        "label": "Live",
+        "url": "https://camshaft.sarathkumarks.dev"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/camshaft-engine"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2026-06-22T22:30:42Z",
+    "topics": []
+  },
+  {
+    "repo": "agentic-development",
+    "title": "Agentic Development",
+    "year": "2026",
+    "stack": "Shell",
+    "description": "Personal agentic-dev config: skills, commands, project skeleton, sync scripts",
+    "highlights": [
+      "Updated May 14, 2026."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/agentic-development"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2026-05-14T21:21:35Z",
+    "topics": []
+  },
+  {
+    "repo": "FUB-Automation",
+    "title": "FUB Automation",
+    "year": "2026",
+    "stack": "Java",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Mar 19, 2026."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/FUB-Automation"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2026-05-08T19:37:46Z",
+    "topics": []
+  },
+  {
+    "repo": "Spendora",
+    "title": "Spendora",
+    "year": "2026",
+    "stack": "Rust",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Mar 5, 2026."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Spendora"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2026-04-12T02:46:42Z",
+    "topics": []
+  },
+  {
     "repo": "Personal-Portfolio",
     "title": "Personal Portfolio",
     "year": "2025",
@@ -19,26 +103,7 @@
       }
     ],
     "stars": 0,
-    "updatedAt": "2026-03-21T21:34:19Z",
-    "topics": []
-  },
-  {
-    "repo": "FUB-Automation",
-    "title": "FUB Automation",
-    "year": "2026",
-    "stack": "Java",
-    "description": "Repository-based project synced from GitHub.",
-    "highlights": [
-      "Updated Mar 19, 2026."
-    ],
-    "links": [
-      {
-        "label": "GitHub",
-        "url": "https://github.com/sarathkumar365/FUB-Automation"
-      }
-    ],
-    "stars": 0,
-    "updatedAt": "2026-03-20T00:37:10Z",
+    "updatedAt": "2026-03-21T21:59:18Z",
     "topics": []
   },
   {
@@ -58,25 +123,6 @@
     ],
     "stars": 0,
     "updatedAt": "2026-03-19T00:29:42Z",
-    "topics": []
-  },
-  {
-    "repo": "Spendora",
-    "title": "Spendora",
-    "year": "2026",
-    "stack": "Rust",
-    "description": "Repository-based project synced from GitHub.",
-    "highlights": [
-      "Updated Mar 5, 2026."
-    ],
-    "links": [
-      {
-        "label": "GitHub",
-        "url": "https://github.com/sarathkumar365/Spendora"
-      }
-    ],
-    "stars": 0,
-    "updatedAt": "2026-03-05T15:30:15Z",
     "topics": []
   },
   {
@@ -176,25 +222,6 @@
     ],
     "stars": 0,
     "updatedAt": "2024-12-29T03:43:42Z",
-    "topics": []
-  },
-  {
-    "repo": "Portfolio",
-    "title": "Portfolio",
-    "year": "2024",
-    "stack": "JavaScript",
-    "description": "Repository-based project synced from GitHub.",
-    "highlights": [
-      "Updated Dec 24, 2024."
-    ],
-    "links": [
-      {
-        "label": "GitHub",
-        "url": "https://github.com/sarathkumar365/Portfolio"
-      }
-    ],
-    "stars": 0,
-    "updatedAt": "2024-12-25T01:39:52Z",
     "topics": []
   },
   {
@@ -537,6 +564,25 @@
     ],
     "stars": 0,
     "updatedAt": "2020-07-13T14:37:51Z",
+    "topics": []
+  },
+  {
+    "repo": "Portfolio",
+    "title": "Portfolio",
+    "year": "2024",
+    "stack": "JavaScript",
+    "description": "Repository-based project synced from GitHub.",
+    "highlights": [
+      "Updated Dec 24, 2024."
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sarathkumar365/Portfolio"
+      }
+    ],
+    "stars": 0,
+    "updatedAt": "2024-12-25T01:39:52Z",
     "topics": []
   }
 ]

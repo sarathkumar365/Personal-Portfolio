@@ -1,9 +1,10 @@
 {
+  "camshaft-engine": true,
   "FUB-Automation": true,
   "Careeros": true,
   "Spendora": true,
   "Personal-Portfolio": true,
-  "Corvanta": true,
+  "Corvanta": false,
   "sarathkumar365": false,
   "Dynamic-Forms": false,
   "llm-enabled-cli-chatbot": false,
@@ -26,5 +27,6 @@
   "forkify-project": false,
   "Shopping-Cart-NodeJS": false,
   "TicTacToe": true,
-  "Helloworld": true
+  "Helloworld": true,
+  "agentic-development": false
 }

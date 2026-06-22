@@ -97,6 +97,8 @@ export interface BlogPost {
   date: string;
   summary: string;
   content: string[];
+  sourceUrl?: string;
+  sourceLabel?: string;
 }
 
 export type BlogSummary = Pick<BlogPost, "slug" | "title" | "date" | "summary">;

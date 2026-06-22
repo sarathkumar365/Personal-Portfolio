@@ -2,8 +2,8 @@
   "hero": {
     "locationLabel": "Typed in Toronto · Ontario",
     "name": "Sarath Kumar",
-    "title": "Full-Stack Developer",
-    "summary": "Full-stack developer who brings production reliability, AI-driven execution, and strong React, Java, and TypeScript engineering to build scalable products that deliver measurable business impact.",
+    "title": "Full-Stack Developer · AI Systems",
+    "summary": "Full-stack developer who ships production AI-enabled systems end-to-end — event-driven automation, LLM and RAG pipelines, and real-time interfaces in React, Java Spring Boot, and Python. I turn messy business problems into reliable software that delivers measurable impact.",
     "contact": {
       "phone": "905.922.5917",
       "location": "Toronto, ON",
@@ -15,15 +15,15 @@
   "stats": [
     {
       "label": "Track Record",
-      "value": "Production systems under ownership"
+      "value": "Production AI & automation, owned end-to-end"
     },
     {
       "label": "Core Strength",
-      "value": "React · Java · TypeScript"
+      "value": "React · Java Spring Boot · Python"
     },
     {
       "label": "Delivery Edge",
-      "value": "Reliability-first · AI-assisted execution"
+      "value": "Event-driven reliability · LLM & RAG execution"
     }
   ],
   "experiences": [
@@ -33,48 +33,46 @@
       "role": "Full Stack Developer",
       "company": "2Creative",
       "location": "Toronto, ON",
-      "summary": "Building and operating production analytics products with a focus on reliability, performance, AI-assisted workflows, and secure cross-platform integrations.",
+      "summary": "Owning full-stack delivery of production GTM automation and AI systems — from event-driven backends and AI-powered workflows to the React consoles teams run on every day.",
       "details": {
-        "headline": "Production reliability, platform architecture, and AI UX",
-        "overview": "Lead full-stack delivery across frontend, backend, and operations, including CI/CD ownership with Jenkins and Harness plus production rollout validation through OpenShift Console.",
+        "headline": "GTM automation, production AI, and full-stack ownership",
+        "overview": "Lead full-stack delivery across frontend, backend, and operations — architecting an event-driven GTM automation engine end-to-end across Java, React, and Python, and owning CI/CD across Jenkins and Harness plus AWS, GitHub Actions, and Docker, with production rollout validation through OpenShift Console.",
         "sections": [
           {
-            "title": "Production Reliability & Observability",
+            "title": "GTM Automation & AI Systems",
             "items": [
-              "Sustain production reliability through on-call rotations using Datadog logs and traces for root-cause analysis and incident resolution.",
-              "Resolved a system-critical deadlock in a core Java component, preventing downtime and stabilizing customer-facing dashboards.",
-              "Led architecture refactors toward production-ready standards using metric-driven PBIs to validate reliability and performance gains."
+              "Built a real-estate GTM workflow automation engine (Java 21, Spring Boot, PostgreSQL) that triggers multi-step workflows from CRM events — automating lead follow-up, task creation, and AI-driven first contact so inbound leads never go cold.",
+              "Integrated an AI voice-calling service for automated first-touch qualification, capturing lead intent so the assigned agent walks into the conversation with full context instead of a cold call.",
+              "Engineered an HMAC-verified webhook ingestion pipeline against the Follow Up Boss CRM using the inbox pattern — durable storage and dynamic trigger routing turned raw CRM events into a zero-loss source of truth for every downstream automation.",
+              "Delivered a full-stack lead-management console (React 19, TypeScript, TanStack Query; Spring Boot REST API) giving ops a single view of each lead with cross-linked calls, workflow runs, and activity history."
             ]
           },
           {
             "title": "Data Platform & Performance",
             "items": [
-              "Engineered dynamic cascading filters enabling multi-attribute segmentation across dashboards and faster data exploration.",
-              "Built an embeddable data insights module and used Redis caching to persist dashboard state across integrated products.",
-              "Improved chart rendering performance and user-level customization, contributing to a 22% increase in user retention."
+              "Built an embeddable analytics module with React, Java services, and Redis caching — enabling secure multi-tenant access with SCM-based RBAC across integrated products.",
+              "Shipped real-time AI insight streaming with React and Server-Sent Events (fetchEventSource) over Java REST APIs, cutting perceived latency for dashboard users.",
+              "Delivered dynamic cascading, multi-attribute filtering and improved chart rendering and personalization — contributing to a 22% increase in user retention."
             ]
           },
           {
-            "title": "AI Features & Workflow Systems",
+            "title": "Production Reliability & Observability",
             "items": [
-              "Implemented SSE streaming with fetchEventSource to deliver real-time OpenAI chatbot responses with lower perceived latency.",
-              "Designed and implemented an AI chatbot interface in React integrated with OpenAI through Java REST services.",
-              "Delivered full-stack controls that allowed super-users to disable widget refresh and prevent shared-widget failures."
+              "Diagnosed and resolved a production-critical Java deadlock using Datadog traces and log correlation, then added circuit-breaker and retry logic adopted across all external integrations — zero recurrence after the fix.",
+              "Sustained production reliability through on-call rotations, root-cause analysis, and documented recurring fixes.",
+              "Led an architecture refactor toward production-grade standards, using metric-driven PBIs to validate reliability and performance gains."
             ]
           },
           {
             "title": "CI/CD, Platform Operations & Collaboration",
             "items": [
-              "Owned day-to-day CI/CD execution across Jenkins and Harness pipelines, including build orchestration, deployment sequencing, and rollback-ready release flow.",
-              "Used OpenShift Console to monitor deployment health, inspect pod/runtime behavior, and validate production rollouts after pipeline runs.",
-              "Automated test-and-release stages to reduce manual handoffs and keep delivery cycles fast and repeatable.",
-              "Used Docker and GitHub Actions to support rapid CI/CD, automated testing, and controlled releases.",
-              "Mentored interns on full-stack fundamentals, code quality, Git workflows, and scalable design patterns.",
-              "Collaborated in Agile/SCRUM delivery cycles across engineering and product stakeholders."
+              "Owned CI/CD across Jenkins and Harness pipelines and automated containerized deployments with Docker and GitHub Actions on AWS — consistent, rollback-ready releases.",
+              "Used OpenShift Console to monitor deployment health, inspect pod and runtime behavior, and validate production rollouts after pipeline runs.",
+              "Mentored interns on full-stack fundamentals, code quality, and Git workflows; collaborated across engineering and product in Agile/SCRUM delivery cycles."
             ]
           }
         ],
-        "closing": "Delivered measurable reliability and retention gains while scaling full-stack platform capabilities in production."
+        "closing": "Shipped production GTM automation and AI systems end-to-end — turning ambiguous business problems into reliable software with measurable reliability and retention gains."
       }
     }
   ],
@@ -85,67 +83,80 @@
         "title": "Plan",
         "items": [
           "Agile/SCRUM",
-          "Microservices concepts",
-          "JWT/OAuth/CORS"
+          "System design",
+          "Event-driven architecture",
+          "Microservices",
+          "JWT/OAuth2/CORS"
         ]
       },
       {
         "title": "Build",
         "items": [
           "React",
+          "React 19",
           "Next.js",
           "TypeScript",
           "JavaScript",
-          "Rust",
-          "D3.js",
+          "TanStack Query",
           "Zustand",
-          "TanStack",
+          "D3.js",
+          "Java 21",
+          "Spring Boot",
+          "Python",
+          "FastAPI",
+          "Flask",
+          "Rust",
           "Node.js",
           "Express",
-          "Java Spring Boot",
-          "FastAPI",
           "REST APIs",
-          "Prisma",
-          "Python"
+          "Prisma"
         ]
       },
       {
         "title": "Integrate",
         "items": [
           "PostgreSQL",
+          "pgvector",
           "MongoDB",
           "JSONB",
-          "Prisma ORM",
           "Redis",
           "RabbitMQ",
-          "Kafka"
+          "Kafka",
+          "HMAC Webhooks",
+          "Server-Sent Events",
+          "WebSockets"
         ]
       },
       {
         "title": "Ship",
         "items": [
           "Docker",
-          "GitHub",
           "GitHub Actions",
           "Jenkins",
+          "Harness",
           "AWS",
           "Azure",
           "OpenShift",
           "Datadog",
           "CI/CD",
           "Production on-call",
-          "Idempotent retry logic"
+          "Idempotent retries"
         ]
       },
       {
         "title": "Evolve",
         "items": [
-          "OpenAI API",
+          "LLM orchestration",
+          "OpenAI",
+          "Claude",
+          "Llama",
+          "RAG pipelines",
+          "LangChain",
+          "pgvector retrieval",
           "Prompt engineering",
+          "AI voice automation",
           "SSE streaming",
-          "AI orchestration",
-          "n8n",
-          "LLM workflows"
+          "n8n"
         ]
       }
     ]
@@ -179,9 +190,9 @@
   },
   "cta": {
     "label": "Final note",
-    "heading": "Let’s build products that stay dependable at scale",
+    "heading": "Let’s build dependable AI-enabled products at scale",
     "lines": [
-      "If your team needs reliable full-stack execution with measurable product outcomes, let’s connect."
+      "If your team needs full-stack engineers who ship production AI and automation with measurable outcomes, let’s connect."
     ],
     "primary": {
       "label": "Start a conversation",

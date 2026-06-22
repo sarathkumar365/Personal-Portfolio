@@ -1,45 +1,9 @@
 import { NextResponse } from "next/server";
 
 import { refreshProjectsFromGithub } from "@/data/portfolio";
+import { isFirstPartyRequest } from "@/lib/request-origin";
 
 const isDevMode = process.env.NODE_ENV !== "production";
-
-const getOriginFromRequest = (request: Request) => {
-  const origin = request.headers.get("origin");
-  if (!origin) {
-    return null;
-  }
-
-  try {
-    return new URL(origin);
-  } catch {
-    return null;
-  }
-};
-
-const isFirstPartyRequest = (request: Request) => {
-  const host = request.headers.get("host");
-  const originUrl = getOriginFromRequest(request);
-
-  if (!host) {
-    return false;
-  }
-
-  if (!originUrl) {
-    const referer = request.headers.get("referer");
-    if (!referer) {
-      return true;
-    }
-
-    try {
-      return new URL(referer).host === host;
-    } catch {
-      return false;
-    }
-  }
-
-  return originUrl.host === host;
-};
 
 export async function POST(request: Request) {
   if (!isDevMode) {

@@ -4,6 +4,7 @@ import {
   getProjectCurationConfig,
   saveProjectCurationConfig,
 } from "@/data/portfolio";
+import { isFirstPartyRequest } from "@/lib/request-origin";
 
 type CurationPayload = {
   visibility?: Record<string, boolean>;
@@ -23,6 +24,14 @@ type CurationPayload = {
 const isDevMode = process.env.NODE_ENV !== "production";
 
 export async function GET() {
+  // Curation config (incl. hidden-project metadata) is dev tooling only.
+  if (!isDevMode) {
+    return NextResponse.json(
+      { ok: false, message: "Not found." },
+      { status: 404 },
+    );
+  }
+
   const config = await getProjectCurationConfig();
   return NextResponse.json({ ok: true, config });
 }
@@ -31,6 +40,13 @@ export async function POST(request: Request) {
   if (!isDevMode) {
     return NextResponse.json(
       { ok: false, message: "Project curation updates are disabled in production." },
+      { status: 403 },
+    );
+  }
+
+  if (!isFirstPartyRequest(request)) {
+    return NextResponse.json(
+      { ok: false, message: "Forbidden origin." },
       { status: 403 },
     );
   }

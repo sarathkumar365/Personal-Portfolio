@@ -14,6 +14,10 @@ type RateBucket = {
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
+const RATE_BUCKET_MAX_ENTRIES = 10_000;
+const MAX_BODY_BYTES = 16_384;
+const MAX_NAME_LENGTH = 80;
+const MAX_EMAIL_LENGTH = 254;
 const rateBuckets = new Map<string, RateBucket>();
 
 const jsonError = (message: string, status: number) =>
@@ -22,15 +26,39 @@ const jsonError = (message: string, status: number) =>
 const normalize = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
 const getClientKey = (request: Request) => {
+  // Prefer headers the platform sets and the client cannot forge. Vercel's
+  // `x-vercel-forwarded-for` / `x-real-ip` are injected by the edge. Only when
+  // both are absent (non-Vercel host) do we fall back to the left-most
+  // x-forwarded-for hop — the conventional originating-client IP. That hop is
+  // client-influenced, so this fallback is best-effort rate limiting only.
+  const trusted =
+    request.headers.get("x-vercel-forwarded-for")?.trim() ||
+    request.headers.get("x-real-ip")?.trim();
+  if (trusted) {
+    return trusted;
+  }
   const xff = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  const realIp = request.headers.get("x-real-ip")?.trim();
-  return xff || realIp || "anonymous";
+  return xff || "anonymous";
+};
+
+// Drop expired buckets so a stream of distinct keys can't grow the Map without
+// bound. (In-memory limiting is per-instance; a shared store is the real fix.)
+const pruneRateBuckets = (now: number) => {
+  if (rateBuckets.size < RATE_BUCKET_MAX_ENTRIES) {
+    return;
+  }
+  for (const [key, bucket] of rateBuckets) {
+    if (now > bucket.resetAt) {
+      rateBuckets.delete(key);
+    }
+  }
 };
 
 const isRateLimited = (key: string, now: number) => {
   const bucket = rateBuckets.get(key);
 
   if (!bucket || now > bucket.resetAt) {
+    pruneRateBuckets(now);
     rateBuckets.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
     return false;
   }
@@ -41,6 +69,22 @@ const isRateLimited = (key: string, now: number) => {
 
   bucket.count += 1;
   return false;
+};
+
+// Reject obvious cross-origin form submissions (CSRF). When an Origin header is
+// present it must match the request host; we don't block requests that omit it
+// (non-browser clients) since those are covered by rate limiting.
+const isCrossOriginRequest = (request: Request) => {
+  const origin = request.headers.get("origin");
+  if (!origin) {
+    return false;
+  }
+  const host = request.headers.get("host");
+  try {
+    return new URL(origin).host !== host;
+  } catch {
+    return true;
+  }
 };
 
 const buildEmailHtml = ({
@@ -72,6 +116,15 @@ const buildEmailHtml = ({
 };
 
 export async function POST(request: Request) {
+  if (isCrossOriginRequest(request)) {
+    return jsonError("Forbidden origin.", 403);
+  }
+
+  const contentLength = Number(request.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    return jsonError("Request body too large.", 413);
+  }
+
   const now = Date.now();
   const clientKey = getClientKey(request);
 
@@ -95,16 +148,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (name.length < 2) {
-    return jsonError("Please provide your name.", 400);
+  // Disallow characters that have meaning in mail address/display-name syntax so
+  // the validated email can't smuggle extra recipients/spoofing into reply_to.
+  const emailPattern = /^[^\s@",;:<>()[\]\\]+@[^\s@",;:<>()[\]\\]+\.[^\s@",;:<>()[\]\\]+$/;
+  if (name.length < 2 || name.length > MAX_NAME_LENGTH) {
+    return jsonError("Please provide your name (2-80 characters).", 400);
   }
-  if (!emailPattern.test(email)) {
+  if (email.length > MAX_EMAIL_LENGTH || !emailPattern.test(email)) {
     return jsonError("Please provide a valid email address.", 400);
   }
   if (message.length < 10 || message.length > 4000) {
     return jsonError("Message must be between 10 and 4000 characters.", 400);
   }
+
+  // Strip control/newline characters before placing the name into the email
+  // subject header (defense against header-context injection / spoofing).
+  const subjectName = name.replace(/[\u0000-\u001f\u007f]+/g, " ").trim();
 
   const resendApiKey = process.env.RESEND_API_KEY;
   const contactTo = process.env.CONTACT_TO_EMAIL;
@@ -125,7 +184,7 @@ export async function POST(request: Request) {
         from: contactFrom,
         to: [contactTo],
         reply_to: email,
-        subject: `Portfolio contact from ${name}`,
+        subject: `Portfolio contact from ${subjectName}`,
         text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
         html: buildEmailHtml({ name, email, message }),
       }),
